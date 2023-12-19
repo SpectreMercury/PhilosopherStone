@@ -39,9 +39,10 @@ const config: Config = {
         'white008': 'rgba(255, 255, 255, 0.30)',
         'white009': 'rgba(255, 255, 255, 0.20)',
         'white010': 'rgba(255, 255, 255, 0.10)',
-        'success-function': '#92FB91',
-        'error-function': '#FF9696',
+        'success-function': '#1CB562',
+        'error-function': '#E11717',
         'warning-function': '#FFECA8',
+        'light-error-function': '#FF9696'
       },
       fontSize: {
         'hd1mb': ['32px', {lineHeight: '120%', fontWeight: 800}],

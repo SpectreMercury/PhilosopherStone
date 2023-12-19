@@ -7,8 +7,8 @@ import { AppDispatch, RootState } from "@/store/store";
 import { useRouter, usePathname } from 'next/navigation';
 import Image from 'next/image';
 import { setWallet } from '@/store/walletSlice';
-import { trpc } from '@/app/_trpc/client';
-import BigNumber from 'bignumber.js';
+import { useSnackbar } from 'notistack';
+import useWalletBalance from '@/hooks/useBalance';
 
 const Header:React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState<Boolean>(false);
@@ -16,15 +16,8 @@ const Header:React.FC = () => {
   const router = useRouter();
   const dispatch = useDispatch()
   const pathname = usePathname()
-  // const [capacity, setCapacity] = useState()
   const walletAddress = useSelector((state: RootState) => state.wallet.wallet?.address);
-
-  const { data: capacity = 0 } = trpc.account.balance.useQuery(
-    {address: walletAddress!},
-    { enabled: !!walletAddress },
-  )
-  const balance = Math.floor(new BigNumber(capacity).toNumber() / 10 ** 8);
-
+  const balance = useWalletBalance(walletAddress!!)
   const toggleMenu = () => {
     if (!isMenuOpen) {
       document.body.style.height = '100vh';
