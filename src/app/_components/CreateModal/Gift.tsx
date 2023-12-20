@@ -11,7 +11,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import useWalletBalance from '@/hooks/useBalance';
 import { createSpore, predefinedSporeConfigs } from '@spore-sdk/core';
-import { useConnect } from '@/hooks/useEstimatedOnChainSize/useConnect';
+import { useConnect } from '@/hooks/useConnect';
 import { sendTransaction } from '@/utils/transaction';
 import { getMIMETypeByName } from '@/utils/mime';
 import { trpc } from '@/app/_trpc/client';
@@ -76,7 +76,8 @@ const CreateGift: React.FC = () => {
     [signTransaction],
   );
 
-  const addSporeMutation = useMutation(addSpore, {
+  const addSporeMutation = useMutation({
+    mutationFn: addSpore,
     onSuccess: () => {
       console.log()
     },
@@ -103,7 +104,6 @@ const CreateGift: React.FC = () => {
         fromInfos: [walletAddress],
         toLock: lock,
         config: predefinedSporeConfigs.Aggron4,
-        // @ts-ignore
         capacityMargin: useCapacityMargin ? BI.from(100_000_000) : BI.from(0),
       });
       enqueueSnackbar('Gift Mint Successful', { variant: 'success' });

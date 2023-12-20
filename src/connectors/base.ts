@@ -57,8 +57,6 @@ export default abstract class CKBConnector {
     });
   }
 
-  abstract connect(): Promise<void>;
-  abstract disconnect(): Promise<void> | void;
   abstract getAnyoneCanPayLock(): Script;
   abstract isOwned(targetLock: Script): boolean;
   abstract signTransaction(

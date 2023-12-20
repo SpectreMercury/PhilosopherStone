@@ -2,7 +2,6 @@ import CKBConnector from '@/connectors/base';
 import { RootState } from '@/store/store';
 import { WalletInfo } from '@/store/walletSlice';
 import { Script, Transaction, config, helpers } from '@ckb-lumos/lumos';
-import { useAtom } from 'jotai';
 import {
   createContext,
   useCallback,
@@ -68,6 +67,7 @@ export const useConnect = () => {
     async (
       txSkeleton: helpers.TransactionSkeletonType,
     ): Promise<Transaction> => {
+      console.log(connectors)
       if (!connector) {
         throw new Error(`Connector ${connectorType} not found`);
       }

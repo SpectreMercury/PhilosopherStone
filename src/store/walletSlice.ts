@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface WalletInfo {
   address: string;
+  ethAddress?: string;
   pubkey?: string;  
   walletType: 'JoyID' | 'MetaMask';
 }

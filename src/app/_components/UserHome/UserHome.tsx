@@ -4,10 +4,19 @@ import CreateModal from '../CreateModal/CreateModal';
 import CreateGift from '../CreateModal/Gift';
 import GiftList from '@/app/_components/List/GiftList';
 import CreateBlindBox from '../CreateModal/CreateBlindBox';
+import { useSporesByAddressQuery } from '@/hooks/useQuery/useSporesByAddress';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
 
 const UserHome: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'Gift' | 'Blind Box'>('Gift');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const walletAddress = useSelector((state: RootState) => state.wallet.wallet?.address);
+  const { data: spores, isLoading: isSporesLoading } = useSporesByAddressQuery(
+    walletAddress as string,
+  );
+
+  console.log(isSporesLoading, spores)
 
   const handleOpenModal = () => {
     setIsModalOpen(true);

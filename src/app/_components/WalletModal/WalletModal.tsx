@@ -1,22 +1,37 @@
 import React from 'react';
 import WalletConfigData from '@/utils/WalletConfig';
 import { WalletModalProps } from '@/types/Wallet';
-import { connect } from '@joyid/ckb';
+import { connect } from '@joyid/evm';
 import { useDispatch } from 'react-redux';
 import { setWallet } from '@/store/walletSlice';
+import { BI, Transaction, commons, config, helpers } from '@ckb-lumos/lumos';
+
 
 const WalletModal: React.FC<WalletModalProps> = ({ onClose }) => {
 
   const dispatch = useDispatch()
+
+  const setAddress = (address: string) => {
+    config.initializeConfig(config.predefined.AGGRON4)
+    const lock = commons.omnilock.createOmnilockScript({
+      auth: {flag: 'ETHEREUM', content: address ?? '0x'}
+    })
+    const ckbAddress = helpers.encodeToAddress(lock, {
+      config: config.predefined.AGGRON4
+    })
+    return ckbAddress
+  }
   const connectJoyID = async () => {
     try {
       const authData = await connect()
+      const ckbAddress = setAddress(authData)
       dispatch(setWallet({
-        address: authData.address, 
-        pubkey: authData.pubkey, 
+        address: ckbAddress,
+        ethAddress: authData, 
         walletType: 'JoyID'
       }))
-      console.log('JoyID info:', authData);
+      // console.log('JoyID info:', authData);
+      console.log('authdata', authData);
       onClose()
     } catch(error) {
       console.log(error)
