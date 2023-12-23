@@ -8,6 +8,20 @@ import { useSporesByAddressQuery } from '@/hooks/useQuery/useSporesByAddress';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 
+const LoadingSkeleton = () => {
+  return (
+    <div>
+      <div className="relative my-8 h-[180px] bg-gray-200 animate-pulse">
+        {/* You can add additional styling here to mimic the layout */}
+      </div>
+      <p className="text-center my-8 text-white001 text-hd2mb font-PlayfairDisplay bg-gray-300 rounded">
+        {/* This is for the text skeleton */}
+        &nbsp;
+      </p>
+    </div>
+  );
+};
+
 const UserHome: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'Gift' | 'Blind Box'>('Gift');
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -30,6 +44,30 @@ const UserHome: React.FC = () => {
     setActiveTab('Gift')
   }
 
+  const renderContent = () => {
+    if (isSporesLoading) {
+      return <LoadingSkeleton />; // Use the LoadingSkeleton component
+    } else if (spores && spores.length > 0) {
+      return <GiftList onNewGiftClick={handleOpenModal} list={spores}/>;
+    } else {
+      return (
+        <div>
+          <div className="relative my-8 h-[180px] bg-gray-200">
+            <Image
+              alt='gift'
+              src='/svg/BlindBox.svg'
+              layout='fill'
+              objectFit='cover'
+            />
+          </div>
+          <p className="text-center my-8 text-white001 text-hd2mb font-PlayfairDisplay">
+            Create Your Gift and Let Smiles Bloom!
+          </p>
+        </div>
+      );
+    }
+  };
+
   return (
     <div className="container mx-auto p-4">
       <div className="flex rounded-md bg-primary011">
@@ -46,22 +84,7 @@ const UserHome: React.FC = () => {
           Blind Box
         </button>
       </div>
-      {/* <GiftList onNewGiftClick={handleOpenModal}/>
-       */}
-      
-      <div className="relative my-8 h-[180px] bg-gray-200">
-        <Image
-            alt='gift'
-            src='/svg/BlindBox.svg'
-            layout='fill'
-            objectFit='cover'
-         />
-      </div>
-
-      <p className="text-center my-8 text-white001 text-hd2mb font-PlayfairDisplay">
-        Create Your Gift and Let Smiles Bloom!
-      </p>
-
+      { renderContent() }
       <button 
         className="w-full h-12 font-PlayfairDisplay border border-white002 bg-white001 text-primary011 py-2 px-4 rounded"
         onClick={handleOpenModal}

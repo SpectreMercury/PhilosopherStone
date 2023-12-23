@@ -27,11 +27,10 @@ const sporesByAddressQueryDocument = graphql(`
       }
     }
   }
-`) as RequestDocument;
+`)
 
 export function useSporesByAddressQuery(address: string | undefined, enabled = true) {
-
-  const { data, ...rest } = useRefreshableQuery<{ spores: QuerySpore[] }>(
+  const { data, ...rest } = useRefreshableQuery(
     {
       queryKey: ['sporesByAddress', address],
       queryFn: async (ctx) => {
@@ -45,7 +44,6 @@ export function useSporesByAddressQuery(address: string | undefined, enabled = t
     },
     true,
   );
-
   const spores: QuerySpore[] = data?.spores ?? [];
   const isLoading = rest.isLoading || rest.isPending;
 

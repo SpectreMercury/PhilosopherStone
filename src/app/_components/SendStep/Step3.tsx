@@ -1,16 +1,68 @@
-import React from 'react';
+import { QuerySpore } from '@/hooks/useQuery/type';
+import { predefinedSporeConfigs, transferSpore } from '@spore-sdk/core';
+import { useMutation } from '@tanstack/react-query';
+import React, { useCallback } from 'react';
+import { BI, OutPoint, config, helpers } from '@ckb-lumos/lumos';
+import { enqueueSnackbar } from 'notistack';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
 
-const Step3: React.FC = () => {
-  // 假设这些是从之前步骤中获取的数据
-  const giftInfo = {
-    type: 'Gift Type',
-    name: 'Gift Name',
-  };
+interface Step2Data {
+  walletAddress: string;
+  email: string;
+  giftMessage: string;
+}
 
-  const recipientInfo = {
-    walletAddress: '0x123...456',
-    email: 'example@example.com',
-  };
+interface Step3Props {
+  step1Data: QuerySpore;
+  step2Data: Step2Data;
+}
+
+
+const Step3: React.FC<Step3Props> = ({ step1Data, step2Data }) => {
+  const walletAddress = useSelector((state: RootState) => state.wallet.wallet?.address);
+
+
+  const transferSporeMutation = useMutation({
+    mutationFn: transferSpore,
+    onSuccess: () => {
+      enqueueSnackbar('Gift Send Successful', { variant: 'success' })
+    },
+    onError: (error) => {
+      console.log(error)
+      enqueueSnackbar('Gift Send Failed', { variant: 'error' })
+    }
+  });
+  
+
+  const handleSubmit = useCallback(
+    async (values: { to: string }) => {
+      console.log(values.to)
+      if (!step2Data.walletAddress || !values.to || !step1Data?.cell) {
+        return;
+      }
+      console.log({
+        outPoint: step1Data.cell.outPoint!,
+        fromInfos: [walletAddress!!],
+        toLock: helpers.parseAddress(values.to, {
+          config: config.predefined.AGGRON4,
+        }),
+        config: predefinedSporeConfigs.Aggron4,
+        useCapacityMarginAsFee: true,
+      })
+      await transferSporeMutation.mutateAsync({
+        outPoint: step1Data.cell.outPoint!,
+        fromInfos: [walletAddress!!],
+        toLock: helpers.parseAddress(values.to, {
+          config: config.predefined.AGGRON4,
+        }),
+        config: predefinedSporeConfigs.Aggron4,
+        useCapacityMarginAsFee: true,
+      });
+      enqueueSnackbar('Gift Send Successful', { variant: 'success' });
+    },
+    [step2Data.walletAddress, step1Data?.cell, transferSporeMutation],
+  );
 
   return (
     <div className='px-4 mt-8'>
@@ -19,11 +71,11 @@ const Step3: React.FC = () => {
         <tbody>
           <tr>
             <td className="border px-4 py-2 w-32 font-SourceSanPro text-white001">Type:</td>
-            <td className="border px-4 py-2 font-SourceSanPro text-white001">{giftInfo.type}</td>
+            <td className="border px-4 py-2 font-SourceSanPro text-white001">Gift</td>
           </tr>
           <tr>
             <td className="border px-4 py-2 w-32 font-SourceSanPro text-white001">Name:</td>
-            <td className="border px-4 py-2 font-SourceSanPro text-white001">{giftInfo.name}</td>
+            <td className="border px-4 py-2 font-SourceSanPro text-white001">{step1Data.id.slice(0, 10)}...{step1Data.id.slice(step1Data.id.length - 10, step1Data.id.length)}</td>
           </tr>
         </tbody>
       </table>
@@ -32,11 +84,11 @@ const Step3: React.FC = () => {
         <tbody>
           <tr>
             <td className="border px-4 py-2 w-36 font-SourceSanPro text-white001">Recipient</td>
-            <td className="border px-4 py-2 font-SourceSanPro text-white001">{recipientInfo.walletAddress}</td>
+            <td className="border px-4 py-2 font-SourceSanPro text-white001">{step2Data.walletAddress.slice(0, 10)}...{step2Data.walletAddress.slice(step2Data.walletAddress.length - 10, step2Data.walletAddress.length)}</td>
           </tr>
           <tr>
             <td className="border px-4 py-2 w-32 font-SourceSanPro text-white001">Email:</td>
-            <td className="border px-4 py-2 font-SourceSanPro text-white001">{recipientInfo.email}</td>
+            <td className="border px-4 py-2 font-SourceSanPro text-white001">{step2Data.email}</td>
           </tr>
         </tbody>
       </table>
@@ -46,11 +98,14 @@ const Step3: React.FC = () => {
         >
             Back
         </button>
-        <button 
-            className="flex-1 h-12 font-PlayfairDisplay border border-white002 bg-white001 text-primary011 py-2 px-4 rounded"
+        <div 
+          className="flex-1 h-12 font-PlayfairDisplay border border-white002 bg-white001 text-primary011 py-2 px-4 rounded"
+          onClick={async() => {
+            await handleSubmit({to: step2Data.walletAddress})
+          }}
         >
             Confirm
-        </button>
+        </div>
       </div>
     </div>
   );

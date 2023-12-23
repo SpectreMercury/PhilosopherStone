@@ -1,4 +1,5 @@
 /* eslint-disable */
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -159,3 +160,13 @@ export type SporeFilterInput = {
 export type TopClusterFilterInput = {
   mintableBy?: InputMaybe<Scalars['String']['input']>;
 };
+
+export type GetSporesByAddressQueryVariables = Exact<{
+  address: Scalars['String']['input'];
+}>;
+
+
+export type GetSporesByAddressQuery = { __typename?: 'Query', spores?: Array<{ __typename?: 'Spore', id: string, contentType: string, capacityMargin?: string | null, cell?: { __typename?: 'Cell', cellOutput: { __typename?: 'CellOutput', capacity: string, lock: { __typename?: 'Script', args: string, codeHash: string, hashType: HashType } }, outPoint?: { __typename?: 'OutPoint', txHash: string, index: string } | null } | null }> | null };
+
+
+export const GetSporesByAddressDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetSporesByAddress"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"address"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"spores"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"filter"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"addresses"},"value":{"kind":"ListValue","values":[{"kind":"Variable","name":{"kind":"Name","value":"address"}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"contentType"}},{"kind":"Field","name":{"kind":"Name","value":"capacityMargin"}},{"kind":"Field","name":{"kind":"Name","value":"cell"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"cellOutput"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"capacity"}},{"kind":"Field","name":{"kind":"Name","value":"lock"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"args"}},{"kind":"Field","name":{"kind":"Name","value":"codeHash"}},{"kind":"Field","name":{"kind":"Name","value":"hashType"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"outPoint"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"txHash"}},{"kind":"Field","name":{"kind":"Name","value":"index"}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetSporesByAddressQuery, GetSporesByAddressQueryVariables>;

@@ -1,33 +1,43 @@
-import React, { useState } from 'react';
-import GiftList from '@/app/_components/List/GiftList'; // 确保路径正确
+import React, { useEffect, useState } from 'react';
 import List from '../List/List';
-import { Gift } from '@/types/Gifts';
+import { QuerySpore } from '@/hooks/useQuery/type';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
+import { useSporesByAddressQuery } from '@/hooks/useQuery/useSporesByAddress';
 
-const Step1: React.FC = () => {
+interface Step1Pros {
+  onSelection?: (data:QuerySpore) => void,
+  selected? : QuerySpore
+}
+
+const Step1: React.FC<Step1Pros> = ({onSelection, selected}) => {
   const [tab, setTab] = useState<'Gift' | 'Spore'>('Gift');
-  const [gifts, setGifts] = useState<Gift[]>([
-        {"id": "0", "name": "0x38910...2029", "occupid": "1000", "image": "https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/heroes/juggernaut.png"},
-        {"id": "1", "name": "0x38910...2029", "occupid": "1000", "image": "https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/heroes/juggernaut.png"},
-        {"id": "2", "name": "0x38910...2029", "occupid": "1000", "image": "https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/heroes/juggernaut.png"},
-        {"id": "3", "name": "0x38910...2029", "occupid": "1000", "image": "https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/heroes/juggernaut.png"},
-        {"id": "4", "name": "0x38910...2029", "occupid": "1000", "image": "https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/heroes/juggernaut.png"},
-        {"id": "5", "name": "0x38910...2029", "occupid": "1000", "image": "https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/heroes/juggernaut.png"},
-        {"id": "6", "name": "0x38910...2029", "occupid": "1000", "image": "https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/heroes/juggernaut.png"},
-        {"id": "7", "name": "0x38910...2029", "occupid": "1000", "image": "https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/heroes/juggernaut.png"},
-        {"id": "8", "name": "0x38910...2029", "occupid": "1000", "image": "https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/heroes/juggernaut.png"},
-        {"id": "9", "name": "0x38910...2029", "occupid": "1000", "image": "https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/heroes/juggernaut.png"}
-  ]);
+  const [gifts, setGifts] = useState<QuerySpore[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [viewMode, setViewMode] = useState<'list' | 'grid'>('grid');
   const [selectedGifts, setSelectedGifts] = useState<string[]>([]);
   const [activeTab, setActiveTab] = useState<'Gift' | 'Blind Box'>('Gift');
-  const handleSelectGift = (id: string) => {
-    setSelectedGifts(prev => 
-      prev.includes(id) ? prev.filter(giftId => giftId !== id) : [...prev, id]
-    );
+  const walletAddress = useSelector((state: RootState) => state.wallet.wallet?.address);
+
+
+  const { data: spores, isLoading: isSporesLoading } = useSporesByAddressQuery(
+    walletAddress as string,
+  );
+
+  const handleSelectSingleGift = (id: string) => {
+    const selectedGift = spores.find(gift => gift.id === id);
+    if (selectedGift && onSelection) {
+      onSelection(selectedGift);
+    }
+    setSelectedGifts([id]); 
   };
 
   const isGiftSelected = (id: string) => selectedGifts.includes(id);
+
+  useEffect(() => {
+    console.log(selected)
+    selected ? setSelectedGifts([selected.id]) : ''
+  }, [selected])
 
   return (
     <div className='px-4'>
@@ -56,19 +66,25 @@ const Step1: React.FC = () => {
 
       {tab === 'Gift' ? (
         <List
-            gifts={gifts}
-            onGiftClick={handleSelectGift}
+            gifts={spores}
+            onGiftClick={handleSelectSingleGift}
             isGiftSelected={isGiftSelected}
             viewMode={viewMode}
+            interactionType={2}
         />
       ) : (
         <List
             gifts={gifts}
-            onGiftClick={handleSelectGift}
+            onGiftClick={handleSelectSingleGift}
             isGiftSelected={isGiftSelected}
             viewMode={viewMode}
         />
       )}
+    {/* <button 
+      className="w-full h-12 mb-8 font-PlayfairDisplay border border-white002 text-primary011 bg-white001 py-2 px-4 rounded"
+    >
+        Next
+    </button> */}
     </div>
   );
 };

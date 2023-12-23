@@ -193,7 +193,7 @@ const CreateGift: React.FC = () => {
         className={`w-full h-[48px] bg-white001 border border-primary003 font-PlayfairDisplay text-primary011 py-2 px-4 rounded mt-4 ${'bg-gray-300 text-gray-500'}`}
         disabled={!file}
         onClick={async () => {
-          await handleSubmit(file, undefined, false)
+          await handleSubmit(file, undefined, true)
         }}
       >
         Create Gift

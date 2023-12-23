@@ -1,18 +1,29 @@
 "use client"
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Step1 from '../_components/SendStep/Step1';
 import Step2 from '../_components/SendStep/Step2';
 import Step3 from '../_components/SendStep/Step3';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import { useSearchParams } from 'next/navigation';
+import { transferSpore as _transferSpore } from '@spore-sdk/core';
+import { QuerySpore } from '@/hooks/useQuery/type';
 
+interface Step2Data {
+  walletAddress: string;
+  email: string;
+  giftMessage: string;
+}
 
 const SendGift: React.FC = () => {
   const [activeStep, setActiveStep] = useState(1);
   const [gift, setGift] = useState('');
   const [recipient, setRecipient] = useState({ name: '', address: '' });
   const [stepStatus, setStepStatus] = useState({ step1: false, step2: false, step3: false });
+  const [step1Data, setStep1Data] = useState<QuerySpore>();
+  const [step2Data, setStep2Data] = useState<Step2Data>();
+  const searchParams = useSearchParams();
 
   const handleGiftChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setGift(e.target.value);
@@ -31,6 +42,29 @@ const SendGift: React.FC = () => {
     return activeStep === step ? <ExpandLessIcon className='text-white001'/> : <ExpandMoreIcon  className='text-white001'/>;
   };
 
+  const handleStep1Selection = (selectedData: QuerySpore) => {
+    setStep1Data(selectedData);
+  };
+
+  const _setStep2Data = (data: Step2Data) => {
+    setStep2Data(data)
+  }
+
+  useEffect(() => {
+    const type = searchParams.get('type');
+    const address = searchParams.get('address');
+
+    if (type && (type === 'gift' || type === 'blindbox') && address) {
+      setActiveStep(2);
+    } else {
+      setActiveStep(1);
+    }
+  }, [searchParams]);
+
+  useEffect(() => {
+    console.log('1', step1Data)
+  }, [step1Data])
+
   return (
     <div className="container mx-auto">
       <div>
@@ -43,7 +77,7 @@ const SendGift: React.FC = () => {
             {renderStepIcon(1)}
           </div>
           {activeStep === 1 && (
-            <Step1 />
+            <Step1 onSelection={handleStep1Selection} selected={step1Data}/>
           )}
         </div>
 
@@ -56,7 +90,7 @@ const SendGift: React.FC = () => {
             {renderStepIcon(2)}
           </div>
           {activeStep === 2 && (
-            <Step2 />
+            <Step2 data={step2Data} setData={_setStep2Data}/>
           )}
         </div>
 
@@ -68,8 +102,8 @@ const SendGift: React.FC = () => {
             </div>
             {renderStepIcon(3)}
           </div>
-          {activeStep === 3 && (
-            <Step3 />
+          {(activeStep === 3 && step1Data && step2Data ) && (
+            <Step3 step1Data={step1Data} step2Data={step2Data} />
           )}
         </div>
       </div>

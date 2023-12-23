@@ -40,7 +40,7 @@ function RootLayout({
         <TrpcProvider>
           <ConnectProvider value={config}>
             <SnackbarProvider
-              autoHideDuration={2000} 
+              autoHideDuration={5000} 
               Components={{
                 success: StyledMaterialDesignContent,
                 error: StyledMaterialDesignContent
