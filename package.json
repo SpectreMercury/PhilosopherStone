@@ -37,6 +37,7 @@
     "@types/node": "20.5.0",
     "@types/react": "^18.2.45",
     "@types/react-dom": "18.2.7",
+    "@wagmi/core": "^1.4.12",
     "autoprefixer": "10.4.15",
     "better-sqlite3": "^8.5.0",
     "bignumber.js": "^9.1.2",

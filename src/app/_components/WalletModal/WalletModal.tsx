@@ -1,10 +1,20 @@
 import React from 'react';
 import WalletConfigData from '@/utils/WalletConfig';
 import { WalletModalProps } from '@/types/Wallet';
-import { connect } from '@joyid/evm';
+import { connect as joyIdConnect } from '@joyid/evm';
 import { useDispatch } from 'react-redux';
 import { setWallet } from '@/store/walletSlice';
-import { BI, Transaction, commons, config, helpers } from '@ckb-lumos/lumos';
+import {
+  Script,
+  Transaction,
+  commons,
+  config,
+  helpers,
+} from '@ckb-lumos/lumos';
+import { InjectedConnector } from '@wagmi/core/connectors/injected';
+import { connect as MetamaskConnect } from '@wagmi/core';
+
+
 
 
 const WalletModal: React.FC<WalletModalProps> = ({ onClose }) => {
@@ -23,7 +33,7 @@ const WalletModal: React.FC<WalletModalProps> = ({ onClose }) => {
   }
   const connectJoyID = async () => {
     try {
-      const authData = await connect()
+      const authData = await joyIdConnect()
       const ckbAddress = setAddress(authData)
       dispatch(setWallet({
         address: ckbAddress,
@@ -38,13 +48,29 @@ const WalletModal: React.FC<WalletModalProps> = ({ onClose }) => {
     }
   }
 
-  const connectWallet = (name: string) => {
+  const setMeskAddress = (ethAddress: `0x${string}` | undefined) => {
+    config.initializeConfig(config.predefined.AGGRON4);
+    const lock = commons.omnilock.createOmnilockScript({
+      auth: { flag: 'ETHEREUM', content: ethAddress ?? '0x' },
+    });
+    const address = helpers.encodeToAddress(lock, {
+      config: config.predefined.AGGRON4,
+    });
+    dispatch(setWallet({
+      address: address,
+      ethAddress: ethAddress, 
+      walletType: 'MetaMask'
+    }))
+  }
+
+  const connectWallet = async (name: string) => {
     if (name === 'JoyID') {
       connectJoyID()
     }
 
     if (name === 'Metamask') {
-      console.log(name)
+      const { account } = await MetamaskConnect({ connector: new InjectedConnector() });
+      setMeskAddress(account)
     }
   }
 

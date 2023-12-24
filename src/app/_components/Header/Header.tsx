@@ -6,9 +6,10 @@ import { useSelector, useDispatch } from 'react-redux'
 import { AppDispatch, RootState } from "@/store/store";
 import { useRouter, usePathname } from 'next/navigation';
 import Image from 'next/image';
-import { setWallet } from '@/store/walletSlice';
+import { setWallet, clearWallet } from '@/store/walletSlice';
 import { useSnackbar } from 'notistack';
 import useWalletBalance from '@/hooks/useBalance';
+
 
 const Header:React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState<Boolean>(false);
@@ -54,6 +55,11 @@ const Header:React.FC = () => {
     router.push(endpoint)
   }
 
+  const handleDisconnect = () => {
+    dispatch(clearWallet());
+    localStorage.removeItem('wallet');
+  };
+
   return (
     <div className='flex flex-col'>
       <div 
@@ -97,7 +103,11 @@ const Header:React.FC = () => {
                     </div>
                     <ContentCopyIcon className='text-white001 cursor-pointer'/>
                   </div>
-                  <div className='border justify-center h-12 my-4 flex items-center rounded-md cursor-pointer text-white001'>
+                  <div 
+                    className='border justify-center h-12 my-4 flex items-center rounded-md cursor-pointer text-white001'
+                    onClick={handleDisconnect}
+                  >
+                    
                     Disconnect
                   </div>
                 </>) : (<>

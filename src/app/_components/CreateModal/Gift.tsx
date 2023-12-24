@@ -45,6 +45,7 @@ const CreateGift: React.FC = () => {
   const [totalCapacity, setTotalCapacity] = useState<number>(0) 
   
   const walletAddress = useSelector((state: RootState) => state.wallet.wallet?.address);
+  const ethAddress = useSelector((state: RootState) => state.wallet.wallet?.ethAddress);
   const balance = useWalletBalance(walletAddress!!)
 
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
@@ -95,6 +96,7 @@ const CreateGift: React.FC = () => {
 
       const contentBuffer = await content.arrayBuffer();
       const contentType = content.type || getMIMETypeByName(content.name);
+      console.log(walletAddress)
       const spore = await addSporeMutation.mutateAsync({
         data: {
           contentType,

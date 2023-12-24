@@ -8,6 +8,7 @@ import { initConfig } from "@joyid/ckb";
 import { JoyIDConfig } from "@/config/joyid/joyid";
 import { ConnectProvider } from '@/hooks/useConnect';
 import JoyIdConnector from '@/connectors/joyId';
+import MetaMaskConnector from "@/connectors/metamask";
 import { MaterialDesignContent, SnackbarProvider } from 'notistack'; 
 import { styled } from "@mui/material";
 
@@ -23,7 +24,7 @@ const StyledMaterialDesignContent = styled(MaterialDesignContent)(() => ({
 
 const config = {
   autoConnect: true,
-  connectors: [new JoyIdConnector()],
+  connectors: [new JoyIdConnector(), new MetaMaskConnector()],
 };
 
 
@@ -33,7 +34,6 @@ function RootLayout({
   children: React.ReactNode;
 }) {
   initConfig(JoyIDConfig)
-
   return (
     <html lang="en" className="min-h-full min-w-full">
       <body className="bg-primary005 bg-no-repeat min-h-full min-w-full m-0">
