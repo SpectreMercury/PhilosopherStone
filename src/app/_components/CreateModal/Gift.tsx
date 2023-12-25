@@ -17,6 +17,8 @@ import { getMIMETypeByName } from '@/utils/mime';
 import { trpc } from '@/app/_trpc/client';
 import { useMutation } from '@tanstack/react-query';
 import { BI } from '@ckb-lumos/lumos';
+import useLoadingOverlay from '@/hooks/useLoadOverlay';
+import LoadingOverlay from '../LoadingOverlay/LoadingOverlay';
 
 const selectOptions = [
   { value: 'box1', label: 'Box 1' },
@@ -25,12 +27,17 @@ const selectOptions = [
   { value: 'box4', label: 'Box 4' },
 ];
 
+interface CreateGiftProps {
+  onClose?: () => void; //
+}
+
+
 interface UploadedImage {
   file: File;
   preview: string;
 }
 
-const CreateGift: React.FC = () => {
+const CreateGift: React.FC<CreateGiftProps> = ({ onClose }) => {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
   const [uploadedImages, setUploadedImages] = useState<UploadedImage[]>([]);
@@ -43,6 +50,8 @@ const CreateGift: React.FC = () => {
   const { address, lock, signTransaction } = useConnect()
   const [capacityList, setCapacityList] = useState<number[]>([]);
   const [totalCapacity, setTotalCapacity] = useState<number>(0) 
+  const { isVisible, showOverlay, hideOverlay } = useLoadingOverlay();
+  const texts = ["Random text 1", "Random text 2", "Random text 3"]; 
   
   const walletAddress = useSelector((state: RootState) => state.wallet.wallet?.address);
   const ethAddress = useSelector((state: RootState) => state.wallet.wallet?.ethAddress);
@@ -85,15 +94,19 @@ const CreateGift: React.FC = () => {
   });
 
   const handleSubmit = useCallback(
-    async (
-      content: Blob | null,
-      clusterId: string | undefined,
-      useCapacityMargin?: boolean,
-    ) => {
-      if (!content || !walletAddress || !lock) {
-        return;
-      }
+  async (
+    content: Blob | null,
+    clusterId: string | undefined,
+    useCapacityMargin?: boolean,
+  ) => {
+    if (!content || !walletAddress || !lock) {
+      return;
+    }
 
+    // Show the loading overlay
+    showOverlay();
+
+    try {
       const contentBuffer = await content.arrayBuffer();
       const contentType = content.type || getMIMETypeByName(content.name);
       console.log(walletAddress)
@@ -108,11 +121,21 @@ const CreateGift: React.FC = () => {
         config: predefinedSporeConfigs.Aggron4,
         capacityMargin: useCapacityMargin ? BI.from(100_000_000) : BI.from(0),
       });
+
       enqueueSnackbar('Gift Mint Successful', { variant: 'success' });
-      close();
-    },
-    [walletAddress, lock, addSporeMutation],
-  );
+    } catch (error) {
+      // Handle errors, maybe show a different message
+      enqueueSnackbar('An error occurred', { variant: 'error' });
+    } finally {
+      // Hide the loading overlay whether the operation was successful or not
+      hideOverlay();
+    }
+
+    onClose?.(); ;
+  },
+  [walletAddress, lock, addSporeMutation, showOverlay, hideOverlay],
+);
+
 
   useEffect(() => {
     if(onChainSize === 0) {
@@ -147,6 +170,7 @@ const CreateGift: React.FC = () => {
 
   return (
     <div>
+      <LoadingOverlay isVisible={isVisible} texts={texts} />
       <p className='text-white001 font-SourceSanPro font-normal mb-2'>Assign to a blind box(optional)</p>
       <Select options={selectOptions} onSelect={handleSelectChange} />
       <div {...getRootProps()} className="border-dashed h-[280px] rounded-md border-2 border-gray-300 p-4 mt-4 text-center">

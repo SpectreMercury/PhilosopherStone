@@ -7,7 +7,18 @@ interface ModalProps {
   children: React.ReactNode;
 }
 
+interface WithOnCloseProp {
+  onClose?: () => void;
+}
+
 const CreateModal: React.FC<ModalProps> = ({ title, onClose, children }) => {
+
+  const childrenWithClose = React.Children.map(children, child => 
+    React.isValidElement<WithOnCloseProp>(child) 
+      ? React.cloneElement(child, { onClose }) 
+      : child
+  );
+
   return (
     <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center">
       <div className="w-full bg-primary010 border border-white008 mx-4 px-4 py-6 rounded-lg">
@@ -17,7 +28,7 @@ const CreateModal: React.FC<ModalProps> = ({ title, onClose, children }) => {
             <CloseIcon className='text-white001' />
           </button>
         </div>
-        {children}
+        {childrenWithClose}
       </div>
     </div>
   );

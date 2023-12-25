@@ -34,6 +34,7 @@ function RootLayout({
   children: React.ReactNode;
 }) {
   initConfig(JoyIDConfig)
+  
   return (
     <html lang="en" className="min-h-full min-w-full">
       <body className="bg-primary005 bg-no-repeat min-h-full min-w-full m-0">

@@ -93,7 +93,7 @@ const UserHome: React.FC = () => {
       </button>
       {isModalOpen && (
         <CreateModal title={`Create New ${activeTab}`} onClose={handleCloseModal}>
-          {activeTab === 'Gift' ? <CreateGift /* 传递所需的 props */ /> : (
+          {activeTab === 'Gift' ? <CreateGift /* 传递所需的 props */ onClose={handleCloseModal}/> : (
             <CreateBlindBox
               onClose={handleCloseModal}
               onCreateGift={changeTabType}

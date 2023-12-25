@@ -8,6 +8,8 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { useConnect } from '@/hooks/useConnect';
 import { sendTransaction } from '@/utils/transaction';
+import { useRouter } from 'next/navigation';
+import useLoadingOverlay from '@/hooks/useLoadOverlay';
 
 
 interface Step2Data {
@@ -21,8 +23,9 @@ interface Step3Props {
   step2Data: Step2Data;
 }
 
-
 const Step3: React.FC<Step3Props> = ({ step1Data, step2Data }) => {
+  const { isVisible, showOverlay, hideOverlay } = useLoadingOverlay();
+  const router = useRouter();
   const { signTransaction } = useConnect()
   const walletAddress = useSelector((state: RootState) => state.wallet.wallet?.address);
 
@@ -42,10 +45,8 @@ const Step3: React.FC<Step3Props> = ({ step1Data, step2Data }) => {
   const transferSporeMutation = useMutation({
     mutationFn: transferSpore,
     onSuccess: () => {
-      enqueueSnackbar('Gift Send Successful', { variant: 'success' })
     },
     onError: (error) => {
-      console.log(error)
       enqueueSnackbar('Gift Send Failed', { variant: 'error' })
     }
   });
@@ -53,7 +54,7 @@ const Step3: React.FC<Step3Props> = ({ step1Data, step2Data }) => {
 
   const handleSubmit = useCallback(
     async (values: { to: string }) => {
-      console.log(values.to)
+      showOverlay(); 
       if (!step2Data.walletAddress || !values.to || !step1Data?.cell) {
         return;
       }
@@ -68,6 +69,7 @@ const Step3: React.FC<Step3Props> = ({ step1Data, step2Data }) => {
         useCapacityMarginAsFee: true,
       });
       enqueueSnackbar('Gift Send Successful', { variant: 'success' });
+      router.push('/');
     },
     [step2Data.walletAddress, step1Data?.cell, transferSporeMutation],
   );
