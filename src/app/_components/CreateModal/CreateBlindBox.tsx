@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import List from '../List/List';
 import { Gift } from '@/types/Gifts';
+import { QuerySpore } from '@/hooks/useQuery/type';
 
 interface CreateBlindBoxProps {
   onClose: () => void;                // 关闭弹窗的回调函数
@@ -10,18 +11,7 @@ interface CreateBlindBoxProps {
 
 const CreateBlindBox: React.FC<CreateBlindBoxProps> = ({ onClose, onCreateGift, onCreateBlindBox }) => {
   const [title, setTitle] = useState('');
-  const [gifts, setGifts] = useState<Gift[]>([
-    {"id": "0", "name": "0x38910...2029", "occupid": "1000", "image": "https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/heroes/juggernaut.png"},
-    {"id": "1", "name": "0x38910...2029", "occupid": "1000", "image": "https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/heroes/juggernaut.png"},
-    {"id": "2", "name": "0x38910...2029", "occupid": "1000", "image": "https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/heroes/juggernaut.png"},
-    {"id": "3", "name": "0x38910...2029", "occupid": "1000", "image": "https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/heroes/juggernaut.png"},
-    {"id": "4", "name": "0x38910...2029", "occupid": "1000", "image": "https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/heroes/juggernaut.png"},
-    {"id": "5", "name": "0x38910...2029", "occupid": "1000", "image": "https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/heroes/juggernaut.png"},
-    {"id": "6", "name": "0x38910...2029", "occupid": "1000", "image": "https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/heroes/juggernaut.png"},
-    {"id": "7", "name": "0x38910...2029", "occupid": "1000", "image": "https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/heroes/juggernaut.png"},
-    {"id": "8", "name": "0x38910...2029", "occupid": "1000", "image": "https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/heroes/juggernaut.png"},
-    {"id": "9", "name": "0x38910...2029", "occupid": "1000", "image": "https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/heroes/juggernaut.png"}
-  ]);
+  const [gifts, setGifts] = useState<QuerySpore[]>();
   const [selectedGifts, setSelectedGifts] = useState<string[]>([]);
 
   const handleSelectGift = (id: string) => {
@@ -43,7 +33,7 @@ const CreateBlindBox: React.FC<CreateBlindBoxProps> = ({ onClose, onCreateGift, 
           placeholder="Blind Box Title" 
         />
 
-        {gifts.length === 0 ? (
+        {gifts && gifts.length === 0 ? (
           <div>
             <p className='text-white003 font-SourceSanPro text-body1mb'>No Gifts found. <span className='text-primary004 font-SourceSanPro' onClick={onCreateGift}>Create New Gift</span></p>
             <button className="w-full h-12 mt-8 font-PlayfairDisplay border border-white002 bg-white001 text-primary011 py-2 px-4 rounded" onClick={onCreateBlindBox}>Create Empty Box</button>
@@ -53,7 +43,7 @@ const CreateBlindBox: React.FC<CreateBlindBoxProps> = ({ onClose, onCreateGift, 
             <p className='text-white001 font-SourceSanPro text-body1mb'>Select Gifts to put into this Blind Box</p>
             <div className='max-h-[470px] overflow-auto'>
               <List 
-                gifts={gifts} 
+                gifts={gifts!!} 
                 onGiftClick={handleSelectGift}
                 isGiftSelected={isGiftSelected}
                 viewMode="grid"
