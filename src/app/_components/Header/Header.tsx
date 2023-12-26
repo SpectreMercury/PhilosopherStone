@@ -10,6 +10,7 @@ import { setWallet, clearWallet } from '@/store/walletSlice';
 import { useSnackbar } from 'notistack';
 import useWalletBalance from '@/hooks/useBalance';
 import WalletModal from '../WalletModal/WalletModal';
+import { kv } from '@vercel/kv';
 
 
 const Header:React.FC = () => {
@@ -62,6 +63,24 @@ const Header:React.FC = () => {
     dispatch(clearWallet());
     localStorage.removeItem('wallet');
   };
+
+  async function callSaveAction(key: string, value: Object) {
+    const response = await fetch('/api/gift', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ action: 'save', key, value }),
+    });
+    const data = await response.json();
+    console.log(data)
+    return data;
+  }
+
+  useEffect(() => {
+    console.log(2)
+    callSaveAction('1', {'giftMessage': '1'})
+  }, [])
 
   return (
     <div className='flex flex-col'>

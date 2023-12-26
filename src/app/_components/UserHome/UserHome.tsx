@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import CreateModal from '../CreateModal/CreateModal';
 import CreateGift from '../CreateModal/Gift';
@@ -7,6 +7,7 @@ import CreateBlindBox from '../CreateModal/CreateBlindBox';
 import { useSporesByAddressQuery } from '@/hooks/useQuery/useSporesByAddress';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
+import { QuerySpore } from '@/hooks/useQuery/type';
 
 const LoadingSkeleton = () => {
   return (
@@ -28,9 +29,8 @@ const UserHome: React.FC = () => {
   const walletAddress = useSelector((state: RootState) => state.wallet.wallet?.address);
   const { data: spores, isLoading: isSporesLoading } = useSporesByAddressQuery(
     walletAddress as string,
-  );
-
-  console.log(isSporesLoading, spores)
+  );const storeSporesList = useSelector((state: RootState) => state.spores.spores);
+  const [sporesList, setSporesList] = useState<QuerySpore[]>([]) 
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -45,7 +45,7 @@ const UserHome: React.FC = () => {
   }
 
   const renderContent = () => {
-    if (isSporesLoading) {
+    if (isSporesLoading ) {
       return <LoadingSkeleton />; // Use the LoadingSkeleton component
     } else if (spores && spores.length > 0) {
       return <GiftList onNewGiftClick={handleOpenModal} list={spores}/>;

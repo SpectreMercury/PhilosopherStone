@@ -3,6 +3,9 @@ import { QuerySpore } from './type';
 import { graphQLClient } from '@/utils/graphql';
 import { useRefreshableQuery } from './useRefreshableQuery';
 import { RequestDocument } from 'graphql-request';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
+import { setSpores } from '@/store/sporeListSlice';
 
 const sporesByAddressQueryDocument = graphql(`
   query GetSporesByAddress($address: String!) {
@@ -30,6 +33,8 @@ const sporesByAddressQueryDocument = graphql(`
 `)
 
 export function useSporesByAddressQuery(address: string | undefined, enabled = true) {
+  const dispatch = useDispatch()
+
   const { data, ...rest } = useRefreshableQuery(
     {
       queryKey: ['sporesByAddress', address],
@@ -46,7 +51,9 @@ export function useSporesByAddressQuery(address: string | undefined, enabled = t
   );
   const spores: QuerySpore[] = data?.spores ?? [];
   const isLoading = rest.isLoading || rest.isPending;
-
+  if (spores.length != 0) {
+    dispatch(setSpores(spores))
+  }
   return {
     ...rest,
     data: spores,

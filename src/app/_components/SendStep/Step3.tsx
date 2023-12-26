@@ -10,7 +10,7 @@ import { useConnect } from '@/hooks/useConnect';
 import { sendTransaction } from '@/utils/transaction';
 import { useRouter } from 'next/navigation';
 import useLoadingOverlay from '@/hooks/useLoadOverlay';
-
+import { UpdateGiftReadStatusAction, saveAction } from '@/utils/vercelAction';
 
 interface Step2Data {
   walletAddress: string;
@@ -51,6 +51,29 @@ const Step3: React.FC<Step3Props> = ({ step1Data, step2Data }) => {
     }
   });
   
+  async function callSaveAction(key: string, value: Object) {
+    const response = await fetch('/api/gift', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ action: 'save', key, value }),
+    });
+    const data = await response.json();
+    return data;
+  }
+
+  async function callUpdateGiftReadStatusAction(key: string, value: string) {
+    const response = await fetch('/api/gift', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ action: 'updateStatus', key, value }),
+    });
+    const data = await response.json();
+    return data;
+  }
 
   const handleSubmit = useCallback(
     async (values: { to: string }) => {
@@ -58,7 +81,6 @@ const Step3: React.FC<Step3Props> = ({ step1Data, step2Data }) => {
       if (!step2Data.walletAddress || !values.to || !step1Data?.cell) {
         return;
       }
-
       await transferSporeMutation.mutateAsync({
         outPoint: step1Data.cell.outPoint!,
         fromInfos: [walletAddress!!],
@@ -68,8 +90,12 @@ const Step3: React.FC<Step3Props> = ({ step1Data, step2Data }) => {
         config: predefinedSporeConfigs.Aggron4,
         useCapacityMarginAsFee: true,
       });
+      await callSaveAction(step2Data.walletAddress, {
+        'giftMessage': step2Data.giftMessage
+      })
+      await callUpdateGiftReadStatusAction(values.to, step1Data.id)
       enqueueSnackbar('Gift Send Successful', { variant: 'success' });
-      router.push('/');
+      router.push('/finished');
     },
     [step2Data.walletAddress, step1Data?.cell, transferSporeMutation],
   );

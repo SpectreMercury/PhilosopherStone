@@ -7,10 +7,11 @@ import { useSporesByAddressQuery } from '@/hooks/useQuery/useSporesByAddress';
 
 interface Step1Pros {
   onSelection?: (data:QuerySpore) => void,
-  selected? : QuerySpore
+  selected? : QuerySpore,
+  hasGift?: string | null | undefined
 }
 
-const Step1: React.FC<Step1Pros> = ({onSelection, selected}) => {
+const Step1: React.FC<Step1Pros> = ({onSelection, selected, hasGift}) => {
   const [tab, setTab] = useState<'Gift' | 'Spore'>('Gift');
   const [gifts, setGifts] = useState<QuerySpore[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -18,7 +19,8 @@ const Step1: React.FC<Step1Pros> = ({onSelection, selected}) => {
   const [selectedGifts, setSelectedGifts] = useState<string[]>([]);
   const [activeTab, setActiveTab] = useState<'Gift' | 'Blind Box'>('Gift');
   const walletAddress = useSelector((state: RootState) => state.wallet.wallet?.address);
-
+  const storeSporesList = useSelector((state: RootState) => state.spores.spores);
+  const [sporesList, setSporesList] = useState<QuerySpore[]>([]) 
 
   const { data: spores, isLoading: isSporesLoading } = useSporesByAddressQuery(
     walletAddress as string,
@@ -31,13 +33,27 @@ const Step1: React.FC<Step1Pros> = ({onSelection, selected}) => {
     }
     setSelectedGifts([id]); 
   };
-
+  
   const isGiftSelected = (id: string) => selectedGifts.includes(id);
 
   useEffect(() => {
     console.log(selected)
     selected ? setSelectedGifts([selected.id]) : ''
   }, [selected])
+
+  useEffect(() => {
+    if(storeSporesList && storeSporesList.length != 0) {
+      setSporesList(storeSporesList)
+      if (hasGift) {
+        console.log(hasGift)
+        const selectedSpore = storeSporesList.find(spore => spore.id === hasGift);
+        if (selectedSpore && onSelection) {
+          onSelection(selectedSpore);
+          isGiftSelected(selectedSpore.id);
+        }
+      }
+    }
+  }, [storeSporesList, spores])
 
   return (
     <div className='px-4'>
@@ -66,7 +82,7 @@ const Step1: React.FC<Step1Pros> = ({onSelection, selected}) => {
 
       {tab === 'Gift' ? (
         <List
-            gifts={spores}
+            gifts={sporesList}
             onGiftClick={handleSelectSingleGift}
             isGiftSelected={isGiftSelected}
             viewMode={viewMode}
@@ -74,7 +90,7 @@ const Step1: React.FC<Step1Pros> = ({onSelection, selected}) => {
         />
       ) : (
         <List
-            gifts={gifts}
+            gifts={sporesList}
             onGiftClick={handleSelectSingleGift}
             isGiftSelected={isGiftSelected}
             viewMode={viewMode}

@@ -23,11 +23,17 @@ const SendGift: React.FC = () => {
   const [stepStatus, setStepStatus] = useState({ step1: false, step2: false, step3: false });
   const [step1Data, setStep1Data] = useState<QuerySpore>();
   const [step2Data, setStep2Data] = useState<Step2Data>();
+  const [hasGift, setHasGift] = useState<string>()
   const searchParams = useSearchParams();
 
   const handleGiftChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setGift(e.target.value);
   };
+
+  useEffect(() => {
+    const hasGiftValue = searchParams.get('hasGift');
+    setHasGift(hasGiftValue ?? '');
+  }, [searchParams])
 
   const handleRecipientChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -61,10 +67,6 @@ const SendGift: React.FC = () => {
     }
   }, [searchParams]);
 
-  useEffect(() => {
-    console.log('1', step1Data)
-  }, [step1Data])
-
   return (
     <div className="container mx-auto">
       <div>
@@ -77,7 +79,7 @@ const SendGift: React.FC = () => {
             {renderStepIcon(1)}
           </div>
           {activeStep === 1 && (
-            <Step1 onSelection={handleStep1Selection} selected={step1Data}/>
+            <Step1 onSelection={handleStep1Selection} selected={step1Data} hasGift={hasGift}/>
           )}
         </div>
 

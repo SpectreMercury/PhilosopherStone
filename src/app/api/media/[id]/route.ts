@@ -16,8 +16,6 @@ export async function GET(_: Request, { params }: { params: { id: string } }) {
     },
   });
 
-  console.log(collector)
-
   for await (const cell of collector.collect()) {
     const spore = unpackToRawSporeData(cell.data);
     const buffer = Buffer.from(spore.content.toString().slice(2), 'hex');
