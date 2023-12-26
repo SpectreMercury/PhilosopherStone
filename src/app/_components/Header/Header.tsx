@@ -9,11 +9,14 @@ import Image from 'next/image';
 import { setWallet, clearWallet } from '@/store/walletSlice';
 import { useSnackbar } from 'notistack';
 import useWalletBalance from '@/hooks/useBalance';
+import WalletModal from '../WalletModal/WalletModal';
 
 
 const Header:React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState<Boolean>(false);
   const [activeRoute, setActiveRoute] = useState<string>('');
+  const [showModal, setShowModal] = useState(false);
+
   const router = useRouter();
   const dispatch = useDispatch()
   const pathname = usePathname()
@@ -62,6 +65,8 @@ const Header:React.FC = () => {
 
   return (
     <div className='flex flex-col'>
+      {showModal && <WalletModal onClose={() => setShowModal(false)} />}
+
       <div 
         className="flex justify-between items-center px-4 py-3 bg-primary011 text-white"
       >
@@ -111,7 +116,10 @@ const Header:React.FC = () => {
                     Disconnect
                   </div>
                 </>) : (<>
-                  <div className='border justify-center h-12 my-4 flex items-center rounded-md cursor-pointer text-white001'>
+                  <div 
+                    className='border justify-center h-12 my-4 flex items-center rounded-md cursor-pointer text-white001'
+                    onClick={() => {setShowModal(true)}}
+                  >
                     Connect Wallet
                   </div>
                 </>)
