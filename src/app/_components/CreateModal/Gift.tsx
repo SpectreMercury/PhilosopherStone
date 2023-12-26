@@ -20,12 +20,12 @@ import { BI } from '@ckb-lumos/lumos';
 import useLoadingOverlay from '@/hooks/useLoadOverlay';
 import LoadingOverlay from '../LoadingOverlay/LoadingOverlay';
 
-const selectOptions = [
-  { value: 'box1', label: 'Box 1' },
-  { value: 'box2', label: 'Box 2' },
-  { value: 'box3', label: 'Box 3' },
-  { value: 'box4', label: 'Box 4' },
-];
+// const selectOptions = [
+//   { value: 'box1', label: 'Box 1' },
+//   { value: 'box2', label: 'Box 2' },
+//   { value: 'box3', label: 'Box 3' },
+//   { value: 'box4', label: 'Box 4' },
+// ];
 
 interface CreateGiftProps {
   onClose?: () => void; //
@@ -172,7 +172,7 @@ const CreateGift: React.FC<CreateGiftProps> = ({ onClose }) => {
     <div>
       <LoadingOverlay isVisible={isVisible} texts={texts} />
       <p className='text-white001 font-SourceSanPro font-normal mb-2'>Assign to a blind box(optional)</p>
-      <Select options={selectOptions} onSelect={handleSelectChange} />
+      {/* <Select options={selectOptions} onSelect={handleSelectChange} /> */}
       <div {...getRootProps()} className="border-dashed h-[280px] rounded-md border-2 border-gray-300 p-4 mt-4 text-center">
         <input {...getInputProps()} />
         {
