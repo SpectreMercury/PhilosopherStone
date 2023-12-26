@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import List from '../List/List';
-import { Gift } from '@/types/Gifts';
 import { QuerySpore } from '@/hooks/useQuery/type';
 
 interface CreateBlindBoxProps {
