@@ -67,7 +67,6 @@ export const useConnect = () => {
     async (
       txSkeleton: helpers.TransactionSkeletonType,
     ): Promise<Transaction> => {
-      console.log(connectors)
       if (!connector) {
         throw new Error(`Connector ${connectorType} not found`);
       }

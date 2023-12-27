@@ -1,5 +1,4 @@
 function customFetch(request, init) {
-  console.log('customFetch', request);
   return fetch(request, {
     ...init,
     next: {

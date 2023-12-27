@@ -73,12 +73,10 @@ const Header:React.FC = () => {
       body: JSON.stringify({ action: 'save', key, value }),
     });
     const data = await response.json();
-    console.log(data)
     return data;
   }
 
   useEffect(() => {
-    console.log(2)
     callSaveAction('1', {'giftMessage': '1'})
   }, [])
 

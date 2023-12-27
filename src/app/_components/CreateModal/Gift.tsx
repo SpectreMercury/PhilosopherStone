@@ -88,9 +88,6 @@ const CreateGift: React.FC<CreateGiftProps> = ({ onClose }) => {
 
   const addSporeMutation = useMutation({
     mutationFn: addSpore,
-    onSuccess: () => {
-      console.log()
-    },
   });
 
   const handleSubmit = useCallback(
@@ -109,7 +106,6 @@ const CreateGift: React.FC<CreateGiftProps> = ({ onClose }) => {
     try {
       const contentBuffer = await content.arrayBuffer();
       const contentType = content.type || getMIMETypeByName(content.name);
-      console.log(walletAddress)
       const spore = await addSporeMutation.mutateAsync({
         data: {
           contentType,
@@ -153,7 +149,6 @@ const CreateGift: React.FC<CreateGiftProps> = ({ onClose }) => {
   };
 
   useEffect(() => {
-    console.log(capacityList)
     setTotalCapacity(capacityList.reduce((acc, curr) => acc + curr, 0))
   }, [capacityList])
 

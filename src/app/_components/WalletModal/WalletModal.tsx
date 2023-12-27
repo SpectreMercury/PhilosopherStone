@@ -27,7 +27,6 @@ const WalletModal: React.FC<WalletModalProps> = ({ onClose }) => {
       auth: {flag: 'ETHEREUM', content: address ?? '0x'},
     },{ config: config.predefined.AGGRON4 })
 
-    console.log('lock:', lock)
     const ckbAddress = helpers.encodeToAddress(lock, {
       config: config.predefined.AGGRON4
     })
@@ -43,7 +42,6 @@ const WalletModal: React.FC<WalletModalProps> = ({ onClose }) => {
         ethAddress: authData, 
         walletType: 'JoyID'
       }))
-      console.log('authdata', authData);
       onClose()
     } catch(error) {
       console.log(error)

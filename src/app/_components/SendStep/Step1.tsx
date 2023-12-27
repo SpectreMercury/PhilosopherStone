@@ -37,7 +37,6 @@ const Step1: React.FC<Step1Pros> = ({onSelection, selected, hasGift}) => {
   const isGiftSelected = (id: string) => selectedGifts.includes(id);
 
   useEffect(() => {
-    console.log(selected)
     selected ? setSelectedGifts([selected.id]) : ''
   }, [selected])
 
@@ -45,7 +44,6 @@ const Step1: React.FC<Step1Pros> = ({onSelection, selected, hasGift}) => {
     if(storeSporesList && storeSporesList.length != 0) {
       setSporesList(storeSporesList)
       if (hasGift) {
-        console.log(hasGift)
         const selectedSpore = storeSporesList.find(spore => spore.id === hasGift);
         if (selectedSpore && onSelection) {
           onSelection(selectedSpore);

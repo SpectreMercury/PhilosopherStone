@@ -3,7 +3,6 @@ import { predefinedSporeConfigs, unpackToRawSporeData } from '@spore-sdk/core';
 
 export async function GET(_: Request, { params }: { params: { id: string } }) {
   const { id } = params;
-  console.log(id)
   if (!id) {
     return new Response(null, { status: 400 });
   }
