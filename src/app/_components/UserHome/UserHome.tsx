@@ -44,11 +44,15 @@ const UserHome: React.FC = () => {
     setActiveTab('Gift')
   }
 
+  useEffect(() => {
+    setSporesList(storeSporesList!!)
+  }, [storeSporesList])
+
   const renderContent = () => {
     if (isSporesLoading ) {
       return <LoadingSkeleton />; // Use the LoadingSkeleton component
-    } else if (spores && spores.length > 0) {
-      return <GiftList onNewGiftClick={handleOpenModal} list={spores}/>;
+    } else if (sporesList && sporesList.length > 0) {
+      return <GiftList onNewGiftClick={handleOpenModal} list={sporesList}/>;
     } else {
       return (
         <div>

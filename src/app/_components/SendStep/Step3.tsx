@@ -11,6 +11,8 @@ import { sendTransaction } from '@/utils/transaction';
 import { useRouter } from 'next/navigation';
 import useLoadingOverlay from '@/hooks/useLoadOverlay';
 import { UpdateGiftReadStatusAction, saveAction } from '@/utils/vercelAction';
+import LoadingOverlay from '../LoadingOverlay/LoadingOverlay';
+import { useSporesByAddressQuery } from '@/hooks/useQuery/useSporesByAddress';
 
 interface Step2Data {
   walletAddress: string;
@@ -25,9 +27,13 @@ interface Step3Props {
 
 const Step3: React.FC<Step3Props> = ({ step1Data, step2Data }) => {
   const { isVisible, showOverlay, hideOverlay } = useLoadingOverlay();
+  const texts = ["Unmatched Flexibility and Interopera­bility", "Supreme Security and Decentrali­zation", "Inventive Tokenomics"]; 
   const router = useRouter();
   const { signTransaction } = useConnect()
   const walletAddress = useSelector((state: RootState) => state.wallet.wallet?.address);
+  const { refresh: refreshSporesByAddress } = useSporesByAddressQuery(walletAddress, false);
+
+  
 
   const transferSpore = useCallback(
     async (...args: Parameters<typeof _transferSpore>) => {
@@ -94,7 +100,9 @@ const Step3: React.FC<Step3Props> = ({ step1Data, step2Data }) => {
         'giftMessage': step2Data.giftMessage
       })
       await callUpdateGiftReadStatusAction(values.to, step1Data.id)
+      hideOverlay();
       enqueueSnackbar('Gift Send Successful', { variant: 'success' });
+      refreshSporesByAddress()
       router.push('/finished');
     },
     [step2Data.walletAddress, step1Data?.cell, transferSporeMutation],
@@ -102,6 +110,8 @@ const Step3: React.FC<Step3Props> = ({ step1Data, step2Data }) => {
 
   return (
     <div className='px-4 mt-8'>
+      <LoadingOverlay isVisible={isVisible} texts={texts} />
+
       <div className='font-SourceSanPro text-white001 text-subheadermb mb-2'>Gift Information</div>
       <table className="table-auto w-full mb-8">
         <tbody>

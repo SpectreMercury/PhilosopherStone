@@ -7,7 +7,7 @@ import { AppDispatch, RootState } from "@/store/store";
 import { useRouter, usePathname } from 'next/navigation';
 import Image from 'next/image';
 import { setWallet, clearWallet } from '@/store/walletSlice';
-import { useSnackbar } from 'notistack';
+import { enqueueSnackbar, useSnackbar } from 'notistack';
 import useWalletBalance from '@/hooks/useBalance';
 import WalletModal from '../WalletModal/WalletModal';
 import { kv } from '@vercel/kv';
@@ -16,7 +16,7 @@ import { kv } from '@vercel/kv';
 const Header:React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState<Boolean>(false);
   const [activeRoute, setActiveRoute] = useState<string>('');
-  const [showModal, setShowModal] = useState(false);
+  const [showHeaderModal, setHeaderShowModal] = useState(false);
 
   const router = useRouter();
   const dispatch = useDispatch()
@@ -76,13 +76,23 @@ const Header:React.FC = () => {
     return data;
   }
 
+  const handleCopy = async (textToCopy: string) => {
+    try {
+      await navigator.clipboard.writeText(textToCopy);
+      enqueueSnackbar('Copied Successful', {variant: 'success'})
+    } catch (err) {
+      enqueueSnackbar('Copied Fail', {variant: 'error'})
+    }
+  };
+
+
   useEffect(() => {
     callSaveAction('1', {'giftMessage': '1'})
   }, [])
 
   return (
     <div className='flex flex-col'>
-      {showModal && <WalletModal onClose={() => setShowModal(false)} />}
+      {showHeaderModal && <WalletModal onClose={() => setHeaderShowModal(false)} />}
 
       <div 
         className="flex justify-between items-center px-4 py-3 bg-primary011 text-white"
@@ -123,7 +133,9 @@ const Header:React.FC = () => {
                       />
                       <div className='text-white001 text-labelmb'>{walletAddress.slice(0, 10)}...{walletAddress.slice(walletAddress.length - 10, walletAddress.length)}</div>
                     </div>
-                    <ContentCopyIcon className='text-white001 cursor-pointer'/>
+                    <ContentCopyIcon className='text-white001 cursor-pointer' 
+                      onClick={() => {handleCopy(walletAddress)}}
+                    />
                   </div>
                   <div 
                     className='border justify-center h-12 my-4 flex items-center rounded-md cursor-pointer text-white001'
@@ -135,7 +147,7 @@ const Header:React.FC = () => {
                 </>) : (<>
                   <div 
                     className='border justify-center h-12 my-4 flex items-center rounded-md cursor-pointer text-white001'
-                    onClick={() => {setShowModal(true)}}
+                    onClick={() => {setHeaderShowModal(true)}}
                   >
                     Connect Wallet
                   </div>

@@ -7,12 +7,17 @@ import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import LanguageIcon from '@mui/icons-material/Language';
 import Link from 'next/link';
+import { enqueueSnackbar } from 'notistack';
+import { useSporeQuery } from '@/hooks/useQuery/useQuerybySpore';
 
 const Gift: React.FC = () => {
   const router = useRouter();
   const pathName = usePathname();
   const address = pathName.split("/")[pathName.split('/').length - 1]
   const ckbOccupied = useSearchParams()
+  const { data: spore, isLoading: isSporeLoading } = useSporeQuery(
+    address as string,
+  );
 
   function formatNumberWithCommas(num: string): string {
     const numStr = num.toString();
@@ -21,6 +26,14 @@ const Gift: React.FC = () => {
     return commaInserted.split('').reverse().join('');
   }
 
+  const handleCopy = async (textToCopy: string) => {
+    try {
+      await navigator.clipboard.writeText(textToCopy);
+      enqueueSnackbar('Copied Successful', {variant: 'success'})
+    } catch (err) {
+      enqueueSnackbar('Copied Fail', {variant: 'error'})
+    }
+  };
 
   return (
     <div className="flex flex-col items-center p-4">
@@ -32,8 +45,10 @@ const Gift: React.FC = () => {
           <div className='text-white001'>{address.slice(0,6)}...{address.slice(address.length - 6, address.length)}</div>
         </div>
         <div className='flex gap-2'>
-          <ContentCopyIcon className='text-white001 cursor-pointer'/>
-          <LanguageIcon className='text-white001 cursor-pointer' />
+          <ContentCopyIcon className='text-white001 cursor-pointer' onClick={() => {handleCopy(address)}}/>
+          <Link href={`https://pudge.explorer.nervos.org/transaction/${spore?.cell?.outPoint?.txHash}`} target='_blank'>
+            <LanguageIcon className='text-white001 cursor-pointer' />
+          </Link>
         </div>
       </div>
       <div className="py-4">

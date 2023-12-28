@@ -51,7 +51,7 @@ const Step2: React.FC<Step2Props> = ({ data, setData }) => {
       <input 
         type="text" 
         id="walletAddress"
-        className='block w-full h-12 rounded-md bg-primary005 px-4'
+        className='block w-full h-12 rounded-md bg-primary005 px-4 text-white001'
         placeholder='E.g. 0xAbCdEfGhIjKlMnOpQrStUvWxYz0123456789'
         value={walletAddress}
         onChange={(e) => setWalletAddress(e.target.value)}
@@ -64,7 +64,7 @@ const Step2: React.FC<Step2Props> = ({ data, setData }) => {
         value={email}
         
         onChange={handleEmailChange}
-        className={`block w-full h-12 rounded-md bg-primary005 px-4 ${emailError ? 'error ' : ''}`}
+        className={`block w-full h-12 rounded-md bg-primary005 text-white001 px-4 ${emailError ? 'error ' : ''}`}
       />
       {emailError && <p className="error-message">Email format is incorrect</p>}
 
@@ -72,7 +72,7 @@ const Step2: React.FC<Step2Props> = ({ data, setData }) => {
       <textarea 
         id="message"
         value={message}
-        className='block w-full h-24 rounded-md bg-primary005 p-4'
+        className='block w-full h-24 rounded-md bg-primary005 p-4 text-white001'
         onChange={(e) => setMessage(e.target.value)}
       />
 

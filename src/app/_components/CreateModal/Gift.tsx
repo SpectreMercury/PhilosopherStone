@@ -19,6 +19,7 @@ import { useMutation } from '@tanstack/react-query';
 import { BI } from '@ckb-lumos/lumos';
 import useLoadingOverlay from '@/hooks/useLoadOverlay';
 import LoadingOverlay from '../LoadingOverlay/LoadingOverlay';
+import { useSporesByAddressQuery } from '@/hooks/useQuery/useSporesByAddress';
 
 // const selectOptions = [
 //   { value: 'box1', label: 'Box 1' },
@@ -51,11 +52,13 @@ const CreateGift: React.FC<CreateGiftProps> = ({ onClose }) => {
   const [capacityList, setCapacityList] = useState<number[]>([]);
   const [totalCapacity, setTotalCapacity] = useState<number>(0) 
   const { isVisible, showOverlay, hideOverlay } = useLoadingOverlay();
-  const texts = ["Random text 1", "Random text 2", "Random text 3"]; 
-  
+  const texts = ["Unmatched Flexibility and Interopera­bility", "Supreme Security and Decentrali­zation", "Inventive Tokenomics"]; 
+
   const walletAddress = useSelector((state: RootState) => state.wallet.wallet?.address);
   const ethAddress = useSelector((state: RootState) => state.wallet.wallet?.ethAddress);
   const balance = useWalletBalance(walletAddress!!)
+  const { refresh: refreshSporesByAddress } = useSporesByAddressQuery(walletAddress, false);
+
 
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
     const newImages = acceptedFiles.map(file => ({
@@ -117,7 +120,7 @@ const CreateGift: React.FC<CreateGiftProps> = ({ onClose }) => {
         config: predefinedSporeConfigs.Aggron4,
         capacityMargin: useCapacityMargin ? BI.from(100_000_000) : BI.from(0),
       });
-
+      refreshSporesByAddress()
       enqueueSnackbar('Gift Mint Successful', { variant: 'success' });
     } catch (error) {
       // Handle errors, maybe show a different message

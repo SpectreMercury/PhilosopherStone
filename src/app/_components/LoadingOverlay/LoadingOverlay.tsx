@@ -48,10 +48,10 @@ const LoadingOverlay: React.FC<LoadingOverlayProps> = ({ isVisible, texts }) => 
   if (!isVisible) return null;
 
   return (
-    <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center">
+    <div className="fixed inset-0 bg-primary006 bg-opacity-20 flex items-center justify-center">
       <div>
-        <h1 className="text-white text-2xl">{displayedText}</h1>
-        <p className="text-white mt-4">{texts[currentIndex]}</p>
+        <h1 className="text-white001 font-PlayfairDisplay text-hd2mb">{displayedText}</h1>
+        <p className="text-white001 font-SourceSanPro mt-4"> {texts[currentIndex]}</p>
       </div>
     </div>
   );
