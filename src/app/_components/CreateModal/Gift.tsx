@@ -171,7 +171,10 @@ const CreateGift: React.FC<CreateGiftProps> = ({ onClose }) => {
       <LoadingOverlay isVisible={isVisible} texts={texts} />
       <p className='text-white001 font-SourceSanPro font-normal mb-2'>Assign to a blind box(optional)</p>
       {/* <Select options={selectOptions} onSelect={handleSelectChange} /> */}
-      <div {...getRootProps()} className="border-dashed h-[280px] rounded-md border-2 border-gray-300 p-4 mt-4 text-center">
+      <div 
+        {...getRootProps()} 
+        className="cursor-pointer bg-primary008 border-dashed h-[280px] rounded-md border-2 border-gray-300 p-4 mt-4 text-center"
+      >
         <input {...getInputProps()} />
         {
           isDragActive ?
@@ -186,8 +189,8 @@ const CreateGift: React.FC<CreateGiftProps> = ({ onClose }) => {
                     width={99}
                     height={99}
                     alt='uploader'/>
-                  <p className='mt-8 mb-1 text-white001 font-bold font-SourceSanPro'>Click To Upload</p>
-                  <p className='text-white004 font-SourceSanPro'>Maximum file size: 300 KB</p>
+                  <p className='mt-8 mb-1 text-white001 font-SourceSanPro text-body1bdmb'>Click To Upload</p>
+                  <p className='text-white003 font-SourceSanPro text-labelmb'>Maximum file size: 300 KB</p>
                 </div>
               </>)
         }
@@ -195,10 +198,12 @@ const CreateGift: React.FC<CreateGiftProps> = ({ onClose }) => {
       <div className="mt-4 max-h-[300px] overflow-auto">
         {uploadedImages.map((image, index) => (
           <div key={index} className="bg-primary008 px-4 py-2 rounded-md flex items-center justify-between my-2">
-            <img src={image.preview} alt={`uploaded ${index}`} className="w-16 h-16 object-cover" />
-            <div>
-              <p className='w-32 text-white001 text-body1mb font-semibold font-SourceSanPro overflow-hidden overflow-ellipsis whitespace-nowrap'>{image.file.name}</p>
-              <p className='text-white004 text-body1mb font-SourceSanPro'> Estimate ≈ {onChainSize} CKBytes</p>
+            <div className='flex gap-4 items-center'>
+              <img src={image.preview} alt={`uploaded ${index}`} className="w-16 h-16 object-cover" />
+              <div>
+                <p className='w-32 text-white001 text-body1mb font-semibold font-SourceSanPro overflow-hidden overflow-ellipsis whitespace-nowrap'>{image.file.name}</p>
+                <p className='text-white004 text-body1mb font-SourceSanPro'> Estimate ≈ {onChainSize} CKBytes</p>
+              </div>
             </div>
             <div onClick={() => handleRemoveImage(index)}>
               <Image 
@@ -210,17 +215,26 @@ const CreateGift: React.FC<CreateGiftProps> = ({ onClose }) => {
             </div>
           </div>
         ))}
-        <div className='text-light-error-function font-SourceSanPro text-sm'>Not enough CKByte in your wallet. You can get some CKByte from <Link className=' underline' target='_blank' href={'https://faucet.nervos.org/'}> Nervos Pudge Faucet</Link> </div>
-        <div className='text-white001 font-SourceSanPro text-sm'>Estimate Total on Chain Size ≈ {totalCapacity}</div>
+        {file && balance === 0 && 
+          <div 
+            className='text-light-error-function font-SourceSanPro text-sm'>
+              Not enough CKByte in your wallet. You can get some CKByte from 
+              <Link className=' underline' target='_blank' href={'https://faucet.nervos.org/'}>Nervos Pudge Faucet</Link> 
+          </div>
+        }
+        <div className='flex justify-center'>
+          <div className='text-white001 font-SourceSanPro text-body1mb'>Estimate Total On-Chain Size: </div>
+          <div className='text-white001 font-SourceSanPro text-body1bdmb'>{` ${totalCapacity} CKB`}</div>
+        </div>
       </div>
       <button 
-        className={`w-full h-[48px] bg-white001 border border-primary003 font-PlayfairDisplay text-primary011 py-2 px-4 rounded mt-4 ${'bg-gray-300 text-gray-500'}`}
+        className={`cursor-pointer w-full h-[48px] bg-white001 border border-primary009 font-PlayfairDisplay text-primary011 py-2 px-4 rounded mt-4 ${!file && 'opacity-50 cursor-not-allowed'}`}
         disabled={!file}
         onClick={async () => {
           await handleSubmit(file, undefined, true)
         }}
       >
-        Create Gift
+        Create
       </button>
     </div>
   );
