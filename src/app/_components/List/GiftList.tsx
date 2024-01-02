@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
-import TableRowsIcon from '@mui/icons-material/TableRows';
 import AutoAwesomeMosaicIcon from '@mui/icons-material/AutoAwesomeMosaic';
 import CheckIcon from '@mui/icons-material/Check';
 import List from './List';
 import { QuerySpore } from '@/hooks/useQuery/type';
+import useWindowDimensions from '@/hooks/getWindowDimension';
 
 interface GiftListProps {
   onNewGiftClick?: () => void;
@@ -16,6 +16,7 @@ const GiftList: React.FC<GiftListProps> = ({ onNewGiftClick, list }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [viewMode, setViewMode] = useState<'list' | 'grid'>('grid');
   const [selectedGifts, setSelectedGifts] = useState<string[]>([]);
+  const { width } = useWindowDimensions();
 
   const handleSelectGift = (id: string) => {
     setSelectedGifts(prev => 
@@ -27,23 +28,43 @@ const GiftList: React.FC<GiftListProps> = ({ onNewGiftClick, list }) => {
 
   return (
     <div className='mb-8'>
-      <div className='mt-4 flex gap-8 justify-between items-center'>
+      <div className={`mt-4 ${width >= 1280 && 'flex gap-8 justify-between items-center'}`}>
         <input
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="px-4 py-3 rounded-full bg-primary006"
+            className={`px-4 py-3 rounded-full bg-primary008 ${width < 1280 && "w-full"}`}
             placeholder="Search gifts..."
         />
-        <div className="text-primary003 font-SourceSanPro text-body1mb" onClick={onNewGiftClick}>+ New Gift</div>
+        {width >= 1280 &&
+          <div 
+            className="text-primary003 font-SourceSanPro text-body1mb" 
+            onClick={onNewGiftClick}>
+              + New Gift
+          </div>
+        }
       </div>
       <div className="flex justify-between items-center mt-4">
         <div>
-          <span className='text-white001'>{gifts.length} Gifts</span>
-          <button className="ml-2 text-primary004">Select All</button>
+          <span className='text-white001'>{gifts.length} {gifts.length === 1 ? "Gift" : "Gifts"}</span>
+          <button className="cursor-pointer ml-4 text-primary004">Select All</button>
         </div>
         <div onClick={() => setViewMode(viewMode === 'list' ? 'grid' : 'list')}>
-          <TableRowsIcon className='text-white001'/>
+          {viewMode === "grid" ? 
+            <Image 
+              className="cursor-pointer"
+              alt='list view icon'
+              src='/svg/icon-list.svg'
+              width={24}
+              height={24}
+            /> : 
+             <Image
+              className="cursor-pointer"
+              alt='grid view icon'
+              src='/svg/icon-grid.svg'
+              width={24}
+              height={24}
+          />}
         </div>
       </div>
 
@@ -53,6 +74,22 @@ const GiftList: React.FC<GiftListProps> = ({ onNewGiftClick, list }) => {
         isGiftSelected={isGiftSelected}
         viewMode={viewMode}
       />
+
+      {/* Floating add icon */}
+      {width < 1280 &&
+        <div 
+          style={{width: 44, height: 44, position:"absolute", bottom: 32, right: 16}} 
+          className="cursor-pointer flex items-center justify-center rounded-full bg-primary007 text-primary003 text-body1mb" 
+          onClick={onNewGiftClick}>
+            <Image 
+              className="cursor-pointer"
+              alt='add icon'
+              src='/svg/icon-plus.svg'
+              width={24}
+              height={24}
+            />
+        </div>
+      }
     </div>
   );
 };
