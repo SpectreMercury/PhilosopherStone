@@ -116,11 +116,11 @@ const Step3: React.FC<Step3Props> = ({ step1Data, step2Data }) => {
       <table className="table-auto w-full mb-8">
         <tbody>
           <tr>
-            <td className="border px-4 py-2 w-32 font-SourceSanPro text-white001">Type:</td>
+            <td className="border px-4 py-2 w-32 font-SourceSanPro text-white001">Type</td>
             <td className="border px-4 py-2 font-SourceSanPro text-white001">Gift</td>
           </tr>
           <tr>
-            <td className="border px-4 py-2 w-32 font-SourceSanPro text-white001">Name:</td>
+            <td className="border px-4 py-2 w-32 font-SourceSanPro text-white001">Name</td>
             <td className="border px-4 py-2 font-SourceSanPro text-white001">{step1Data.id.slice(0, 10)}...{step1Data.id.slice(step1Data.id.length - 10, step1Data.id.length)}</td>
           </tr>
         </tbody>
@@ -133,25 +133,25 @@ const Step3: React.FC<Step3Props> = ({ step1Data, step2Data }) => {
             <td className="border px-4 py-2 font-SourceSanPro text-white001">{step2Data.walletAddress.slice(0, 10)}...{step2Data.walletAddress.slice(step2Data.walletAddress.length - 10, step2Data.walletAddress.length)}</td>
           </tr>
           <tr>
-            <td className="border px-4 py-2 w-32 font-SourceSanPro text-white001">Email:</td>
+            <td className="border px-4 py-2 w-32 font-SourceSanPro text-white001">Email</td>
             <td className="border px-4 py-2 font-SourceSanPro text-white001">{step2Data.email}</td>
           </tr>
         </tbody>
       </table>
       <div className='flex gap-6 my-8'>
         <button 
-            className="flex-1 h-12 font-PlayfairDisplay border border-white002 bg-primary011 text-white001 py-2 px-4 rounded"
+          className="flex-1 h-12 font-PlayfairDisplay border border-white009 text-white001 py-2 px-4 rounded"
         >
             Back
         </button>
-        <div 
+        <button 
           className="flex-1 h-12 font-PlayfairDisplay border border-white002 bg-white001 text-primary011 py-2 px-4 rounded"
           onClick={async() => {
             await handleSubmit({to: step2Data.walletAddress})
           }}
         >
-            Confirm
-        </div>
+            Send
+        </button>
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { MouseEventHandler, useEffect, useState } from 'react';
 import List from '../List/List';
 import { QuerySpore } from '@/hooks/useQuery/type';
 import { useSelector } from 'react-redux';
@@ -56,36 +56,21 @@ const Step1: React.FC<Step1Pros> = ({onSelection, selected, hasGift}) => {
   return (
     <div className='px-4'>
       <p className='mt-8 text-white001 font-SourceSanPro text-subheadermb'>Select Gift Type</p>
-      <div className="my-4 flex rounded-md bg-primary011">
-        <button
-          className={`flex-1 py-2 m-1 font-semibold text-white font-SourceSanPro ${activeTab === 'Gift' ? 'bg-primary010' : ''} rounded-md`}
-          onClick={() => setActiveTab('Gift')}
-        >
-          Gift
-        </button>
-        <button
-          className={`flex-1 py-1 m-1 font-semibold text-white font-SourceSanPro ${activeTab === 'Blind Box' ? 'text-blue-500 bg-primary010' : ''} rounded-md `}
-          onClick={() => setActiveTab('Blind Box')}
-        >
-          Blind Box
-        </button>
+      <div className="my-4 gap-6 flex rounded-md">
+        <Tab label="Gift" activeTab={activeTab} onClick={() => setActiveTab('Gift')} />
+        <Tab label="Blind Box" activeTab={activeTab} onClick={() => setActiveTab('Blind Box')} />
       </div>
-      <input 
-        type="text" 
-        value={searchTerm} 
-        onChange={(e) => setSearchTerm(e.target.value)} 
-        className="px-4 py-3 rounded-full bg-primary006"
-        placeholder="Search..."
-      />
-
+      <p className='mt-8 text-white001 font-SourceSanPro text-subheadermb'>
+        {activeTab === "Gift" ? "Select A Gift" : "Select A Blind Box"}
+      </p>
       {tab === 'Gift' ? (
-        <List
-            gifts={sporesList}
-            onGiftClick={handleSelectSingleGift}
-            isGiftSelected={isGiftSelected}
-            viewMode={viewMode}
-            interactionType={2}
-        />
+          <List
+              gifts={sporesList}
+              onGiftClick={handleSelectSingleGift}
+              isGiftSelected={isGiftSelected}
+              viewMode={viewMode}
+              interactionType={2}
+          />
       ) : (
         <List
             gifts={sporesList}
@@ -104,3 +89,22 @@ const Step1: React.FC<Step1Pros> = ({onSelection, selected, hasGift}) => {
 };
 
 export default Step1;
+
+interface TabProps {
+  label: 'Gift' | 'Blind Box';
+  activeTab: 'Gift' | 'Blind Box';
+  onClick: MouseEventHandler<HTMLButtonElement>;
+}
+
+const Tab: React.FC<TabProps> = ({ label, onClick, activeTab }) => { 
+  return (
+    <button
+      className={`flex-1 py-2 text-bd1mb border 
+        ${activeTab === label ? 'font-semibold text-white border-2 border-white001' : 'text-white005 border-white005' }`
+      }
+      onClick={onClick}
+    >
+      {label}
+    </button>
+  )
+}

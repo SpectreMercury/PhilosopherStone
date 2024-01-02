@@ -71,9 +71,9 @@ const SendGift: React.FC = () => {
     <div className="container mx-auto">
       <div>
         <div>
-          <div className="flex justify-between px-4 items-center h-16 bg-primary008" onClick={() => toggleStep(1)}>
+          <div className="cursor-pointer flex justify-between px-4 items-center h-16 bg-primary008" onClick={() => toggleStep(1)}>
             <div>
-              <div className='text-white007 font-SourceSanPro text-labelmb'>Step 1/3</div>
+              <div className='text-white003 font-SourceSanPro text-labelmb mb-1'>Step 1/3</div>
               <div className='text-white001 font-PlayfairDisplay text-subheadermb'>Choose Your Gift</div>
             </div>
             {renderStepIcon(1)}
@@ -84,9 +84,9 @@ const SendGift: React.FC = () => {
         </div>
 
         <div>
-          <div className="flex justify-between px-4 items-center h-16 bg-primary008" onClick={() => toggleStep(2)}>
+          <div className="cursor-pointer mt-1 flex justify-between px-4 items-center h-16 bg-primary008" onClick={() => toggleStep(2)}>
             <div>
-              <div className='text-white007 font-SourceSanPro text-labelmb'>Step 2/3</div>
+              <div className='text-white003 font-SourceSanPro text-labelmb mb-1'>Step 2/3</div>
               <div className='text-white001 font-PlayfairDisplay text-subheadermb'>Provide Recipient Details</div>
             </div>
             {renderStepIcon(2)}
@@ -97,10 +97,10 @@ const SendGift: React.FC = () => {
         </div>
 
         <div>
-          <div className="flex justify-between px-4 items-center h-16 bg-primary008" onClick={() => toggleStep(3)}>
+          <div className="cursor-pointer mt-1 flex justify-between px-4 items-center h-16 bg-primary008" onClick={() => toggleStep(3)}>
             <div>
-              <div className='text-white007 font-SourceSanPro text-labelmb'>Step 3/3</div>
-              <div className='text-white001 font-PlayfairDisplay text-subheadermb'>Confirm and Send</div>
+              <div className='text-white003 font-SourceSanPro text-labelmb mb-1'>Step 3/3</div>
+              <div className='text-white001 font-PlayfairDisplay text-subheadermb'>Confirm & Send</div>
             </div>
             {renderStepIcon(3)}
           </div>
