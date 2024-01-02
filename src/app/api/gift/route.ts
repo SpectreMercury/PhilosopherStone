@@ -24,13 +24,28 @@ async function updateGiftReadStatusAction(k: string, newValue: string) {
   await kv.set(k, JSON.stringify(result));
 }
 
+async function checkGiftStatusAction(k: string) {
+  const resultStr: string[] | null = await kv.get(k);
+  let result: string[] = [];
+  
+  if (resultStr) {
+    result = resultStr;
+  }
+  return result
+}
+
 export async function POST(req: NextRequest, res: NextApiResponse) {
     const body = await req.json();
+    let rlt: any
     if(body?.action == 'save') {
-        await saveAction(body.key, body.value)
+      rlt = await saveAction(body.key, body.value)
     }
     if(body?.action == 'update') {
-        await updateGiftReadStatusAction(body.key, body.value)
+      rlt = await updateGiftReadStatusAction(body.key, body.value)
     }
-    return NextResponse.json({data: body}, {status: 200})
+    if(body?.action == 'checkStatus') {
+      rlt = await checkGiftStatusAction(body.key)
+    }
+    return NextResponse.json({data: rlt}, {status: 200})
 }
+

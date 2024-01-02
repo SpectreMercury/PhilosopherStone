@@ -1,7 +1,7 @@
 import { configureStore, Middleware, MiddlewareAPI, Dispatch, AnyAction } from '@reduxjs/toolkit';
 import walletReducer, { setWallet, clearWallet } from './walletSlice';
-import sporesReducer, { setSpores } from './sporeListSlice';
-
+import sporesReducer from './sporeListSlice';
+import newGiftsReducer from './newGiftsSlice'
 
 const localStorageMiddleware: Middleware = (store) => (next) => (action) => {
   if (setWallet.match(action)) {
@@ -15,7 +15,8 @@ const localStorageMiddleware: Middleware = (store) => (next) => (action) => {
 export const store = configureStore({
   reducer: {
     wallet: walletReducer,
-    spores: sporesReducer
+    spores: sporesReducer,
+    newGifts: newGiftsReducer
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(localStorageMiddleware),
 });

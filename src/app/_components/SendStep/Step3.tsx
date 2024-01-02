@@ -75,7 +75,7 @@ const Step3: React.FC<Step3Props> = ({ step1Data, step2Data }) => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ action: 'updateStatus', key, value }),
+      body: JSON.stringify({ action: 'update', key, value }),
     });
     const data = await response.json();
     return data;

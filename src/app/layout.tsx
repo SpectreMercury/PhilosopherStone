@@ -11,6 +11,9 @@ import JoyIdConnector from '@/connectors/joyId';
 import MetaMaskConnector from "@/connectors/metamask";
 import { MaterialDesignContent, SnackbarProvider } from 'notistack'; 
 import { styled } from "@mui/material";
+import { GiftReceiveModalProvider } from "./context/GiftReceiveModalContext";
+import ReceiveGiftModal from "./_components/common/ReceiveGiftModal/ReceiveGiftModal";
+import { useGiftReceiveModal } from "@/hooks/Modal/useGiftReceiveModal";
 
 const StyledMaterialDesignContent = styled(MaterialDesignContent)(() => ({
   '&.notistack-MuiContent-success': {
@@ -33,28 +36,30 @@ function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  initConfig(JoyIDConfig)
-  
+  initConfig(JoyIDConfig)  
   return (
     <html lang="en" className="min-h-full min-w-full">
       <body className="bg-primary005 bg-no-repeat min-h-full min-w-full m-0">
         <TrpcProvider>
           <ConnectProvider value={config}>
-            <SnackbarProvider
-              autoHideDuration={5000} 
-              Components={{
-                success: StyledMaterialDesignContent,
-                error: StyledMaterialDesignContent
-              }}>
-              <Provider store={store}>
-                <div className="container relative flex flex-col min-h-screen mx-auto sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl">
-                  <Header />
-                  <div className="flex-1 flex flex-col w-full bg-gradient-conic">
-                  {children}
+            <GiftReceiveModalProvider>
+              <SnackbarProvider
+                autoHideDuration={5000} 
+                Components={{
+                  success: StyledMaterialDesignContent,
+                  error: StyledMaterialDesignContent
+                }}>
+                <Provider store={store}>
+                  <div className="container relative flex flex-col min-h-screen mx-auto sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl">
+                    <Header />
+                      <div className="flex-1 flex flex-col w-full bg-gradient-conic">
+                        {children}
+                      </div>
                   </div>
-                </div>
-              </Provider>
-            </SnackbarProvider>
+                </Provider>
+              </SnackbarProvider>
+            </GiftReceiveModalProvider>
+            
           </ConnectProvider>
         </TrpcProvider>
       </body>
