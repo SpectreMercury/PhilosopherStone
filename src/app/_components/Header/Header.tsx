@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, MouseEventHandler } from 'react';
 import MenuIcon from '@mui/icons-material/Menu';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import Close from '@mui/icons-material/Close';
@@ -76,30 +76,29 @@ const Header:React.FC = () => {
   return (
     <div className='flex flex-col'>
       {showHeaderModal && <WalletModal onClose={() => setHeaderShowModal(false)} />}
-
       <div 
-        className="flex justify-between items-center px-4 py-3 bg-primary011 text-white"
+        className="flex justify-between items-center px-4 py-3 bg-primary010 text-white"
       >
         <div 
-          className='bg-primary010 font-PlayfairDisplay font-bold cursor-pointer px-4 py-2 bg-surface03 rounded-md'
+          className='font-PlayfairDisplay font-bold cursor-pointer px-4 py-2 bg-primary008 rounded-md'
           onClick={backToHome}
         >
           Philosopher Stone
         </div>
-        <div className="cursor-pointer flex space-y-2 bg-primary010 w-10 h-10 rounded-md items-center justify-center" onClick={toggleMenu}>
+        <div className="cursor-pointer flex space-y-2 bg-primary008 w-10 h-10 rounded-md items-center justify-center" onClick={toggleMenu}>
           {isMenuOpen ? <Close className='text-white001 h-6 w-6' /> : <MenuIcon className='text-white001 h-6 w-6' />}
         </div>
       </div>
       {
         isMenuOpen && (
-          <div className='absoulte bg-primary011 w-full top-16 flex flex-col justify-between' style={{ height: `calc(100vh - 64px)`}}>
-            <div className='px-4'>
-              <div className={`mt-4 cursor-pointer ${isRouteActive('/') ? 'text-white001': 'text-white005'} h-11 text-body1mb`}>Create Gift & Blind Box</div>
-              <div className={`cursor-pointer ${isRouteActive('/send') ? 'text-white001': 'text-white005'} h-11 text-body1mb`} onClick={() => {NaviTo('/send')}}>Send Gift</div>
-              <div className={`cursor-pointer ${isRouteActive('/my') ? 'text-white001': 'text-white005'} h-11 text-body1mb`}>My Box</div>
-              <div className={`cursor-pointer ${isRouteActive('/history') ? 'text-white001': 'text-white005'} h-11 text-body1mb`}>History</div>
+          <div className='absoulte bg-primary010 w-full top-16 flex flex-col justify-between' style={{ height: `calc(100vh - 64px)`}}>
+            <div className='px-4 mt-4'>
+              <MenuList text={"Create Gift & Blind Box"} isActive={isRouteActive('/')} onClick={() => NaviTo('/')} />
+              <MenuList text={"Send Gift"} isActive={isRouteActive('/send')} onClick={() => NaviTo('/send')} />
+              <MenuList text={"My Box"} isActive={isRouteActive('/my')} onClick={() => NaviTo('/')} />
+              <MenuList text={"History"} isActive={isRouteActive('/history')} onClick={() => NaviTo('/')} />
             </div>
-            <div className='px-4 border-t'>
+            <div className='px-4 border-t border-white009'>
               {
                 walletAddress ? (<>
                   <div className='flex justify-between py-4'>
@@ -121,18 +120,18 @@ const Header:React.FC = () => {
                     />
                   </div>
                   <div 
-                    className='border justify-center h-12 my-4 flex items-center rounded-md cursor-pointer text-white001'
+                    className='border justify-center h-12 my-8 flex items-center rounded-md cursor-pointer text-white001'
                     onClick={handleDisconnect}
                   >
                     
-                    Disconnect
+                    Log out
                   </div>
                 </>) : (<>
                   <div 
-                    className='border justify-center h-12 my-4 flex items-center rounded-md cursor-pointer text-white001'
+                    className='border justify-center h-12 my-8 flex items-center rounded-md cursor-pointer text-white001'
                     onClick={() => {setHeaderShowModal(true)}}
                   >
-                    Connect Wallet
+                    Log in
                   </div>
                 </>)
               }
@@ -145,3 +144,28 @@ const Header:React.FC = () => {
 };
 
 export default Header;
+
+interface MenuListProps {
+  text: string;
+  onClick: MouseEventHandler<HTMLDivElement>;
+  isActive: boolean;
+}
+
+const MenuList: React.FC<MenuListProps> = ({ text, onClick, isActive }) => { 
+  return (
+    <div 
+      className={`h-11 cursor-pointer flex gap-4 ${isActive? 'text-white001 font-bold': 'text-white005'} text-body1mb items-center`} 
+      onClick={onClick}
+    >
+      {text}
+      {isActive && 
+        <Image 
+          alt='active tab'
+          src='/svg/icon-star.svg'
+          width={24}
+          height={24}
+        />
+      }
+  </div>
+  )
+}
