@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Image from 'next/image';
 
 interface LoadingOverlayProps {
   isVisible: boolean;
@@ -48,8 +49,14 @@ const LoadingOverlay: React.FC<LoadingOverlayProps> = ({ isVisible, texts }) => 
   if (!isVisible) return null;
 
   return (
-    <div className="fixed inset-0 bg-primary006 bg-opacity-20 flex items-center justify-center">
-      <div>
+    <div className="fixed inset-0 bg-primary011 bg-opacity-90 flex items-center justify-center">
+      <div className='flex flex-col items-center justify-center'>
+        <Image 
+          alt={"logo"}
+          src={"/svg/ps-logo.svg"}
+          width={48}
+          height={48}
+        />
         <h1 className="text-white001 font-PlayfairDisplay text-hd2mb">{displayedText}</h1>
         <p className="text-white001 font-SourceSanPro mt-4"> {texts[currentIndex]}</p>
       </div>
