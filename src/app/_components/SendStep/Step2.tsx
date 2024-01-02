@@ -51,7 +51,7 @@ const Step2: React.FC<Step2Props> = ({ data, setData }) => {
       <input 
         type="text" 
         id="walletAddress"
-        className='block w-full h-12 rounded-md bg-primary005 px-4 text-white001'
+        className='block w-full h-12 rounded-md bg-primary008 px-4 text-white001 border border-white009'
         placeholder='E.g. 0xAbCdEfGhIjKlMnOpQrStUvWxYz0123456789'
         value={walletAddress}
         onChange={(e) => setWalletAddress(e.target.value)}
@@ -64,15 +64,15 @@ const Step2: React.FC<Step2Props> = ({ data, setData }) => {
         value={email}
         
         onChange={handleEmailChange}
-        className={`block w-full h-12 rounded-md bg-primary005 text-white001 px-4 ${emailError ? 'error ' : ''}`}
+        className={`block w-full h-12 rounded-md bg-primary008 text-white001 px-4 border border-white009 ${emailError ? 'error ' : ''}`}
       />
-      {emailError && <p className="error-message">Email format is incorrect</p>}
+      {emailError && <p className="mt-1 text-light-error-function font-SourceSanPro text-sm">Email format is incorrect</p>}
 
       <div className='text-labelmb text-white001 font-SourceSanPro mb-2 mt-4'>Gift Message</div>
       <textarea 
         id="message"
         value={message}
-        className='block w-full h-24 rounded-md bg-primary005 p-4 text-white001'
+        className='block w-full h-24 rounded-md bg-primary008 p-4 text-white001 border border-white009'
         onChange={(e) => setMessage(e.target.value)}
       />
 
@@ -86,7 +86,7 @@ const Step2: React.FC<Step2Props> = ({ data, setData }) => {
       /> */}
       <div className='flex gap-6 my-8'>
         <button 
-          className="flex-1 h-12 font-PlayfairDisplay border border-white002 bg-primary011 text-white001 py-2 px-4 rounded"
+          className="flex-1 h-12 font-PlayfairDisplay border border-white009 text-white001 py-2 px-4 rounded"
         >
             Back
         </button>
