@@ -29,8 +29,10 @@ const UserHome: React.FC = () => {
   const walletAddress = useSelector((state: RootState) => state.wallet.wallet?.address);
   const { data: spores, isLoading: isSporesLoading } = useSporesByAddressQuery(
     walletAddress as string,
-  );const storeSporesList = useSelector((state: RootState) => state.spores.spores);
-  const [sporesList, setSporesList] = useState<QuerySpore[]>([]) 
+  );
+  const storeSporesList = useSelector((state: RootState) => state.spores.spores);
+  const [sporesList, setSporesList] = useState<QuerySpore[] | []>([])
+  const [blindBoxList, setBlindBoxList] = useState<[]>([]) 
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -44,15 +46,35 @@ const UserHome: React.FC = () => {
     setActiveTab('Gift')
   }
 
+  const getBlindBoxData = async () => {
+    const response = await fetch('/api/blindbox', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ action: 'getList', key: walletAddress}),
+    });
+    const data = await response.json();
+    setBlindBoxList(data.data);
+  }
+
+
   useEffect(() => {
-    setSporesList(storeSporesList!!)
-  }, [storeSporesList])
+    if (activeTab === 'Gift') {
+      setSporesList(storeSporesList || []);
+    }
+  }, [storeSporesList, blindBoxList, activeTab]);
+
 
   const renderContent = () => {
-    if (isSporesLoading ) {
-      return <LoadingSkeleton />; // Use the LoadingSkeleton component
-    } else if (sporesList && sporesList.length > 0) {
-      return <GiftList onNewGiftClick={handleOpenModal} list={sporesList}/>;
+    if (isSporesLoading && activeTab === 'Gift') {
+      return <LoadingSkeleton />;
+    }
+
+    const currentList = activeTab === 'Gift' ? sporesList : blindBoxList
+
+    if (currentList && currentList.length > 0) {
+      return <GiftList onNewGiftClick={handleOpenModal} list={sporesList} type={activeTab} blindboxList={blindBoxList} />;
     } else {
       return (
         <div>
@@ -72,6 +94,7 @@ const UserHome: React.FC = () => {
     }
   };
 
+
   return (
     <div className="container mx-auto p-4">
       <div className="flex rounded-md bg-primary011">
@@ -83,7 +106,10 @@ const UserHome: React.FC = () => {
         </button>
         <button
           className={`flex-1 py-1 m-1 font-semibold text-white font-SourceSanPro ${activeTab === 'Blind Box' ? 'text-blue-500 bg-primary010' : ''} rounded-md `}
-          onClick={() => setActiveTab('Blind Box')}
+          onClick={() => {
+            setActiveTab('Blind Box')
+            getBlindBoxData()
+          }}
         >
           Blind Box
         </button>
@@ -97,11 +123,12 @@ const UserHome: React.FC = () => {
       </button>
       {isModalOpen && (
         <CreateModal title={`Create New ${activeTab}`} onClose={handleCloseModal}>
-          {activeTab === 'Gift' ? <CreateGift /* 传递所需的 props */ onClose={handleCloseModal}/> : (
+          {activeTab === 'Gift' ? <CreateGift onClose={handleCloseModal}/> : (
             <CreateBlindBox
               onClose={handleCloseModal}
               onCreateGift={changeTabType}
               onCreateBlindBox={handleOpenModal}
+              walletAddress={walletAddress!!}
             />
           )}
         </CreateModal>

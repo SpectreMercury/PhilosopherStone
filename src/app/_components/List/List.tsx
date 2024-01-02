@@ -8,6 +8,7 @@ interface GiftListProps {
   onGiftClick: (id: string) => void;
   isGiftSelected: (id: string) => boolean;
   onNewGiftClick?: () => void;
+  selectedList?: [];
   viewMode: 'list' | 'grid';
   /**
    * @interactionType
@@ -18,7 +19,7 @@ interface GiftListProps {
   interactionType?: number; 
 }
 
-const List: React.FC<GiftListProps> = ({ gifts, onGiftClick, isGiftSelected, onNewGiftClick, viewMode, interactionType }) => {
+const List: React.FC<GiftListProps> = ({ gifts, onGiftClick, isGiftSelected, onNewGiftClick, viewMode, interactionType = 1, selectedList }) => {
   return (
     <div className='mb-8'>
       <div className={`${viewMode === 'list' ? 'flex flex-col gap-4' : 'grid grid-cols-2 gap-4'} mt-4`}>

@@ -3,23 +3,29 @@ import List from '../List/List';
 import { QuerySpore } from '@/hooks/useQuery/type';
 
 interface CreateBlindBoxProps {
-  onClose: () => void;                // 关闭弹窗的回调函数
-  onCreateGift: () => void;           // 创建礼物的回调函数
-  onCreateBlindBox: () => void;       // 创建盲盒的回调函数
+  onClose: () => void;                
+  onCreateGift: () => void;         
+  onCreateBlindBox: () => void;
+  walletAddress: string;      
 }
 
-const CreateBlindBox: React.FC<CreateBlindBoxProps> = ({ onClose, onCreateGift, onCreateBlindBox }) => {
+const CreateBlindBox: React.FC<CreateBlindBoxProps> = ({ onClose, onCreateGift, onCreateBlindBox, walletAddress }) => {
   const [title, setTitle] = useState('');
   const [gifts, setGifts] = useState<QuerySpore[]>();
   const [selectedGifts, setSelectedGifts] = useState<string[]>([]);
 
-  const handleSelectGift = (id: string) => {
-    setSelectedGifts(prev => 
-      prev.includes(id) ? prev.filter(giftId => giftId !== id) : [...prev, id]
-    );
-  };
-
   const isGiftSelected = (id: string) => selectedGifts.includes(id);
+
+  const createBlindBox = async () => {
+    const response = await fetch('/api/blindbox', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ action: 'create', key: walletAddress, name: title}),
+    });
+    const data = await response.json();
+  }
 
   return (
     <div className="rounded-lg">
@@ -32,25 +38,7 @@ const CreateBlindBox: React.FC<CreateBlindBoxProps> = ({ onClose, onCreateGift, 
           placeholder="Blind Box Title" 
         />
 
-        {gifts && gifts.length === 0 ? (
-          <div>
-            <p className='text-white003 font-SourceSanPro text-body1mb'>No Gifts found. <span className='text-primary004 font-SourceSanPro' onClick={onCreateGift}>Create New Gift</span></p>
-            <button className="w-full h-12 mt-8 font-PlayfairDisplay border border-white002 bg-white001 text-primary011 py-2 px-4 rounded" onClick={onCreateBlindBox}>Create Empty Box</button>
-          </div>
-        ) : (
-          <>
-            <p className='text-white001 font-SourceSanPro text-body1mb'>Select Gifts to put into this Blind Box</p>
-            <div className='max-h-[470px] overflow-auto'>
-              <List 
-                gifts={gifts!!} 
-                onGiftClick={handleSelectGift}
-                isGiftSelected={isGiftSelected}
-                viewMode="grid"
-              />
-            </div>
-            <button className="w-full h-12 mt-8 font-PlayfairDisplay border border-white002 bg-white001 text-primary011 py-2 px-4 rounded" onClick={onCreateBlindBox}>Create Blind Box</button>
-          </>
-        )}
+        <button className="w-full h-12 mt-8 font-PlayfairDisplay border border-white002 bg-white001 text-primary011 py-2 px-4 rounded" onClick={createBlindBox}>Create Blind Box</button>
       </div>
   );
 };
