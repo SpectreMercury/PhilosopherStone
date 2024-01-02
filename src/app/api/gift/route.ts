@@ -34,6 +34,16 @@ async function checkGiftStatusAction(k: string) {
   return result
 }
 
+async function getGiftMessage(k: string) {
+  const resultStr: string[] | null = await kv.get(k);
+  let result: {} = {};
+  
+  if (resultStr) {
+    result = resultStr;
+  }
+  return result
+}
+
 export async function POST(req: NextRequest, res: NextApiResponse) {
     const body = await req.json();
     let rlt: any
@@ -45,6 +55,9 @@ export async function POST(req: NextRequest, res: NextApiResponse) {
     }
     if(body?.action == 'checkStatus') {
       rlt = await checkGiftStatusAction(body.key)
+    }
+    if(body?.action == 'getGiftMessage') {
+      rlt = await getGiftMessage(body.key)
     }
     return NextResponse.json({data: rlt}, {status: 200})
 }

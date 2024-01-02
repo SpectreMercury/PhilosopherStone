@@ -64,18 +64,6 @@ const Header:React.FC = () => {
     localStorage.removeItem('wallet');
   };
 
-  async function callSaveAction(key: string, value: Object) {
-    const response = await fetch('/api/gift', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ action: 'save', key, value }),
-    });
-    const data = await response.json();
-    return data;
-  }
-
   const handleCopy = async (textToCopy: string) => {
     try {
       await navigator.clipboard.writeText(textToCopy);
@@ -84,11 +72,6 @@ const Header:React.FC = () => {
       enqueueSnackbar('Copied Fail', {variant: 'error'})
     }
   };
-
-
-  useEffect(() => {
-    callSaveAction('1', {'giftMessage': '1'})
-  }, [])
 
   return (
     <div className='flex flex-col'>

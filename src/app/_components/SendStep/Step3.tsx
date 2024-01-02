@@ -96,7 +96,7 @@ const Step3: React.FC<Step3Props> = ({ step1Data, step2Data }) => {
         config: predefinedSporeConfigs.Aggron4,
         useCapacityMarginAsFee: true,
       });
-      await callSaveAction(step2Data.walletAddress, {
+      await callSaveAction(step1Data.id, {
         'giftMessage': step2Data.giftMessage
       })
       await callUpdateGiftReadStatusAction(values.to, step1Data.id)
