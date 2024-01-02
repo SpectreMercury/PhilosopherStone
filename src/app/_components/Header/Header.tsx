@@ -80,10 +80,15 @@ const Header:React.FC = () => {
         className="flex justify-between items-center px-4 py-3 bg-primary010 text-white"
       >
         <div 
-          className='font-PlayfairDisplay font-bold cursor-pointer px-4 py-2 bg-primary008 rounded-md'
+          className='cursor-pointer'
           onClick={backToHome}
         >
-          Philosopher Stone
+          <Image 
+            alt={"logo"}
+            src={"/svg/ps-logo.svg"}
+            width={40}
+            height={40}
+          />
         </div>
         <div className="cursor-pointer flex space-y-2 bg-primary008 w-10 h-10 rounded-md items-center justify-center" onClick={toggleMenu}>
           {isMenuOpen ? <Close className='text-white001 h-6 w-6' /> : <MenuIcon className='text-white001 h-6 w-6' />}
