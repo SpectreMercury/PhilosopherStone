@@ -141,7 +141,7 @@ const Gift: React.FC = () => {
       <p className="py-4 font-SourceSanPro text-white001 text-body1mb">“{giftMessage}”</p>
       <button className="w-full h-12 font-PlayfairDisplay border border-white002 my-4 py-2 px-4 rounded text-white001" onClick={handleMeltModal}>Melt</button>
       <Link className="w-full h-12 flex justify-center items-center font-PlayfairDisplay border border-white002 bg-white001 text-primary011 py-2 px-4 rounded" 
-        href={`/send?hasGift=${address}`}>Send as Gift</Link>
+        href={`/send?hasGift=${pathAddress}`}>Send as Gift</Link>
     </div>
   );
 };

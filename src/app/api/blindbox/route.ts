@@ -2,9 +2,13 @@ import { kv } from "@vercel/kv";
 import { NextApiResponse } from "next";
 import { NextRequest, NextResponse } from "next/server";
 
+interface boxData {
+  id: string
+}
+
 interface BlindBox {
   id: string;
-  boxData: string[]; 
+  boxData: boxData[]; 
 }
 
 const create = async (k: string, boxName: string) => {
@@ -47,19 +51,21 @@ const getBlindBoxByName = async (k: string, boxName: string): Promise<{ box?: Bl
   return { box };
 }
 
-const add = async (k: string, boxName: string, giftIds: string[]) => {
+const add = async (k: string, boxName: string, giftIds: []) => {
   let currBlindBoxes: BlindBox[] | null = await kv.get(k);
   currBlindBoxes = currBlindBoxes ? currBlindBoxes : [];
   const existingBoxIndex = currBlindBoxes.findIndex(box => box.id === boxName);
 
   if (existingBoxIndex !== -1) {
-    currBlindBoxes[existingBoxIndex].boxData.push(...giftIds);
+    const newGiftObjects = giftIds.map(id => ({ id }));
+    currBlindBoxes[existingBoxIndex].boxData.push(...newGiftObjects);
     await kv.set(k, JSON.stringify(currBlindBoxes));
     return {};
   } else {
     return { error: 'No blind box found with the given name.' };
   }
 }
+
 
 const remove = async (k: string, boxName: string, giftIds: string[]) => {
   let currBlindBoxes: BlindBox[] | null = await kv.get(k);
@@ -67,13 +73,14 @@ const remove = async (k: string, boxName: string, giftIds: string[]) => {
   const boxIndex = currBlindBoxes.findIndex(box => box.id === boxName);
 
   if (boxIndex !== -1) {
-    currBlindBoxes[boxIndex].boxData = currBlindBoxes[boxIndex].boxData.filter(id => !giftIds.includes(id));
+    currBlindBoxes[boxIndex].boxData = currBlindBoxes[boxIndex].boxData.filter(gift => !giftIds.includes(gift.id));
     await kv.set(k, JSON.stringify(currBlindBoxes));
     return {};
   } else {
     return { error: 'No blind box found with the given name.' };
   }
 }
+
 
 const send = async (k: string, boxName: string): Promise<{ giftId?: string, error?: string }> => {
   let currBlindBoxes: BlindBox[] | null = await kv.get(k);
@@ -83,14 +90,13 @@ const send = async (k: string, boxName: string): Promise<{ giftId?: string, erro
 
   if (boxIndex !== -1 && currBlindBoxes[boxIndex].boxData.length > 0) {
     const randomIndex = Math.floor(Math.random() * currBlindBoxes[boxIndex].boxData.length);
-    const giftId = currBlindBoxes[boxIndex].boxData[randomIndex];
+    const giftObject = currBlindBoxes[boxIndex].boxData[randomIndex];
 
-    return { giftId };
+    return { giftId: giftObject.id }; 
   } else {
     return { error: 'No blind box found with the given name or blind box is empty.' };
   }
 }
-
 
 
 export async function POST(req: NextRequest, res: NextApiResponse) {
@@ -131,6 +137,7 @@ export async function POST(req: NextRequest, res: NextApiResponse) {
     }
 
     if(body?.action == 'getBoxByName') {
+      console.log(`${body.key}-blindbox`)
       const response = await getBlindBoxByName(`${body.key}-blindbox`, body.name)
       console.log(body.name)
       if (response?.error) {

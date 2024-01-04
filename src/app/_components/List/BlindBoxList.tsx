@@ -1,34 +1,101 @@
-import React from 'react';
-import BlindBoxItem from './BlindBoxItem';
-
-interface BlindBoxItemType {
-    id: string;
-    boxData: string[];
-}
+import React, { useEffect, useState } from 'react';
+import Image from 'next/image';
+import AutoAwesomeMosaicIcon from '@mui/icons-material/AutoAwesomeMosaic';
+import CheckIcon from '@mui/icons-material/Check';
+import List from './List';
+import { QuerySpore } from '@/hooks/useQuery/type';
+import useWindowDimensions from '@/hooks/getWindowDimension';
+import { boxData } from '@/types/BlindBox';
 
 interface BlindBoxListProps {
-  gifts:BlindBoxItemType[]; // 替换为盲盒数组类型
-  onGiftClick: (id: string) => void;
-  isGiftSelected: (id: string) => boolean;
-  viewMode: 'list' | 'grid';
-  interactionType?: number;
+  onNewGiftClick?: () => void;
+  list: boxData[];
+  interactionType?: number
 }
 
-const BlindBoxList: React.FC<BlindBoxListProps> = ({ gifts, onGiftClick, isGiftSelected, viewMode, interactionType }) => {
+const BlindBoxList: React.FC<BlindBoxListProps> = ({ onNewGiftClick, list, interactionType = 1 }) => {
+  const [gifts, setGifts] = useState<boxData[]>(list);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [viewMode, setViewMode] = useState<'list' | 'grid'>('grid');
+  const [selectedGifts, setSelectedGifts] = useState<string[]>([]);
+  const { width } = useWindowDimensions();
+
+  const handleSelectGift = (id: string) => {
+    setSelectedGifts(prev => 
+      prev.includes(id) ? prev.filter(giftId => giftId !== id) : [...prev, id]
+    );
+  };
+
+  useEffect(() => {
+    setGifts(list)
+  }, [list])
+
+  const isGiftSelected = (id: string) => selectedGifts.includes(id);
+
   return (
     <div className='mb-8'>
-      <div className={`${viewMode === 'list' ? 'flex flex-col gap-4' : 'grid grid-cols-2 gap-4'} mt-4`}>
-        {gifts.map(box => (
-          <BlindBoxItem 
-            key={box.id}
-            blindBox={box}
-            isSelected={isGiftSelected(box.id)}
-            onSelect={() => onGiftClick(box.id)}
-            viewMode={viewMode}
-            interactionType={interactionType}
-          />
-        ))}
+      {/* <div className={`mt-4 ${width >= 1280 && 'flex gap-8 justify-between items-center'}`}>
+        <input
+            type="text"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className={`px-4 py-3 rounded-full bg-primary008 ${width < 1280 && "w-full"}`}
+            placeholder="Search gifts..."
+        />
+        {width >= 1280 &&
+          <div 
+            className="text-primary003 font-SourceSanPro text-body1mb" 
+            onClick={onNewGiftClick}>
+              + New Gift
+          </div>
+        }
+      </div> */}
+      <div className="flex justify-between items-center mt-4">
+        <div>
+          <span className='text-white001'>{list.length} {list.length === 1 ? "Gift" : "Gifts"}</span>
+          <button className="cursor-pointer ml-4 text-primary004">Select All</button>
+        </div>
+        <div onClick={() => setViewMode(viewMode === 'list' ? 'grid' : 'list')}>
+          {viewMode === "grid" ? 
+            <Image 
+              className="cursor-pointer"
+              alt='list view icon'
+              src='/svg/icon-list.svg'
+              width={24}
+              height={24}
+            /> : 
+             <Image
+              className="cursor-pointer"
+              alt='grid view icon'
+              src='/svg/icon-grid.svg'
+              width={24}
+              height={24}
+          />}
+        </div>
       </div>
+      <List
+        gifts={gifts}
+        onGiftClick={handleSelectGift}
+        isGiftSelected={isGiftSelected}
+        interactionType={interactionType}
+        viewMode={viewMode}
+      />
+
+      {/* Floating add icon */}
+      {width < 1280 &&
+        <div 
+          style={{width: 44, height: 44, position:"absolute", bottom: 32, right: 16}} 
+          className="cursor-pointer flex items-center justify-center rounded-full bg-primary007 text-primary003 text-body1mb" 
+          onClick={onNewGiftClick}>
+            <Image 
+              className="cursor-pointer"
+              alt='add icon'
+              src='/svg/icon-plus.svg'
+              width={24}
+              height={24}
+            />
+        </div>
+      }
     </div>
   );
 };

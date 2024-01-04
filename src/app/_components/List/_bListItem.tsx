@@ -3,10 +3,11 @@ import Image from 'next/image';
 import CheckIcon from '@mui/icons-material/Check';
 import { QuerySpore } from '@/hooks/useQuery/type'; // 这应该替换为您的盲盒类型
 import Link from 'next/link';
+import { boxData } from '@/types/BlindBox';
 
 interface BlindBoxItem {
     id: string;
-    boxData: string[];
+    boxData: boxData[];
 }
 
 

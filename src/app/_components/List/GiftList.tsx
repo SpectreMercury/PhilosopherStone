@@ -5,7 +5,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import List from './List';
 import { QuerySpore } from '@/hooks/useQuery/type';
 import useWindowDimensions from '@/hooks/getWindowDimension';
-import BlindBoxList from './BlindBoxList';
+import BlindBoxList from './_bList';
 
 interface GiftListProps {
   onNewGiftClick?: () => void;

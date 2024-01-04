@@ -2,13 +2,14 @@
 import React from 'react';
 import ListItem from './ListItem';
 import { QuerySpore } from '@/hooks/useQuery/type';
+import { boxData } from '@/types/BlindBox';
 
 interface GiftListProps {
-  gifts: QuerySpore[];
+  gifts: QuerySpore[] | boxData[];
   onGiftClick: (id: string) => void;
   isGiftSelected: (id: string) => boolean;
   onNewGiftClick?: () => void;
-  selectedList?: [];
+  selectedList?: string[];
   viewMode: 'list' | 'grid';
   /**
    * @interactionType

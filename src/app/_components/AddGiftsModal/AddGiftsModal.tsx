@@ -2,38 +2,42 @@ import React, { useState } from 'react';
 import GiftList from '../List/GiftList';
 import { useSporesByAddressQuery } from '@/hooks/useQuery/useSporesByAddress';
 import List from '../List/List';
+import { boxData } from '@/types/BlindBox';
 
 interface AddGiftsModalProps {
   onClose: () => void;
   onConfirm: (selectedIds: string[]) => void;
-  listItems: string[]; 
+  listItems: boxData[]; 
   walletAddress: string;
 }
 
 const AddGiftsModal: React.FC<AddGiftsModalProps> = ({ onClose, onConfirm, listItems, walletAddress}) => {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [viewMode, setViewMode] = useState<'list' | 'grid'>('grid');
-  const [selectedGifts, setSelectedGifts] = useState<string[]>(listItems);
+  const [selectedGifts, setSelectedGifts] = useState<boxData[]>(listItems);
 
   const { data: spores, isLoading: isSporesLoading } = useSporesByAddressQuery(
     walletAddress as string,
   );
   
   const handleSelectMultipleGifts = (id: string) => {
-    setSelectedGifts(prevSelectedGifts => {
-        if (prevSelectedGifts.includes(id)) {
-            return prevSelectedGifts.filter(existingId => existingId !== id);
-        } else {
-            return [...prevSelectedGifts, id];
-        }
-    });
-  };
+  setSelectedIds(prevSelectedIds => {
+    if (prevSelectedIds.includes(id)) {
+      return prevSelectedIds.filter(existingId => existingId !== id);
+    } else {
+      return [...prevSelectedIds, id];
+    }
+  });
+};
 
-  const isGiftSelected = (id: string) => selectedGifts.includes(id);
 
+
+  const isGiftSelected = (id: string) => {
+    return selectedIds.some(gift => gift === id);
+  }
 
   const handleConfirm = () => {
-    onConfirm(selectedGifts);
+    onConfirm(selectedIds);
     onClose();
   };
 
@@ -48,7 +52,8 @@ const AddGiftsModal: React.FC<AddGiftsModalProps> = ({ onClose, onConfirm, listI
             onGiftClick={handleSelectMultipleGifts}
             isGiftSelected={isGiftSelected}
             viewMode={viewMode}
-            interactionType={2}
+            interactionType={3}
+            selectedList={selectedIds}
           />
         </div>
         <div className="flex justify-between mt-4 gap-6">

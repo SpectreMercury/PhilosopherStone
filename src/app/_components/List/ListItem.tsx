@@ -5,9 +5,10 @@ import CheckIcon from '@mui/icons-material/Check';
 import { QuerySpore } from '@/hooks/useQuery/type';
 import { BI } from '@ckb-lumos/lumos';
 import Link from 'next/link';
+import { boxData } from '@/types/BlindBox';
 
 interface ItemProps {
-  gift: QuerySpore;
+  gift: QuerySpore | boxData;
   isSelected: boolean;
   onSelect: () => void;
   viewMode: 'list' | 'grid';
@@ -15,6 +16,11 @@ interface ItemProps {
 }
 
 const ListItem: React.FC<ItemProps> = ({ gift, isSelected, onSelect, viewMode, interactionType }) => {
+  const isQuerySpore = (gift: QuerySpore | boxData): gift is QuerySpore => {
+    return (gift as QuerySpore).cell !== undefined;
+  };
+  const isSpore = isQuerySpore(gift);
+
   const listItemContent = (
     <div 
       className={`${isSelected ? 'border-success-function border-2' : 'border-white009'} bg-primary008 relative cursor-pointer
@@ -26,7 +32,9 @@ const ListItem: React.FC<ItemProps> = ({ gift, isSelected, onSelect, viewMode, i
       </div>
       <div className="w-[115px] ml-4 h-[80px] flex-grow flex flex-col items-start justify-center">
         <p className="font-semibold font-SourceSanPro text-body1mb text-white001">{gift.id.slice(0,6)}...{gift.id.slice(gift.id.length - 6,gift.id.length)}</p>
-        <p className="font-normal font-SourceSanPro text-labelmb text-white007">{BI.from(gift.cell?.cellOutput.capacity).toNumber() / 10 ** 8} CKB</p>
+        {
+          isSpore && <p className="font-normal font-SourceSanPro text-labelmb text-white007">{BI.from(gift.cell?.cellOutput.capacity).toNumber() / 10 ** 8} CKB</p>
+        }
       </div>
       {isSelected && (
         <div className={`absolute ${viewMode === 'list' ? 'right-4' : 'top-2 right-2'} w-6 h-6 rounded-full bg-green-500 border-green-500 flex items-center justify-center`}>
@@ -36,7 +44,7 @@ const ListItem: React.FC<ItemProps> = ({ gift, isSelected, onSelect, viewMode, i
     </div>
   );
   return interactionType && interactionType > 1 ? listItemContent : (
-    <Link href={`/gift/${gift.id}?occupied=${BI.from(gift.cell?.cellOutput.capacity).toNumber() / 10 ** 8}`}>
+    <Link href={`/gift/${gift.id}`}>
       {listItemContent}
     </Link>
   );
