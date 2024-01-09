@@ -1,10 +1,7 @@
+import { boxData } from "@/types/BlindBox";
 import { kv } from "@vercel/kv";
 import { NextApiResponse } from "next";
 import { NextRequest, NextResponse } from "next/server";
-
-interface boxData {
-  id: string
-}
 
 interface BlindBox {
   id: string;
@@ -60,22 +57,27 @@ const add = async (k: string, boxName: string, giftIds: []) => {
     const newGiftObjects = giftIds.map(id => ({ id }));
     currBlindBoxes[existingBoxIndex].boxData.push(...newGiftObjects);
     await kv.set(k, JSON.stringify(currBlindBoxes));
-    return {};
+    return {
+      data:currBlindBoxes[existingBoxIndex].boxData
+    };
   } else {
     return { error: 'No blind box found with the given name.' };
   }
 }
 
 
-const remove = async (k: string, boxName: string, giftIds: string[]) => {
+const remove = async (k: string, boxName: string, giftIds: boxData[]) => {
   let currBlindBoxes: BlindBox[] | null = await kv.get(k);
   currBlindBoxes = currBlindBoxes ? currBlindBoxes : [];
   const boxIndex = currBlindBoxes.findIndex(box => box.id === boxName);
 
   if (boxIndex !== -1) {
-    currBlindBoxes[boxIndex].boxData = currBlindBoxes[boxIndex].boxData.filter(gift => !giftIds.includes(gift.id));
+    const giftIdStrings = giftIds.map(gift => gift.id);
+    currBlindBoxes[boxIndex].boxData = currBlindBoxes[boxIndex].boxData.filter(gift => !giftIdStrings.includes(gift.id));
     await kv.set(k, JSON.stringify(currBlindBoxes));
-    return {};
+    return {
+      data: currBlindBoxes[boxIndex].boxData
+    };
   } else {
     return { error: 'No blind box found with the given name.' };
   }
@@ -122,7 +124,7 @@ export async function POST(req: NextRequest, res: NextApiResponse) {
         rlt = response
     }
     if(body?.action == 'remove') {
-        const response = await remove(`${body.key}-blindbox`, body.name, body.id);
+        const response = await remove(`${body.key}-blindbox`, body.name, body.ids);
         if (response?.error) {
             error = response.error;
         }

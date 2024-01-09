@@ -9,11 +9,12 @@ import { boxData } from '@/types/BlindBox';
 
 interface BlindBoxListProps {
   onNewGiftClick?: () => void;
+  updateGiftList?: (ids: string[]) => void;
   list: boxData[];
   interactionType?: number
 }
 
-const BlindBoxList: React.FC<BlindBoxListProps> = ({ onNewGiftClick, list, interactionType = 1 }) => {
+const BlindBoxList: React.FC<BlindBoxListProps> = ({ onNewGiftClick, list, interactionType = 1,updateGiftList }) => {
   const [gifts, setGifts] = useState<boxData[]>(list);
   const [searchTerm, setSearchTerm] = useState('');
   const [viewMode, setViewMode] = useState<'list' | 'grid'>('grid');
@@ -25,6 +26,13 @@ const BlindBoxList: React.FC<BlindBoxListProps> = ({ onNewGiftClick, list, inter
       prev.includes(id) ? prev.filter(giftId => giftId !== id) : [...prev, id]
     );
   };
+
+  useEffect(() => {
+    if (updateGiftList) {
+      updateGiftList(selectedGifts);
+    }
+  }, [selectedGifts, updateGiftList]); 
+
 
   useEffect(() => {
     setGifts(list)

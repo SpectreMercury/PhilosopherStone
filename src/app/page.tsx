@@ -1,8 +1,7 @@
 "use client"
 import GuestHome from "./_components/GuestHome/GuestHome";
 import { useSelector, useDispatch } from 'react-redux'
-import { serverClient } from "./_trpc/serverClient";
-import { AppDispatch, RootState } from "@/store/store";
+import { RootState } from "@/store/store";
 import UserHome from "./_components/UserHome/UserHome";
 import { useGiftReceiveModal } from "@/hooks/Modal/useGiftReceiveModal";
 import { useEffect } from "react";
@@ -43,7 +42,7 @@ export default function Home() {
   }, [walletAddress])
 
   return (
-    <main className="universe-bg max-w-3xl flex-1">
+    <main className="universe-bg max-w-3xl flex-1 overflow-auto">
       <ReceiveGiftModal isReceiveGiftModalOpen={isGiftReceiveModalOpen} closeReceiveGiftModal={closeGiftReceiveModal} />
       <div className="text-hd1mb font-PlayfairDisplay text-white001 text-center py-12">
         Philosopher Stone
