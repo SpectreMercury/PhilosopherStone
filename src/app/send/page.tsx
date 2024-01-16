@@ -1,113 +1,239 @@
 "use client"
 
-import React, { useEffect, useState } from 'react';
-import Step1 from '../_components/SendStep/Step1';
-import Step2 from '../_components/SendStep/Step2';
-import Step3 from '../_components/SendStep/Step3';
+import React, { useCallback, useEffect, useState } from 'react';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
-import { useSearchParams } from 'next/navigation';
-import { transferSpore as _transferSpore } from '@spore-sdk/core';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { transferSpore as _transferSpore, predefinedSporeConfigs } from '@spore-sdk/core';
 import { QuerySpore } from '@/hooks/useQuery/type';
-
-interface Step2Data {
-  walletAddress: string;
-  email: string;
-  giftMessage: string;
-}
+import { useSporeQuery } from '@/hooks/useQuery/useQuerybySpore';
+import { BI, OutPoint, config, helpers } from '@ckb-lumos/lumos';
+import { fetchBlindBoxAPI } from '@/utils/fetchAPI';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
+import { boxData } from '@/types/BlindBox';
+import Image from 'next/image'
+import useLoadingOverlay from '@/hooks/useLoadOverlay';
+import LoadingOverlay from '../_components/LoadingOverlay/LoadingOverlay';
+import { useConnect } from '@/hooks/useConnect';
+import { sendTransaction } from '@/utils/transaction';
+import { useMutation } from '@tanstack/react-query';
+import { enqueueSnackbar } from 'notistack';
+import { useSporesByAddressQuery } from '@/hooks/useQuery/useSporesByAddress';
 
 const SendGift: React.FC = () => {
-  const [activeStep, setActiveStep] = useState(1);
+  const { isVisible, showOverlay, hideOverlay } = useLoadingOverlay();
+  const texts = ["Unmatched Flexibility and Interopera­bility", "Supreme Security and Decentrali­zation", "Inventive Tokenomics"]; 
+  const [message, setMessage] = useState<string>('');
+  const [toWalletAddress, setToWalletAddress] = useState<string>('')
   const [gift, setGift] = useState('');
-  const [recipient, setRecipient] = useState({ name: '', address: '' });
-  const [stepStatus, setStepStatus] = useState({ step1: false, step2: false, step3: false });
-  const [step1Data, setStep1Data] = useState<QuerySpore>();
-  const [step2Data, setStep2Data] = useState<Step2Data>();
   const [hasGift, setHasGift] = useState<string>()
+  const [occupied, setOccupied] = useState<string>('')
+  const router = useRouter();
+  const { signTransaction } = useConnect()
+  const [activeTab, setActiveTab] = useState<'Gift' | 'Blind Box'>('Gift');
+  const walletAddress = useSelector((state: RootState) => state.wallet.wallet?.address);
+  const { refresh: refreshSporesByAddress } = useSporesByAddressQuery(walletAddress, false);
+
+  const { data: spore, isLoading: isSporeLoading } = useSporeQuery(
+    hasGift as string,
+  );
+
   const searchParams = useSearchParams();
+  const type = searchParams.get('type')
 
   const handleGiftChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setGift(e.target.value);
-  };
+  }; 
 
-  useEffect(() => {
-    const hasGiftValue = searchParams.get('hasGift');
-    setHasGift(hasGiftValue ?? '');
-  }, [searchParams])
+  const getBlindBox = async (boxName: string) => {
+    const data = await fetchBlindBoxAPI({
+      action: 'getBoxByName',
+      key: walletAddress!!,
+      name: boxName
+    })
+    return data.data.box.boxData
+  }
 
-  const handleRecipientChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setRecipient(prev => ({ ...prev, [name]: value }));
-  };
+  const _getRandomIndex = (length: number) => {
+    return Math.floor(Math.random() * length)
+  }
 
-  const toggleStep = (stepNumber: number) => {
-    setActiveStep(prevStep => prevStep === stepNumber ? 0 : stepNumber);
-  };
+  const _randomExtractGift = async () => {
+    if(type !== 'BlindBox') return
+    const boxName = searchParams.get('name')
+    if(!boxName) return 
+    let selectedBlindBox = await getBlindBox(boxName)
+    let randomSelect = selectedBlindBox[_getRandomIndex(selectedBlindBox.length)]
+    if(!randomSelect) return 
+    setHasGift(randomSelect.id)
+  }
 
-  const renderStepIcon = (step: number) => {
-    return activeStep === step ? <ExpandLessIcon className='text-white001'/> : <ExpandMoreIcon  className='text-white001'/>;
-  };
-
-  const handleStep1Selection = (selectedData: QuerySpore) => {
-    setStep1Data(selectedData);
-  };
-
-  const _setStep2Data = (data: Step2Data) => {
-    setStep2Data(data)
+  const formatNumberWithCommas = (num: number) => {
+    const numStr = num.toString();
+    const reversedNumStr = numStr.split('').reverse().join('');
+    const commaInserted = reversedNumStr.replace(/(\d{3})(?=\d)/g, '$1,');
+    setOccupied(commaInserted.split('').reverse().join(''))
   }
 
   useEffect(() => {
-    const type = searchParams.get('type');
-    const address = searchParams.get('address');
-
-    if (type && (type === 'gift' || type === 'blindbox') && address) {
-      setActiveStep(2);
-    } else {
-      setActiveStep(1);
+    if(walletAddress) {
+      _randomExtractGift()
     }
-  }, [searchParams]);
+  }, [walletAddress])
+
+  useEffect(() => {
+    if(type !== 'BlindBox') {
+      const hasGiftValue = searchParams.get('hasGift');
+      setHasGift(hasGiftValue ?? '');
+    }
+  }, [searchParams])
+
+  const transferSpore = useCallback(
+    async (...args: Parameters<typeof _transferSpore>) => {
+      const { txSkeleton, outputIndex } = await _transferSpore(...args);
+      const signedTx = await signTransaction(txSkeleton);
+      const txHash = await sendTransaction(signedTx);
+      return {
+        txHash,
+        index: BI.from(outputIndex).toHexString(),
+      } as OutPoint;
+    },
+    [signTransaction],
+  );
+
+  const transferSporeMutation = useMutation({
+    mutationFn: transferSpore,
+    onSuccess: () => {
+    },
+    onError: (error) => {
+      enqueueSnackbar('Gift Send Failed', { variant: 'error' })
+    }
+  });
+  
+  const callSaveAction = async (key: string, value: Object) => {
+    const response = await fetch('/api/gift', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ action: 'save', key, value }),
+    });
+    const data = await response.json();
+    return data;
+  }
+
+  async function callUpdateGiftReadStatusAction(key: string, value: string) {
+    const response = await fetch('/api/gift', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ action: 'update', key, value }),
+    });
+    const data = await response.json();
+    return data;
+  }
+  
+  const handleSubmit = useCallback(
+    async (values: { to: string }) => {
+      showOverlay(); 
+      if (!walletAddress || !values.to || !spore) {
+        return;
+      }
+      await transferSporeMutation.mutateAsync({
+        outPoint: spore.cell?.outPoint!,
+        fromInfos: [walletAddress!!],
+        toLock: helpers.parseAddress(values.to, {
+          config: config.predefined.AGGRON4,
+        }),
+        config: predefinedSporeConfigs.Aggron4,
+        useCapacityMarginAsFee: true,
+      });
+      await callSaveAction(spore.id, {
+        'giftMessage': ''
+      })
+      await callUpdateGiftReadStatusAction(values.to, spore.id)
+      hideOverlay();
+      enqueueSnackbar('Gift Send Successful', { variant: 'success' });
+      refreshSporesByAddress()
+      router.push('/finished');
+    },
+    [transferSporeMutation],
+  );
+
+
+  useEffect(() => {
+    if(!isSporeLoading) {
+      formatNumberWithCommas(BI.from(spore?.cell?.cellOutput.capacity).toNumber() / 10 ** 8)
+    }
+  }, [isSporeLoading, spore?.cell?.cellOutput.capacity])
 
   return (
     <div className="container mx-auto">
+      <LoadingOverlay isVisible={isVisible} texts={texts} />
+
       <div>
-        <div>
-          <div className="cursor-pointer flex justify-between px-4 items-center h-16 bg-primary008" onClick={() => toggleStep(1)}>
-            <div>
-              <div className='text-white003 font-SourceSanPro text-labelmb mb-1'>Step 1/3</div>
-              <div className='text-white001 font-PlayfairDisplay text-subheadermb'>Choose Your Gift</div>
-            </div>
-            {renderStepIcon(1)}
-          </div>
-          {activeStep === 1 && (
-            <Step1 onSelection={handleStep1Selection} selected={step1Data} hasGift={hasGift}/>
-          )}
+        <div className='flex justify-center mt-4 flex-col items-center'>
+          {
+            type === 'BlindBox' ? (
+            <>
+              {
+                isSporeLoading ? (<></>) :(<></>)
+              }
+            </>) : (
+            <>
+              {/* @ts-ignore */}
+              <img src={`/api/media/${hasGift}`} width={300} height={200} className="px-4" alt="Gift" />
+            </>)
+          }
+          <p className='text-white001 font-SourceSanPro text-hd2mb mt-4'>{occupied} CKBytes</p>
+          <p className='text-white001 font-SourceSanPro text-body1mb text-white005 mt-4'>{hasGift?.slice(0,10)}...{hasGift?.slice(hasGift.length - 10, hasGift.length)}</p>
+        </div>
+        <div className='flex flex-col px-4'>
+          <p className='text-white001 font-SourceSanPro text-body1bdmb mt-4'>Gift Message</p>
+          <textarea 
+            id="message"
+            value={message}
+            className='w-full h-24 border rounded-lg bg-primary008 mt-2 px-4 py-2 text-white001' 
+            onChange={(e) => setMessage(e.target.value)}/>
         </div>
 
-        <div>
-          <div className="cursor-pointer mt-1 flex justify-between px-4 items-center h-16 bg-primary008" onClick={() => toggleStep(2)}>
-            <div>
-              <div className='text-white003 font-SourceSanPro text-labelmb mb-1'>Step 2/3</div>
-              <div className='text-white001 font-PlayfairDisplay text-subheadermb'>Provide Recipient Details</div>
-            </div>
-            {renderStepIcon(2)}
-          </div>
-          {activeStep === 2 && (
-            <Step2 data={step2Data} setData={_setStep2Data}/>
-          )}
+        {/* <p className='text-white001 font-SourceSanPro text-body1bdmb mt-4 px-4'>Delivery Method</p>
+        <div className="flex rounded-md bg-primary011 m-4">
+          <button
+            className={`flex-1 py-2 m-1 font-semibold text-white font-SourceSanPro ${activeTab === 'Gift' ? 'bg-primary010' : ''} rounded-md`}
+            onClick={() => setActiveTab('Gift')}
+          >
+            Gift
+          </button>
+          <button
+            className={`flex-1 py-1 m-1 font-semibold text-white font-SourceSanPro ${activeTab === 'Blind Box' ? 'text-blue-500 bg-primary010' : ''} rounded-md `}
+            onClick={() => {
+              setActiveTab('Blind Box')
+            }}
+          >
+            Blind Box
+          </button>
+        </div> */}
+        <div className='flex flex-col px-4'>
+          <p className='text-white001 font-SourceSanPro text-body1bdmb mt-4'>Recipient’s wallet address*</p>
+          <input 
+            id="walletAddress"
+            placeholder='E.g. 0xAbCdEfGhIjKlMnOpQrStUvWxYz0123456789'
+            value={toWalletAddress}
+            onChange={(e) => setToWalletAddress(e.target.value)}
+            className='w-full h-12 border rounded-lg bg-primary008 mt-2 px-4 text-white001' />
         </div>
-
-        <div>
-          <div className="cursor-pointer mt-1 flex justify-between px-4 items-center h-16 bg-primary008" onClick={() => toggleStep(3)}>
-            <div>
-              <div className='text-white003 font-SourceSanPro text-labelmb mb-1'>Step 3/3</div>
-              <div className='text-white001 font-PlayfairDisplay text-subheadermb'>Confirm & Send</div>
-            </div>
-            {renderStepIcon(3)}
-          </div>
-          {(activeStep === 3 && step1Data && step2Data ) && (
-            <Step3 step1Data={step1Data} step2Data={step2Data} />
-          )}
+        <div className='flex flex-col px-4 mt-8'>
+          <button 
+            onClick={() => {handleSubmit({to: toWalletAddress})}}
+            className="w-full h-12 font-PlayfairDisplay border border-white002 bg-white001 text-primary011 py-2 px-4 rounded flex items-center justify-center"
+          >
+            Send Gift
+          </button>
         </div>
+        
       </div>
     </div>
   );

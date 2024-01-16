@@ -7,10 +7,9 @@ import { RootState } from '@/store/store';
 import AddGiftsModal from '@/app/_components/AddGiftsModal/AddGiftsModal';
 import GiftList from '@/app/_components/List/GiftList';
 import BlindBoxList from '@/app/_components/List/BlindBoxList';
-
-interface boxData {
-  id: string
-}
+import { fetchBlindBoxAPI } from '@/utils/fetchAPI';
+import { boxData } from '@/types/BlindBox';
+import Link from 'next/link';
 
 const BlindBoxPage = () => {
   const pathName = usePathname();
@@ -21,28 +20,22 @@ const BlindBoxPage = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [viewMode, setViewMode] = useState('grid')
   const [selectedGifts, setSelectedGifts] = useState<string[]>([])
+  
   const getBlindBox = async () => {
-    const response = await fetch('/api/blindbox', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ action: 'getBoxByName', key: walletAddress, name: decodeURIComponent(boxName)}),
-    });
-    const data = await response.json();
-    setBoxGifts(data.data.box.boxData)
+    const data = await fetchBlindBoxAPI({
+      action: 'getList',
+      key: walletAddress!!
+    })
+    setBoxGifts(data.data[0].boxData)
   }
 
   const addToBlindBox = async (ids: string[]) => {
-    const response = await fetch('/api/blindbox', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ action: 'add', key: walletAddress, name: decodeURIComponent(boxName), ids: ids}),
-    });
-    const data = await response.json();
-    setBoxGifts(data.data.data)
+    const data = await fetchBlindBoxAPI({ 
+      action: 'add', 
+      key: walletAddress!!, 
+      name: decodeURIComponent(boxName), 
+    ids: ids})
+    setBoxGifts(data.data)
   }
 
   const convertToObjects = (ids: string[]) => {
@@ -50,15 +43,13 @@ const BlindBoxPage = () => {
   }
 
   const removeGifts = async (ids: string[]) => {
-    const response = await fetch('/api/blindbox', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ action: 'remove', key: walletAddress, name: decodeURIComponent(boxName), ids: convertToObjects(ids)}),
+    const data = await fetchBlindBoxAPI({ 
+      action: 'remove', 
+      key: walletAddress!!, 
+      name: decodeURIComponent(boxName), 
+      ids: convertToObjects(ids)
     });
-    const data = await response.json();
-    setBoxGifts(data.data.data)
+    setBoxGifts(data.data)
   }
 
 
@@ -76,10 +67,15 @@ const BlindBoxPage = () => {
 
   const onConfirm = (ids: string[]) => {
     addToBlindBox(ids)
+    getBlindBox()
   }
 
   const onRemoveGifts = () => {
     removeGifts(selectedGifts)
+  }
+
+  const cancelRemove = () => {
+    setSelectedGifts([])
   }
 
 
@@ -88,6 +84,10 @@ const BlindBoxPage = () => {
       getBlindBox()
     }
   }, [boxName, walletAddress]);
+
+  useEffect(() => {
+    
+  }, [])
 
   if (!boxName) {
     return <p>Loading...</p>; 
@@ -106,7 +106,7 @@ const BlindBoxPage = () => {
         )}
         {boxGifts.length > 0 ? (
           <div className='w-full'>
-            <BlindBoxList list={boxGifts}  interactionType={3} updateGiftList={getSelectedList}/>
+            <BlindBoxList list={boxGifts}  interactionType={3} updateGiftList={getSelectedList} selectedList={selectedGifts}/>
           </div>
         ) : (
           <></>
@@ -116,21 +116,30 @@ const BlindBoxPage = () => {
       <div className='flex gap-4'>
         {
           selectedGifts.length > 0 && (
-            <button 
-              className="flex-1 h-12 mb-8 font-PlayfairDisplay border border-white002 bg-white001 text-primary011 py-2 px-4 rounded"     
-              onClick={onRemoveGifts}    
-            >
-              Romove Gifts
-            </button>
+            <>
+              <button 
+                className="flex-1 h-12 mb-8 font-PlayfairDisplay border border-white002 bg-white001 text-primary011 py-2 px-4 rounded"     
+                onClick={onRemoveGifts}    
+              >
+                Romove Gifts
+              </button>
+              <button 
+                className="flex-1 h-12 mb-8 font-PlayfairDisplay border border-white002 bg-white001 text-primary011 py-2 px-4 rounded"     
+                onClick={cancelRemove}    
+              >
+                Back
+              </button>
+            </>
+            
           )
         }
-        {boxGifts && boxGifts.length > 0 && (
-            <button 
-              className="flex-1 h-12 mb-8 font-PlayfairDisplay border border-white002 bg-white001 text-primary011 py-2 px-4 rounded"         
+        {boxGifts && boxGifts.length > 0 && selectedGifts.length <= 0 && (
+            <Link 
+              href={`/send?type=BlindBox&name=${decodeURIComponent(boxName)}`}
+              className="flex-1 flex items-center justify-center h-12 mb-8 font-PlayfairDisplay border border-white002 bg-white001 text-primary011 py-2 px-4 rounded"         
             >
               Send Blind Box
-            </button>
-            
+            </Link>
         )}
       </div>
     </div>

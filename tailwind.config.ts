@@ -55,6 +55,15 @@ const config: Config = {
         'labelbdmb': ['14px', {lineHeight: '160%', fontWeight: 700}],
         'buttonmb': ['16px', {lineHeight: '100%', fontWeight: 700}],
         'codemb': ['14px', {lineHeight: '160%', fontWeight: 700}],
+      },
+      animation: {
+        'wiggle': 'wiggle 1s linear infinite',
+      },
+      keyframes: {
+        wiggle: {
+          '0%, 100%': { transform: 'rotate(-15deg)' },
+          '50%': { transform: 'rotate(15deg)' },
+        }
       }
     },
   },

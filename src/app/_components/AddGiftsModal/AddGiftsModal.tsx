@@ -3,6 +3,7 @@ import GiftList from '../List/GiftList';
 import { useSporesByAddressQuery } from '@/hooks/useQuery/useSporesByAddress';
 import List from '../List/List';
 import { boxData } from '@/types/BlindBox';
+import Close from '@mui/icons-material/Close';
 
 interface AddGiftsModalProps {
   onClose: () => void;
@@ -21,14 +22,14 @@ const AddGiftsModal: React.FC<AddGiftsModalProps> = ({ onClose, onConfirm, listI
   );
   
   const handleSelectMultipleGifts = (id: string) => {
-  setSelectedIds(prevSelectedIds => {
-    if (prevSelectedIds.includes(id)) {
-      return prevSelectedIds.filter(existingId => existingId !== id);
-    } else {
-      return [...prevSelectedIds, id];
-    }
-  });
-};
+    setSelectedIds(prevSelectedIds => {
+      if (prevSelectedIds.includes(id)) {
+        return prevSelectedIds.filter(existingId => existingId !== id);
+      } else {
+        return [...prevSelectedIds, id];
+      }
+    });
+  };
 
 
 
@@ -45,7 +46,8 @@ const AddGiftsModal: React.FC<AddGiftsModalProps> = ({ onClose, onConfirm, listI
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
       <div className="bg-primary011 rounded-lg p-4 max-w-lg w-full relative mx-4">
         <div className='relative text-white001 text-hd2mb font-PlayfairDisplay my-4'>Pick Gifts to Blind Box 
-        <button  onClick={onClose} className="absolute right-0 text-white001 text-hd2mb font-PlayfairDisplay">X</button></div>
+          <Close onClick={onClose} className="absolute right-0 text-white001 text-hd2mb font-PlayfairDisplay"/>
+        </div>
         <div style={{ maxHeight: '600px', overflow: 'auto' }}>
           <List
             gifts={spores}

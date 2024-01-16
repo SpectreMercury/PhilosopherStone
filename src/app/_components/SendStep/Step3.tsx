@@ -105,7 +105,7 @@ const Step3: React.FC<Step3Props> = ({ step1Data, step2Data }) => {
       refreshSporesByAddress()
       router.push('/finished');
     },
-    [step2Data.walletAddress, step1Data?.cell, transferSporeMutation],
+    [transferSporeMutation],
   );
 
   return (

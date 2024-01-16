@@ -99,6 +99,21 @@ export default class SporeService {
     return BI.from(0);
   }
 
+  public async getNewOmnilock() {
+    const collector = this.indexer.collector({
+      type: {
+        "codeHash": "0x00000000000000000000000000000000000000000000000000545950455f4944",
+        "args": "0x761f51fc9cd6a504c32c6ae64b3746594d1af27629b427c5ccf6c9a725a89144",
+        "hashType": "type"
+      }
+    })
+    let cells:Cell[] = []
+    for await(const cell of collector.collect()) {
+      cells.push(cell)
+    }
+    return cells
+  }
+
   public async list(clusterIds: string[] = [], options?: QueryOptions) {
     const collector = this.indexer.collector({
       type: { ...this.script, args: '0x' },
@@ -226,8 +241,8 @@ export default class SporeService {
             }
 
             const cell: Cell = {
-              data: liveCell.cell.data.content,
-              cellOutput: liveCell.cell.output,
+              data: liveCell!!.cell!!.data.content,
+              cellOutput: liveCell!!.cell!!.output,
               outPoint,
             };
 

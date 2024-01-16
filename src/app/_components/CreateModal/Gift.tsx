@@ -16,17 +16,11 @@ import { sendTransaction } from '@/utils/transaction';
 import { getMIMETypeByName } from '@/utils/mime';
 import { trpc } from '@/app/_trpc/client';
 import { useMutation } from '@tanstack/react-query';
-import { BI } from '@ckb-lumos/lumos';
+import { BI, Hexadecimal, config } from '@ckb-lumos/lumos';
 import useLoadingOverlay from '@/hooks/useLoadOverlay';
 import LoadingOverlay from '../LoadingOverlay/LoadingOverlay';
 import { useSporesByAddressQuery } from '@/hooks/useQuery/useSporesByAddress';
-
-// const selectOptions = [
-//   { value: 'box1', label: 'Box 1' },
-//   { value: 'box2', label: 'Box 2' },
-//   { value: 'box3', label: 'Box 3' },
-//   { value: 'box4', label: 'Box 4' },
-// ];
+import SporeService from '@/spore';
 
 interface CreateGiftProps {
   onClose?: () => void; //
@@ -105,10 +99,11 @@ const CreateGift: React.FC<CreateGiftProps> = ({ onClose }) => {
 
     // Show the loading overlay
     showOverlay();
-
     try {
       const contentBuffer = await content.arrayBuffer();
       const contentType = content.type || getMIMETypeByName(content.name);
+      let latest = JSON.parse(JSON.stringify(predefinedSporeConfigs.Aggron4))
+      latest['lumos'] = config.predefined.AGGRON4
       const spore = await addSporeMutation.mutateAsync({
         data: {
           contentType,
@@ -117,16 +112,16 @@ const CreateGift: React.FC<CreateGiftProps> = ({ onClose }) => {
         },
         fromInfos: [walletAddress],
         toLock: lock,
-        config: predefinedSporeConfigs.Aggron4,
+        config: latest  ,
+        // @ts-ignore
         capacityMargin: useCapacityMargin ? BI.from(100_000_000) : BI.from(0),
       });
       refreshSporesByAddress()
       enqueueSnackbar('Gift Mint Successful', { variant: 'success' });
     } catch (error) {
-      // Handle errors, maybe show a different message
+      console.error(error)
       enqueueSnackbar('An error occurred', { variant: 'error' });
     } finally {
-      // Hide the loading overlay whether the operation was successful or not
       hideOverlay();
     }
 

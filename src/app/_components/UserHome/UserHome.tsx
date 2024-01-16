@@ -11,6 +11,7 @@ import { QuerySpore } from '@/hooks/useQuery/type';
 import { FAQData } from '@/settings/FAQData';
 import Faq from '../FAQ/FAQ';
 import Link from 'next/link';
+import SporeService from '@/spore';
 
 const LoadingSkeleton = () => {
   return (
@@ -48,7 +49,6 @@ const UserHome: React.FC = () => {
   const changeTabType = () => {
     setActiveTab('Gift')
   }
-
 
   const renderContent = () => {
     const currentList = activeTab === 'Gift' ? sporesList : blindBoxList
