@@ -34,9 +34,6 @@ const Gift: React.FC = () => {
   const { isVisible, showOverlay, hideOverlay } = useLoadingOverlay();
   const texts = ["Unmatched Flexibility and Interopera­bility", "Supreme Security and Decentrali­zation", "Inventive Tokenomics"]; 
 
-
-  
-
   function formatNumberWithCommas(num: number) {
     const numStr = num.toString();
     const reversedNumStr = numStr.split('').reverse().join('');

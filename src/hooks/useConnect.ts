@@ -1,4 +1,5 @@
 import CKBConnector from '@/connectors/base';
+import SporeService from '@/spore';
 import { RootState } from '@/store/store';
 import { WalletInfo } from '@/store/walletSlice';
 import { Script, Transaction, config, helpers } from '@ckb-lumos/lumos';
@@ -30,6 +31,13 @@ export const useConnect = () => {
   const connectorType = walletInfo?.walletType
   const [autoConnected, setAuthConnected] = useState(false);
   const connected = !!address;
+
+  
+  const getCells = async () => {
+    let cells = await SporeService.shared.getNewOmnilock()
+    console.log(cells[0])
+    return cells[0]
+  }
 
   const lock = useMemo(() => {
     if (!address) return undefined;

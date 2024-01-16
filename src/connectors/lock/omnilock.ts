@@ -58,7 +58,6 @@ export async function signTransaction(
     }
   });
 
-  // remove anyone-can-pay witness when cell lock not changed
   inputs.forEach((input, index) => {
     const { lock } = input.cellOutput;
     if (

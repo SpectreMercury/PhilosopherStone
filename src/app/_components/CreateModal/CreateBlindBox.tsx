@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import List from '../List/List';
 import { QuerySpore } from '@/hooks/useQuery/type';
+import { enqueueSnackbar } from 'notistack';
 
 interface CreateBlindBoxProps {
   onClose: () => void;                
@@ -25,6 +26,12 @@ const CreateBlindBox: React.FC<CreateBlindBoxProps> = ({ onClose, onCreateGift, 
       body: JSON.stringify({ action: 'create', key: walletAddress, name: title}),
     });
     const data = await response.json();
+    if(data.data.errno !== 200) {
+      enqueueSnackbar('Create Blind Box Error', {variant: 'error'})
+    } else {
+      enqueueSnackbar('Create Blind Box Successful', {variant: 'success'})
+    }
+    onClose()
   }
 
   return (

@@ -64,8 +64,14 @@ const My: React.FC = () => {
   useEffect(() => {
     if (activeTab === 'Gift') {
       setSporesList(storeSporesList || []);
+    } else {
+      getBlindBoxData()
     }
   }, [storeSporesList, blindBoxList, activeTab]);
+
+  useEffect(() => {
+    getBlindBoxData()
+  }, [isModalOpen])
 
 
   const renderContent = () => {
@@ -110,7 +116,6 @@ const My: React.FC = () => {
           className={`flex-1 py-1 m-1 font-semibold text-white font-SourceSanPro ${activeTab === 'Blind Box' ? 'text-blue-500 bg-primary010' : ''} rounded-md `}
           onClick={() => {
             setActiveTab('Blind Box')
-            getBlindBoxData()
           }}
         >
           Blind Box

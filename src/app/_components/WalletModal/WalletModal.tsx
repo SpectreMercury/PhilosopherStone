@@ -61,6 +61,7 @@ const WalletModal: React.FC<WalletModalProps> = ({ onClose }) => {
       ethAddress: ethAddress, 
       walletType: 'MetaMask'
     }))
+    onClose()
   }
 
   const connectWallet = async (name: string) => {

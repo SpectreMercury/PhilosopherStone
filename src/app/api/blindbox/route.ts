@@ -1,3 +1,4 @@
+import SporeService from "@/spore";
 import { boxData } from "@/types/BlindBox";
 import { kv } from "@vercel/kv";
 import { NextApiResponse } from "next";
@@ -17,7 +18,11 @@ const create = async (k: string, boxName: string) => {
     const newBlindBox: BlindBox = { id: boxName, boxData: [] };
     currBlindBoxes.push(newBlindBox);
     await kv.set(k, JSON.stringify(currBlindBoxes));
-    return {}
+    return {
+      errno: 200,
+      data: [],
+      errmsg: 'successful'
+    }
   } else {
     return { error: 'A blind box with the same name already exists.' };
   }
@@ -52,7 +57,6 @@ const add = async (k: string, boxName: string, giftIds: []) => {
   let currBlindBoxes: BlindBox[] | null = await kv.get(k);
   currBlindBoxes = currBlindBoxes ? currBlindBoxes : [];
   const existingBoxIndex = currBlindBoxes.findIndex(box => box.id === boxName);
-
   if (existingBoxIndex !== -1) {
     const newGiftObjects = giftIds.map(id => ({ id }));
     currBlindBoxes[existingBoxIndex].boxData.push(...newGiftObjects);
@@ -81,6 +85,22 @@ const remove = async (k: string, boxName: string, giftIds: boxData[]) => {
   } else {
     return { error: 'No blind box found with the given name.' };
   }
+}
+
+const clear = async (k: string, giftIds: string[]) => {
+  let currBlindBoxes: BlindBox[] | null = await kv.get(k);
+  currBlindBoxes = currBlindBoxes ? currBlindBoxes : [];
+
+  // 更新每个 BlindBox 的 boxData，移除包含在 giftIds 中的元素
+  currBlindBoxes.forEach(blindBox => {
+    blindBox.boxData = blindBox.boxData.filter(gift => !giftIds.includes(gift.id));
+  });
+
+  await kv.set(k, JSON.stringify(currBlindBoxes));
+
+  return {
+    data: currBlindBoxes
+  };
 }
 
 
@@ -131,6 +151,14 @@ export async function POST(req: NextRequest, res: NextApiResponse) {
         rlt = response
     }
     if(body?.action == 'send') {
+        const response = await send(`${body.key}-blindbox`, body.name)
+        if (response?.error) {
+            error = response.error;
+        }
+        rlt = response
+    }
+
+    if(body?.action == 'clear') {
         const response = await send(`${body.key}-blindbox`, body.name)
         if (response?.error) {
             error = response.error;
