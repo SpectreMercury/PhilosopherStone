@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
+import ProgressBar from '@/app/_components/ProgressBar/ProgressBar';
 
 interface LoadingOverlayProps {
   isVisible: boolean;
   texts: string[];
+  progressStatus: 'pending' | 'done';
 }
 
-const LoadingOverlay: React.FC<LoadingOverlayProps> = ({ isVisible, texts }) => {
+const LoadingOverlay: React.FC<LoadingOverlayProps> = ({ isVisible, texts, progressStatus }) => {
   const [displayedText, setDisplayedText] = useState('');
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -50,14 +52,15 @@ const LoadingOverlay: React.FC<LoadingOverlayProps> = ({ isVisible, texts }) => 
 
   return (
     <div className="fixed inset-0 bg-primary011 bg-opacity-90 flex items-center justify-center">
-      <div className='flex flex-col items-center justify-center'>
+      <div className='w-full px-4 flex flex-col items-center justify-center'>
         <Image 
           alt={"logo"}
           src={"/svg/ps-logo.svg"}
           width={48}
           height={48}
         />
-        <h1 className="text-white001 font-PlayfairDisplay text-hd2mb">{displayedText}</h1>
+        <h1 className=" h-12 text-white001 font-PlayfairDisplay text-hd2mb">Philosopher Stone</h1>
+        <ProgressBar status={progressStatus} />
         <p className="text-white001 font-SourceSanPro mt-4"> {texts[currentIndex]}</p>
       </div>
     </div>

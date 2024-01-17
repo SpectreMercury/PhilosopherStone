@@ -20,9 +20,10 @@ import { sendTransaction } from '@/utils/transaction';
 import { useMutation } from '@tanstack/react-query';
 import { enqueueSnackbar } from 'notistack';
 import { useSporesByAddressQuery } from '@/hooks/useQuery/useSporesByAddress';
+import { set } from 'lodash';
 
 const SendGift: React.FC = () => {
-  const { isVisible, showOverlay, hideOverlay } = useLoadingOverlay();
+  const { isVisible, showOverlay, hideOverlay, progressStatus, setProgressStatus } = useLoadingOverlay();
   const texts = ["Unmatched Flexibility and Interopera­bility", "Supreme Security and Decentrali­zation", "Inventive Tokenomics"]; 
   const [message, setMessage] = useState<string>('');
   const [toWalletAddress, setToWalletAddress] = useState<string>('')
@@ -154,7 +155,10 @@ const SendGift: React.FC = () => {
         'giftMessage': ''
       })
       await callUpdateGiftReadStatusAction(values.to, spore.id)
-      hideOverlay();
+      setProgressStatus('done')
+      setTimeout(() => {
+        hideOverlay();
+      }, 1000)
       enqueueSnackbar('Gift Send Successful', { variant: 'success' });
       refreshSporesByAddress()
       router.push('/finished');
@@ -171,7 +175,7 @@ const SendGift: React.FC = () => {
 
   return (
     <div className="container mx-auto">
-      <LoadingOverlay isVisible={isVisible} texts={texts} />
+      <LoadingOverlay isVisible={isVisible} texts={texts} progressStatus={progressStatus} />
 
       <div>
         <div className='flex justify-center mt-4 flex-col items-center'>
