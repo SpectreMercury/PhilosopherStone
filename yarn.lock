@@ -861,7 +861,22 @@
     cross-fetch "^3.1.5"
     events "^3.3.0"
 
-"@ckb-lumos/lumos@0.22.0-next.3", "@ckb-lumos/lumos@^0.22.0-next.2", "@ckb-lumos/lumos@^0.22.0-next.3":
+"@ckb-lumos/lumos@0.21.1", "@ckb-lumos/lumos@^0.21.0-next.0":
+  version "0.21.1"
+  resolved "https://registry.npmmirror.com/@ckb-lumos/lumos/-/lumos-0.21.1.tgz#ff5a9a10859b305530026668bd14cdc12e5e7532"
+  integrity sha512-a5n8xaIUvmaPsw2fBki8Jamy6/6uQnLWDZM9SQX29cZ1YVoAk/slnBmEbCIGXmxDhcuAlLkTeJaiLDKEGrZ6pg==
+  dependencies:
+    "@ckb-lumos/base" "0.21.1"
+    "@ckb-lumos/bi" "0.21.1"
+    "@ckb-lumos/ckb-indexer" "0.21.1"
+    "@ckb-lumos/common-scripts" "0.21.1"
+    "@ckb-lumos/config-manager" "0.21.1"
+    "@ckb-lumos/hd" "0.21.1"
+    "@ckb-lumos/helpers" "0.21.1"
+    "@ckb-lumos/rpc" "0.21.1"
+    "@ckb-lumos/toolkit" "0.21.1"
+
+"@ckb-lumos/lumos@^0.22.0-next.2", "@ckb-lumos/lumos@^0.22.0-next.3":
   version "0.22.0-next.3"
   resolved "https://registry.npmmirror.com/@ckb-lumos/lumos/-/lumos-0.22.0-next.3.tgz#be221cc262f358d5637a081612abbdc3a80802f6"
   integrity sha512-wagcumbQCPHTkCINy6D73PY2s9bESijvuxfj4AB3cLCiOEdg+SgpQuMhiaDx96H4pkFeeRKF0beljfVtI0+i9Q==
@@ -878,21 +893,6 @@
     "@ckb-lumos/rpc" "0.22.0-next.3"
     "@ckb-lumos/toolkit" "0.22.0-next.3"
     "@ckb-lumos/transaction-manager" "0.22.0-next.3"
-
-"@ckb-lumos/lumos@^0.21.0-next.0":
-  version "0.21.1"
-  resolved "https://registry.npmmirror.com/@ckb-lumos/lumos/-/lumos-0.21.1.tgz#ff5a9a10859b305530026668bd14cdc12e5e7532"
-  integrity sha512-a5n8xaIUvmaPsw2fBki8Jamy6/6uQnLWDZM9SQX29cZ1YVoAk/slnBmEbCIGXmxDhcuAlLkTeJaiLDKEGrZ6pg==
-  dependencies:
-    "@ckb-lumos/base" "0.21.1"
-    "@ckb-lumos/bi" "0.21.1"
-    "@ckb-lumos/ckb-indexer" "0.21.1"
-    "@ckb-lumos/common-scripts" "0.21.1"
-    "@ckb-lumos/config-manager" "0.21.1"
-    "@ckb-lumos/hd" "0.21.1"
-    "@ckb-lumos/helpers" "0.21.1"
-    "@ckb-lumos/rpc" "0.21.1"
-    "@ckb-lumos/toolkit" "0.21.1"
 
 "@ckb-lumos/rpc@0.21.1", "@ckb-lumos/rpc@^0.21.0-next.0":
   version "0.21.1"
@@ -2974,11 +2974,6 @@
   dependencies:
     "@upstash/redis" "1.25.1"
 
-"@vespaiach/axios-fetch-adapter@^0.3.1":
-  version "0.3.1"
-  resolved "https://registry.npmmirror.com/@vespaiach/axios-fetch-adapter/-/axios-fetch-adapter-0.3.1.tgz#b0c08167bec9cc558f578a1b9ccff52ead1cf1cb"
-  integrity sha512-+1F52VWXmQHSRFSv4/H0wtnxfvjRMPK5531e880MIjypPdUSX6QZuoDgEVeCE1vjhzDdxCVX7rOqkub7StEUwQ==
-
 "@wagmi/connectors@3.1.10":
   version "3.1.10"
   resolved "https://registry.npmmirror.com/@wagmi/connectors/-/connectors-3.1.10.tgz#830cd788579ef56a2526574914481f2d3aabc9f7"
@@ -3782,15 +3777,6 @@ axe-core@=4.7.0:
   version "4.7.0"
   resolved "https://registry.npmmirror.com/axe-core/-/axe-core-4.7.0.tgz"
   integrity sha512-M0JtH+hlOL5pLQwHOLNYZaXuhqmvS8oExsqB1SBYgA4Dk7u/xx+YdGHXaK5pyUfed5mYXdlYiphWq3G8cRi5JQ==
-
-axios@^1.6.5:
-  version "1.6.5"
-  resolved "https://registry.npmmirror.com/axios/-/axios-1.6.5.tgz#2c090da14aeeab3770ad30c3a1461bc970fb0cd8"
-  integrity sha512-Ii012v05KEVuUoFWmMW/UQv9aRIc3ZwkWDcM+h5Il8izZCtRVpDUfwpoFf7eOtajT3QiGR4yDUx7lPqHJULgbg==
-  dependencies:
-    follow-redirects "^1.15.4"
-    form-data "^4.0.0"
-    proxy-from-env "^1.1.0"
 
 axobject-query@^3.2.1:
   version "3.2.1"
@@ -5753,11 +5739,6 @@ flatted@^3.2.9:
   version "3.2.9"
   resolved "https://registry.npmmirror.com/flatted/-/flatted-3.2.9.tgz"
   integrity sha512-36yxDn5H7OFZQla0/jFJmbIKTdZAQHngCedGxiMmpNfEZM0sdEeT+WczLQrjK6D7o2aiyLYDnkw0R3JK0Qv1RQ==
-
-follow-redirects@^1.15.4:
-  version "1.15.5"
-  resolved "https://registry.npmmirror.com/follow-redirects/-/follow-redirects-1.15.5.tgz#54d4d6d062c0fa7d9d17feb008461550e3ba8020"
-  integrity sha512-vSFWUON1B+yAw1VN4xMfxgn5fTUiaOzAJCKBwIIgT/+7CuGy9+r+5gITvP62j3RmaD5Ph65UaERdOSRGUzZtgw==
 
 for-each@^0.3.3:
   version "0.3.3"
@@ -8681,11 +8662,6 @@ proxy-compare@2.5.1:
   version "2.5.1"
   resolved "https://registry.npmmirror.com/proxy-compare/-/proxy-compare-2.5.1.tgz#17818e33d1653fbac8c2ec31406bce8a2966f600"
   integrity sha512-oyfc0Tx87Cpwva5ZXezSp5V9vht1c7dZBhvuV/y3ctkgMVUmiAGDVeeB0dKhGSyT0v1ZTEQYpe/RXlBVBNuCLA==
-
-proxy-from-env@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.npmmirror.com/proxy-from-env/-/proxy-from-env-1.1.0.tgz#e102f16ca355424865755d2c9e8ea4f24d58c3e2"
-  integrity sha512-D+zkORCbA9f1tdWRK0RaCR3GPv50cMxcrz4X8k5LTSUD1Dkw47mKJEZQNunItRTkWwgtaUSo1RVFRIG9ZXiFYg==
 
 pump@^3.0.0:
   version "3.0.0"
