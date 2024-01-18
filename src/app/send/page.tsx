@@ -22,8 +22,7 @@ import { enqueueSnackbar } from 'notistack';
 import { useSporesByAddressQuery } from '@/hooks/useQuery/useSporesByAddress';
 
 const SendGift: React.FC = () => {
-  const { isVisible, showOverlay, hideOverlay } = useLoadingOverlay();
-  const texts = ["Unmatched Flexibility and Interopera­bility", "Supreme Security and Decentrali­zation", "Inventive Tokenomics"]; 
+  const { isVisible, showOverlay, hideOverlay, progressStatus, setProgressStatus } = useLoadingOverlay();  const texts = ["Unmatched Flexibility and Interopera­bility", "Supreme Security and Decentrali­zation", "Inventive Tokenomics"]; 
   const [message, setMessage] = useState<string>('');
   const [toWalletAddress, setToWalletAddress] = useState<string>('')
   const [gift, setGift] = useState('');
@@ -34,17 +33,11 @@ const SendGift: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'Gift' | 'Blind Box'>('Gift');
   const walletAddress = useSelector((state: RootState) => state.wallet.wallet?.address);
   const { refresh: refreshSporesByAddress } = useSporesByAddressQuery(walletAddress, false);
-
   const { data: spore, isLoading: isSporeLoading } = useSporeQuery(
     hasGift as string,
   );
-
   const searchParams = useSearchParams();
   const type = searchParams.get('type')
-
-  const handleGiftChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setGift(e.target.value);
-  }; 
 
   const getBlindBox = async (boxName: string) => {
     const data = await fetchBlindBoxAPI({
@@ -154,7 +147,10 @@ const SendGift: React.FC = () => {
         'giftMessage': ''
       })
       await callUpdateGiftReadStatusAction(values.to, spore.id)
-      hideOverlay();
+      setProgressStatus('done')
+      setTimeout(() => {
+        hideOverlay();
+      }, 1000)
       enqueueSnackbar('Gift Send Successful', { variant: 'success' });
       refreshSporesByAddress()
       router.push('/finished');
@@ -171,8 +167,7 @@ const SendGift: React.FC = () => {
 
   return (
     <div className="container mx-auto">
-      <LoadingOverlay isVisible={isVisible} texts={texts} />
-
+      <LoadingOverlay isVisible={isVisible} texts={texts} progressStatus={progressStatus}/>
       <div>
         <div className='flex justify-center mt-4 flex-col items-center'>
           {

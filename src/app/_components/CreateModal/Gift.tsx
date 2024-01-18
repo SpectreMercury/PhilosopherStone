@@ -45,7 +45,7 @@ const CreateGift: React.FC<CreateGiftProps> = ({ onClose }) => {
   const { address, lock, signTransaction } = useConnect()
   const [capacityList, setCapacityList] = useState<number[]>([]);
   const [totalCapacity, setTotalCapacity] = useState<number>(0) 
-  const { isVisible, showOverlay, hideOverlay } = useLoadingOverlay();
+  const { isVisible, showOverlay, hideOverlay, progressStatus, setProgressStatus } = useLoadingOverlay(); 
   const texts = ["Unmatched Flexibility and Interopera­bility", "Supreme Security and Decentrali­zation", "Inventive Tokenomics"]; 
 
   const walletAddress = useSelector((state: RootState) => state.wallet.wallet?.address);
@@ -122,7 +122,10 @@ const CreateGift: React.FC<CreateGiftProps> = ({ onClose }) => {
       console.error(error)
       enqueueSnackbar('An error occurred', { variant: 'error' });
     } finally {
-      hideOverlay();
+      setProgressStatus('done')
+      setTimeout(() => {
+        hideOverlay();
+      }, 1000)
     }
 
     onClose?.(); ;
@@ -163,7 +166,7 @@ const CreateGift: React.FC<CreateGiftProps> = ({ onClose }) => {
 
   return (
     <div>
-      <LoadingOverlay isVisible={isVisible} texts={texts} />
+      <LoadingOverlay isVisible={isVisible} texts={texts} progressStatus={progressStatus}/>
       <p className='text-white001 font-SourceSanPro font-normal mb-2'>Assign to a blind box(optional)</p>
       {/* <Select options={selectOptions} onSelect={handleSelectChange} /> */}
       <div 
