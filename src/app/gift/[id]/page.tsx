@@ -31,7 +31,7 @@ const Gift: React.FC = () => {
   const [isMeltModal, setIsMeltModal] = useState<boolean>(false)
   const [giftMessage, setGiftMessage] = useState<string>("") 
   const { address, signTransaction } = useConnect()
-  const { isVisible, showOverlay, hideOverlay } = useLoadingOverlay();
+  const { isVisible, showOverlay, hideOverlay, progressStatus, setProgressStatus } = useLoadingOverlay(); 
   const texts = ["Unmatched Flexibility and Interopera­bility", "Supreme Security and Decentrali­zation", "Inventive Tokenomics"]; 
 
   function formatNumberWithCommas(num: number) {
@@ -81,7 +81,10 @@ const Gift: React.FC = () => {
       fromInfos: [address],
       config: predefinedSporeConfigs.Aggron4,
     });
-    hideOverlay();
+    setProgressStatus('done')
+      setTimeout(() => {
+        hideOverlay();
+      }, 1000)
     enqueueSnackbar('Melt Successful', {variant: 'success'})
     handleMeltModal()
     router.push('/')
@@ -113,7 +116,7 @@ const Gift: React.FC = () => {
 
   return (
     <div className="flex flex-col items-center p-4">
-      <LoadingOverlay isVisible={isVisible} texts={texts} />
+      <LoadingOverlay isVisible={isVisible} texts={texts} progressStatus={progressStatus}/>
       <MeltGiftModal onClose={handleMeltModal} amount={occupied} onMelt={handleMelt} isOpen={isMeltModal}/>
       <div className='w-full flex justify-between'>
         <div className='flex items-center gap-2'>
