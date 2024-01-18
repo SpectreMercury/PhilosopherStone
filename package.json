@@ -39,6 +39,7 @@
     "@types/react": "^18.2.45",
     "@types/react-dom": "18.2.7",
     "@vercel/kv": "^1.0.1",
+    "@vespaiach/axios-fetch-adapter": "^0.3.1",
     "@wagmi/core": "^1.4.12",
     "autoprefixer": "10.4.15",
     "axios": "^1.6.5",
