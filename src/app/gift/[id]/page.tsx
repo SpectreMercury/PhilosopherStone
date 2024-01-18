@@ -10,7 +10,7 @@ import LanguageIcon from '@mui/icons-material/Language';
 import Link from 'next/link';
 import { enqueueSnackbar } from 'notistack';
 import { useSporeQuery } from '@/hooks/useQuery/useQuerybySpore';
-import { BI } from '@ckb-lumos/lumos';
+import { BI, config } from '@ckb-lumos/lumos';
 import MeltGiftModal from '@/app/_components/MeltModal/MeltModal';
 import { useConnect } from '@/hooks/useConnect';
 import { sendTransaction } from '@/utils/transaction';
@@ -31,7 +31,8 @@ const Gift: React.FC = () => {
   const [isMeltModal, setIsMeltModal] = useState<boolean>(false)
   const [giftMessage, setGiftMessage] = useState<string>("") 
   const { address, signTransaction } = useConnect()
-  const { isVisible, showOverlay, hideOverlay } = useLoadingOverlay();
+  const { isVisible, showOverlay, hideOverlay, progressStatus, setProgressStatus } = useLoadingOverlay();
+
   const texts = ["Unmatched Flexibility and Interopera­bility", "Supreme Security and Decentrali­zation", "Inventive Tokenomics"]; 
 
   function formatNumberWithCommas(num: number) {
@@ -75,16 +76,21 @@ const Gift: React.FC = () => {
     if (!address || !spore) {
       return;
     }
+    handleMeltModal()
+    let latest = JSON.parse(JSON.stringify(predefinedSporeConfigs.Aggron4))
+    latest['lumos'] = config.predefined.AGGRON4
     showOverlay(); 
     await meltSporeMutation.mutateAsync({
       outPoint: spore!.cell!.outPoint!,
       fromInfos: [address],
-      config: predefinedSporeConfigs.Aggron4,
+      config: latest,
     });
-    hideOverlay();
+    setProgressStatus('done')
+    setTimeout(() => {
+      hideOverlay();
+    }, 1000)
     enqueueSnackbar('Melt Successful', {variant: 'success'})
-    handleMeltModal()
-    router.push('/')
+    
   }
 
 
@@ -113,7 +119,7 @@ const Gift: React.FC = () => {
 
   return (
     <div className="flex flex-col items-center p-4">
-      <LoadingOverlay isVisible={isVisible} texts={texts} />
+      <LoadingOverlay isVisible={isVisible} texts={texts} progressStatus={progressStatus}/>
       <MeltGiftModal onClose={handleMeltModal} amount={occupied} onMelt={handleMelt} isOpen={isMeltModal}/>
       <div className='w-full flex justify-between'>
         <div className='flex items-center gap-2'>
