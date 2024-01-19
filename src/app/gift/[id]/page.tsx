@@ -75,6 +75,7 @@ const Gift: React.FC = () => {
     if (!address || !spore) {
       return;
     }
+    handleMeltModal()
     showOverlay(); 
     await meltSporeMutation.mutateAsync({
       outPoint: spore!.cell!.outPoint!,
@@ -85,7 +86,6 @@ const Gift: React.FC = () => {
         hideOverlay();
       }, 1000)
     enqueueSnackbar('Melt Successful', {variant: 'success'})
-    handleMeltModal()
     router.push('/')
   }
 
