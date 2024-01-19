@@ -102,8 +102,6 @@ const CreateGift: React.FC<CreateGiftProps> = ({ onClose }) => {
     try {
       const contentBuffer = await content.arrayBuffer();
       const contentType = content.type || getMIMETypeByName(content.name);
-      // let latest = JSON.parse(JSON.stringify(predefinedSporeConfigs.Aggron4))
-      // latest['lumos'] = config.predefined.AGGRON4
       const spore = await addSporeMutation.mutateAsync({
         data: {
           contentType,
