@@ -85,10 +85,6 @@ const BlindBoxPage = () => {
     }
   }, [boxName, walletAddress]);
 
-  useEffect(() => {
-    
-  }, [])
-
   if (!boxName) {
     return <p>Loading...</p>; 
   }

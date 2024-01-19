@@ -67,7 +67,7 @@ const My: React.FC = () => {
     } else {
       getBlindBoxData()
     }
-  }, [storeSporesList, blindBoxList, activeTab]);
+  }, [storeSporesList, activeTab]);
 
   useEffect(() => {
     getBlindBoxData()
