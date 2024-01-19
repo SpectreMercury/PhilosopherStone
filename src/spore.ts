@@ -3,6 +3,7 @@ import {
   SporeConfig,
   SporeData,
   getCellCapacityMargin,
+  getSporeScript,
   predefinedSporeConfigs,
 } from '@spore-sdk/core';
 import pick from 'lodash-es/pick';
@@ -54,9 +55,9 @@ export default class SporeService {
   }
 
   public get script() {
-    return this.config.scripts.Spore.script;
+    return getSporeScript(this.config, 'Spore').script;
   }
-
+  
   public isSporeScript(script: Script | undefined) {
     if (!script) {
       return false;

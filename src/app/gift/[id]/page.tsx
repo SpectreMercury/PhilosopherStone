@@ -78,7 +78,6 @@ const Gift: React.FC = () => {
     showOverlay(); 
     await meltSporeMutation.mutateAsync({
       outPoint: spore!.cell!.outPoint!,
-      fromInfos: [address],
       config: predefinedSporeConfigs.Aggron4,
     });
     setProgressStatus('done')

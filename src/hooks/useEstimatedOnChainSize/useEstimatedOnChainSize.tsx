@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useConnect } from './useConnect';
-import { createSpore, predefinedSporeConfigs } from '@spore-sdk/core';
+import { createSpore, getSporeScript, predefinedSporeConfigs } from '@spore-sdk/core';
 import { BI } from '@ckb-lumos/lumos';
 import { isSameScript } from '@/utils/script';
 
@@ -39,8 +39,7 @@ export default function useEstimatedOnChainSize(
           .filter((output) => isSameScript(output.cellOutput.lock, lock))
           .find((output) => {
             const { type } = output.cellOutput;
-            const { script: sporeScript } =
-              predefinedSporeConfigs.Aggron4.scripts.Spore;
+            const { script: sporeScript } = getSporeScript(predefinedSporeConfigs.Aggron4, 'Spore');
             return (
               type?.codeHash === sporeScript.codeHash &&
               type.hashType === sporeScript.hashType
