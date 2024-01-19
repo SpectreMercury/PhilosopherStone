@@ -102,8 +102,8 @@ const CreateGift: React.FC<CreateGiftProps> = ({ onClose }) => {
     try {
       const contentBuffer = await content.arrayBuffer();
       const contentType = content.type || getMIMETypeByName(content.name);
-      let latest = JSON.parse(JSON.stringify(predefinedSporeConfigs.Aggron4))
-      latest['lumos'] = config.predefined.AGGRON4
+      // let latest = JSON.parse(JSON.stringify(predefinedSporeConfigs.Aggron4))
+      // latest['lumos'] = config.predefined.AGGRON4
       const spore = await addSporeMutation.mutateAsync({
         data: {
           contentType,
@@ -112,7 +112,7 @@ const CreateGift: React.FC<CreateGiftProps> = ({ onClose }) => {
         },
         fromInfos: [walletAddress],
         toLock: lock,
-        config: latest  ,
+        config: predefinedSporeConfigs.Aggron4  ,
         // @ts-ignore
         capacityMargin: useCapacityMargin ? BI.from(100_000_000) : BI.from(0),
       });
