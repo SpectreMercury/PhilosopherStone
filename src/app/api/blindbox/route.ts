@@ -14,9 +14,8 @@ async function getCurrentBlindBoxes(k: string): Promise<BlindBox[]> {
     return currBlindBoxes || [];
 }
 
-
-function handleError(error: string) {
-    return NextResponse.json({ error }, { status: 400 });
+function handleError(error: string, errno: number = 400) {
+    return NextResponse.json({ error, errno }, { status: errno });
 }
 
 const create = async (k: string, boxName: string) => {
@@ -28,7 +27,7 @@ const create = async (k: string, boxName: string) => {
   const newBlindBox: BlindBox = { id: boxName, boxData: [] };
   currBlindBoxes.push(newBlindBox);
   await kv.set(k, JSON.stringify(currBlindBoxes));
-  return NextResponse.json({ data: [], message: 'successful' }, { status: 200 });
+  return NextResponse.json({ data: [], message: 'successful', errno: 200 }, { status: 200 });
 }
 
 const getList = async (k: string) => {
@@ -57,7 +56,7 @@ const add = async (k: string, boxName: string, giftIds: string[]) => {
   const newGiftObjects = giftIds.map(id => ({ id }));
   currBlindBoxes[boxIndex].boxData.push(...newGiftObjects);
   await kv.set(k, JSON.stringify(currBlindBoxes));
-  return NextResponse.json({ data: currBlindBoxes[boxIndex].boxData }, { status: 200 });
+  return NextResponse.json({ data: currBlindBoxes[boxIndex].boxData, errno: 200 }, { status: 200 });
 };
 
 const remove = async (k: string, boxName: string, giftIds: string[]) => {
@@ -70,7 +69,7 @@ const remove = async (k: string, boxName: string, giftIds: string[]) => {
 
   currBlindBoxes[boxIndex].boxData = currBlindBoxes[boxIndex].boxData.filter(gift => !giftIds.includes(gift.id));
   await kv.set(k, JSON.stringify(currBlindBoxes));
-  return NextResponse.json({ data: currBlindBoxes[boxIndex].boxData }, { status: 200 });
+  return NextResponse.json({ data: currBlindBoxes[boxIndex].boxData, errno: 200 }, { status: 200 });
 };
 
 const clear = async (k: string, giftIds: string[]) => {
@@ -80,7 +79,7 @@ const clear = async (k: string, giftIds: string[]) => {
   });
 
   await kv.set(k, JSON.stringify(currBlindBoxes));
-  return NextResponse.json({ data: currBlindBoxes }, { status: 200 });
+  return NextResponse.json({ data: currBlindBoxes, errno: 200 }, { status: 200 });
 };
 
 const send = async (k: string, boxName: string) => {
@@ -93,7 +92,7 @@ const send = async (k: string, boxName: string) => {
 
   const randomIndex = Math.floor(Math.random() * box.boxData.length);
   const giftObject = box.boxData[randomIndex];
-  return NextResponse.json({ giftId: giftObject.id }, { status: 200 }); 
+  return NextResponse.json({ giftId: giftObject.id, errno: 200 }, { status: 200 }); 
 };
 
 export async function POST(req: NextRequest, res: NextApiResponse) {
@@ -102,7 +101,7 @@ export async function POST(req: NextRequest, res: NextApiResponse) {
       case 'create':
         return await create(`${body.key}-blindbox`, body.name);
       case 'getList':
-        return NextResponse.json({ data: await getList(`${body.key}-blindbox`) }, { status: 200 });
+        return NextResponse.json({ data: await getList(`${body.key}-blindbox`), errno: 200 }, { status: 200 });
       case 'add':
         return await add(`${body.key}-blindbox`, body.name, body.ids);
       case 'remove':

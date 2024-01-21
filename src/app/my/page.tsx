@@ -14,13 +14,8 @@ import { QuerySpore } from '@/hooks/useQuery/type';
 const LoadingSkeleton = () => {
   return (
     <div>
-      <div className="relative my-8 h-[180px] bg-gray-200 animate-pulse">
-        {/* You can add additional styling here to mimic the layout */}
-      </div>
-      <p className="text-center my-8 text-white001 text-hd2mb font-PlayfairDisplay bg-gray-300 rounded">
-        {/* This is for the text skeleton */}
-        &nbsp;
-      </p>
+      <div className="relative my-8 h-[180px] bg-gray-200 animate-pulse"></div>
+      <p className="text-center my-8 text-white001 text-hd2mb font-PlayfairDisplay bg-gray-300 rounded"></p>
     </div>
   );
 };

@@ -26,7 +26,8 @@ const CreateBlindBox: React.FC<CreateBlindBoxProps> = ({ onClose, onCreateGift, 
       body: JSON.stringify({ action: 'create', key: walletAddress, name: title}),
     });
     const data = await response.json();
-    if(data.data.errno !== 200) {
+    console.log(data)
+    if(data.errno !== 200) {
       enqueueSnackbar('Create Blind Box Error', {variant: 'error'})
     } else {
       enqueueSnackbar('Create Blind Box Successful', {variant: 'success'})
