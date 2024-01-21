@@ -12,8 +12,8 @@ import MetaMaskConnector from "@/connectors/metamask";
 import { MaterialDesignContent, SnackbarProvider } from 'notistack'; 
 import { styled } from "@mui/material";
 import { GiftReceiveModalProvider } from "./context/GiftReceiveModalContext";
-import ReceiveGiftModal from "./_components/common/ReceiveGiftModal/ReceiveGiftModal";
-import { useGiftReceiveModal } from "@/hooks/Modal/useGiftReceiveModal";
+
+
 
 const StyledMaterialDesignContent = styled(MaterialDesignContent)(() => ({
   '&.notistack-MuiContent-success': {
@@ -29,6 +29,12 @@ const config = {
   autoConnect: true,
   connectors: [new JoyIdConnector(), new MetaMaskConnector()],
 };
+
+// const refreshed = await refreshScriptConfig(
+//   predefined.AGGRON4.SCRIPTS,
+//   { resolve: createRpcResolver(rpc) }
+// );
+// initializeConfig({SCRIPTS: refreshed, PREFIX: 'ckt'});
 
 
 function RootLayout({
