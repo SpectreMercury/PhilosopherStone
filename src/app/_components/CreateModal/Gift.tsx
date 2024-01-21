@@ -21,6 +21,9 @@ import useLoadingOverlay from '@/hooks/useLoadOverlay';
 import LoadingOverlay from '../LoadingOverlay/LoadingOverlay';
 import { useSporesByAddressQuery } from '@/hooks/useQuery/useSporesByAddress';
 import SporeService from '@/spore';
+import useLumosScript from '@/hooks/useUpdateLumosConfig';
+import { getLumosScript } from '@/utils/updateLumosConfig';
+import { predefined } from '@ckb-lumos/lumos/config';
 
 interface CreateGiftProps {
   onClose?: () => void; //
@@ -47,12 +50,10 @@ const CreateGift: React.FC<CreateGiftProps> = ({ onClose }) => {
   const [totalCapacity, setTotalCapacity] = useState<number>(0) 
   const { isVisible, showOverlay, hideOverlay, progressStatus, setProgressStatus } = useLoadingOverlay(); 
   const texts = ["Unmatched Flexibility and Interopera­bility", "Supreme Security and Decentrali­zation", "Inventive Tokenomics"]; 
-
   const walletAddress = useSelector((state: RootState) => state.wallet.wallet?.address);
   const ethAddress = useSelector((state: RootState) => state.wallet.wallet?.ethAddress);
   const balance = useWalletBalance(walletAddress!!)
   const { refresh: refreshSporesByAddress } = useSporesByAddressQuery(walletAddress, false);
-
 
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
     const newImages = acceptedFiles.map(file => ({
@@ -99,6 +100,9 @@ const CreateGift: React.FC<CreateGiftProps> = ({ onClose }) => {
 
     // Show the loading overlay
     showOverlay();
+    const latestLumosScript = await getLumosScript();
+    let latest = JSON.parse(JSON.stringify(predefinedSporeConfigs.Aggron4))
+    latest['lumos'] = latestLumosScript
     try {
       const contentBuffer = await content.arrayBuffer();
       const contentType = content.type || getMIMETypeByName(content.name);
@@ -110,7 +114,7 @@ const CreateGift: React.FC<CreateGiftProps> = ({ onClose }) => {
         },
         fromInfos: [walletAddress],
         toLock: lock,
-        config: predefinedSporeConfigs.Aggron4  ,
+        config: latest,
         // @ts-ignore
         capacityMargin: useCapacityMargin ? BI.from(100_000_000) : BI.from(0),
       });

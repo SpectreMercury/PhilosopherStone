@@ -23,10 +23,11 @@ const BlindBoxPage = () => {
   
   const getBlindBox = async () => {
     const data = await fetchBlindBoxAPI({
-      action: 'getList',
-      key: walletAddress!!
+      action: 'getBoxByName',
+      key: walletAddress!!,
+      name: boxName
     })
-    setBoxGifts(data.data[0].boxData)
+    setBoxGifts(data.box.boxData)
   }
 
   const addToBlindBox = async (ids: string[]) => {
@@ -84,10 +85,6 @@ const BlindBoxPage = () => {
       getBlindBox()
     }
   }, [boxName, walletAddress]);
-
-  useEffect(() => {
-    
-  }, [])
 
   if (!boxName) {
     return <p>Loading...</p>; 

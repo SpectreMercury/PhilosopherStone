@@ -17,6 +17,7 @@ import { sendTransaction } from '@/utils/transaction';
 import { useMutation } from '@tanstack/react-query';
 import useLoadingOverlay from '@/hooks/useLoadOverlay';
 import LoadingOverlay from '@/app/_components/LoadingOverlay/LoadingOverlay';
+import { getLumosScript } from '@/utils/updateLumosConfig';
 
 
 const Gift: React.FC = () => {
@@ -75,17 +76,20 @@ const Gift: React.FC = () => {
     if (!address || !spore) {
       return;
     }
+    handleMeltModal()
     showOverlay(); 
+    const latestLumosScript = await getLumosScript();
+    let latest = JSON.parse(JSON.stringify(predefinedSporeConfigs.Aggron4))
+    latest['lumos'] = latestLumosScript
     await meltSporeMutation.mutateAsync({
       outPoint: spore!.cell!.outPoint!,
-      config: predefinedSporeConfigs.Aggron4,
+      config: latest,
     });
     setProgressStatus('done')
       setTimeout(() => {
         hideOverlay();
       }, 1000)
     enqueueSnackbar('Melt Successful', {variant: 'success'})
-    handleMeltModal()
     router.push('/')
   }
 

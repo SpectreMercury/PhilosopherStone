@@ -7,6 +7,9 @@ import { useGiftReceiveModal } from "@/hooks/Modal/useGiftReceiveModal";
 import { useEffect } from "react";
 import { setNewGifts } from "@/store/newGiftsSlice";
 import ReceiveGiftModal from "./_components/common/ReceiveGiftModal/ReceiveGiftModal";
+import { createRpcResolver, predefined, refreshScriptConfigs } from "@ckb-lumos/lumos/config";
+import { RPC, config } from "@ckb-lumos/lumos";
+import { predefinedSporeConfigs } from "@spore-sdk/core";
 
 export const dynamic = "force-dynamic";
 
@@ -34,7 +37,7 @@ export default function Home() {
     }
     return data;
   }
-
+  
   useEffect(() => {
     if (walletAddress) {
       getGiftStatus()

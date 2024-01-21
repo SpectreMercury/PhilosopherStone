@@ -20,6 +20,7 @@ import { sendTransaction } from '@/utils/transaction';
 import { useMutation } from '@tanstack/react-query';
 import { enqueueSnackbar } from 'notistack';
 import { useSporesByAddressQuery } from '@/hooks/useQuery/useSporesByAddress';
+import { getLumosScript } from '@/utils/updateLumosConfig';
 
 const SendGift: React.FC = () => {
   const { isVisible, showOverlay, hideOverlay, progressStatus, setProgressStatus } = useLoadingOverlay();  const texts = ["Unmatched Flexibility and Interopera­bility", "Supreme Security and Decentrali­zation", "Inventive Tokenomics"]; 
@@ -45,7 +46,7 @@ const SendGift: React.FC = () => {
       key: walletAddress!!,
       name: boxName
     })
-    return data.data.box.boxData
+    return data.box.boxData
   }
 
   const _getRandomIndex = (length: number) => {
@@ -131,6 +132,9 @@ const SendGift: React.FC = () => {
   const handleSubmit = useCallback(
     async (values: { to: string }) => {
       showOverlay(); 
+      const latestLumosScript = await getLumosScript();
+      let latest = JSON.parse(JSON.stringify(predefinedSporeConfigs.Aggron4))
+      latest['lumos'] = latestLumosScript
       if (!walletAddress || !values.to || !spore) {
         return;
       }
@@ -140,7 +144,7 @@ const SendGift: React.FC = () => {
         toLock: helpers.parseAddress(values.to, {
           config: config.predefined.AGGRON4,
         }),
-        config: predefinedSporeConfigs.Aggron4,
+        config: latest,
         useCapacityMarginAsFee: true,
       });
       await callSaveAction(spore.id, {
@@ -148,9 +152,6 @@ const SendGift: React.FC = () => {
       })
       await callUpdateGiftReadStatusAction(values.to, spore.id)
       setProgressStatus('done')
-      setTimeout(() => {
-        hideOverlay();
-      }, 1000)
       enqueueSnackbar('Gift Send Successful', { variant: 'success' });
       refreshSporesByAddress()
       router.push('/finished');
@@ -174,7 +175,20 @@ const SendGift: React.FC = () => {
             type === 'BlindBox' ? (
             <>
               {
-                isSporeLoading ? (<></>) :(<></>)
+                isSporeLoading ? (
+                  <Image 
+                    src={'/svg/blindbox-animation-1.svg'}
+                    className='animate-wiggle'
+                    width={164}
+                    height={120}
+                    alt={'unkown-animation'}
+                  />
+                ) :(<Image 
+                    src={'/svg/blindbox-animation-2.svg'}
+                    width={164}
+                    height={120}
+                    alt={'unkown-animation'}
+                  />)
               }
             </>) : (
             <>
@@ -182,8 +196,9 @@ const SendGift: React.FC = () => {
               <img src={`/api/media/${hasGift}`} width={300} height={200} className="px-4" alt="Gift" />
             </>)
           }
-          <p className='text-white001 font-SourceSanPro text-hd2mb mt-4'>{occupied} CKBytes</p>
-          <p className='text-white001 font-SourceSanPro text-body1mb text-white005 mt-4'>{hasGift?.slice(0,10)}...{hasGift?.slice(hasGift.length - 10, hasGift.length)}</p>
+          <p className='text-white001 font-SourceSanPro text-hd2mb mt-4'>{type === 'BlindBox' ?  `******`: `${occupied}` } CKBytes</p>
+          <p className='text-white001 font-SourceSanPro text-body1mb text-white005 mt-4'>
+           {type === 'BlindBox' ? `************` : `${hasGift?.slice(0,10)}......${hasGift?.slice(hasGift.length - 10, hasGift.length)}` }</p>
         </div>
         <div className='flex flex-col px-4'>
           <p className='text-white001 font-SourceSanPro text-body1bdmb mt-4'>Gift Message</p>
