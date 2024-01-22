@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
-import AutoAwesomeMosaicIcon from '@mui/icons-material/AutoAwesomeMosaic';
-import CheckIcon from '@mui/icons-material/Check';
 import List from './List';
 import { QuerySpore } from '@/hooks/useQuery/type';
 import useWindowDimensions from '@/hooks/getWindowDimension';
