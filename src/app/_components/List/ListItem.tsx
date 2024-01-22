@@ -12,10 +12,11 @@ interface ItemProps {
   isSelected: boolean;
   onSelect: () => void;
   viewMode: 'list' | 'grid';
-  interactionType?: number
+  interactionType?: number;
+  isDisabled?: boolean
 }
 
-const ListItem: React.FC<ItemProps> = ({ gift, isSelected, onSelect, viewMode, interactionType }) => {
+const ListItem: React.FC<ItemProps> = ({ gift, isSelected, onSelect, viewMode, interactionType, isDisabled }) => {
   const isQuerySpore = (gift: QuerySpore | boxData): gift is QuerySpore => {
     return (gift as QuerySpore).cell !== undefined;
   };
@@ -23,10 +24,13 @@ const ListItem: React.FC<ItemProps> = ({ gift, isSelected, onSelect, viewMode, i
 
   const listItemContent = (
     <div 
-      className={`${isSelected ? 'border-success-function border-2' : 'border-white009'} bg-primary008 relative cursor-pointer
+      className={`relative ${isSelected ? 'border-success-function border-2' : 'border-white009'} bg-primary008 relative cursor-pointer
         ${viewMode === 'list' ? 'flex items-center px-4 border-t-[1px]' : 'border rounded'} `}
       onClick={interactionType && interactionType > 1 ? onSelect : undefined}
     >
+      {isDisabled && (
+        <div className="z-10 absolute inset-0 bg-gray-500 opacity-50 flex justify-center items-center"></div>
+      )}
       <div className={`${viewMode === 'list' ? 'w-12 h-12 mr-4' : 'h-[120px]'} relative`}>
         <img alt={gift.id!} src={`/api/media/${gift.id}`} className="rounded max-h-[120px] object-cover w-full"/>
       </div>

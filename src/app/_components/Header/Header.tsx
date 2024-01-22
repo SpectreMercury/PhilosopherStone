@@ -18,11 +18,10 @@ const Header:React.FC = () => {
   const [activeRoute, setActiveRoute] = useState<string>('');
   const [showHeaderModal, setHeaderShowModal] = useState(false);
   const router = useRouter();
-  const dispatch = useDispatch()
-  const pathname = usePathname()
-  const searchParams = useSearchParams();
+  const dispatch = useDispatch();
+  const pathname = usePathname();
   const walletAddress = useSelector((state: RootState) => state.wallet.wallet?.address);
-  const balance = useWalletBalance(walletAddress!!)
+  const balance = useWalletBalance(walletAddress!!);
   const toggleMenu = () => {
     if (!isMenuOpen) {
       document.body.style.height = '100vh';
@@ -33,16 +32,6 @@ const Header:React.FC = () => {
     }
     setIsMenuOpen(!isMenuOpen);
   }
-
-  let queryString = '';
-  searchParams.forEach((value, key) => {
-    if (queryString !== '') {
-      queryString += '&';
-    }
-    queryString += `${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
-  });
-
-  const fullPath = `${pathname}?${queryString}`;
 
   useEffect(() => {
     const storedWallet = localStorage.getItem('wallet');
@@ -57,7 +46,7 @@ const Header:React.FC = () => {
   }, [pathname]);
 
   const isRouteActive = (route: string) => {
-    return fullPath === route;
+    return pathname === route;
   };
 
   const backToHome = () => {
@@ -107,10 +96,10 @@ const Header:React.FC = () => {
       {
         isMenuOpen && (
           <div className='absoulte bg-primary010 w-full top-16 flex flex-col justify-between' style={{ height: `calc(100vh - 64px)`}}>
-            <div className='px-4 mt-4'>
-              <MenuList text={"Create Gift"} isActive={isRouteActive('/my?type=Gift')} onClick={() => NaviTo('/my?type=Gift')} />
-              <MenuList text={"Create BlindBox"} isActive={isRouteActive('/my?type=Blind Box')} onClick={() => NaviTo('/my?type=Blind Box')} />
-              <MenuList text={"FAQ"} isActive={isRouteActive('/')} onClick={() => NaviTo('/')} />
+            <div className='px-4 mt-4'>              
+              <MenuList text={"Home"} isActive={isRouteActive('/')} onClick={() => NaviTo('/')} />
+              <MenuList text={"Create"} isActive={isRouteActive('/my')} onClick={() => NaviTo('/my?type=Gift')} />
+              <MenuList text={"FAQ"} isActive={isRouteActive('/FAQ')} onClick={() => NaviTo('/')} />
             </div>
             <div className='px-4 border-t border-white009'>
               {
@@ -168,18 +157,18 @@ interface MenuListProps {
 const MenuList: React.FC<MenuListProps> = ({ text, onClick, isActive }) => { 
   return (
     <div 
-      className={`h-11 cursor-pointer flex gap-4 ${isActive? 'text-white005': 'text-white005'} text-body1mb items-center`} 
+      className={`h-11 cursor-pointer flex gap-4 ${isActive? 'text-white001 font-bold': 'text-white005'} text-body1mb items-center`} 
       onClick={onClick}
     >
       {text}
-      {/* {isActive && 
+      {isActive && 
         <Image 
           alt='active tab'
           src='/svg/icon-star.svg'
           width={24}
           height={24}
         />
-      } */}
+      }
   </div>
   )
 }

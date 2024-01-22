@@ -158,6 +158,7 @@ const CreateGift: React.FC<CreateGiftProps> = ({ onClose }) => {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   const handleRemoveImage = (index: number) => {
+    setFile(null);
     setUploadedImages(current => current.filter((_, idx) => idx !== index));
     setCapacityList(currentList => currentList.filter((_, idx) => idx !== index));
   };

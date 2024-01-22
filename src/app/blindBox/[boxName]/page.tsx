@@ -5,7 +5,6 @@ import { usePathname, useSearchParams } from 'next/navigation';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import AddGiftsModal from '@/app/_components/AddGiftsModal/AddGiftsModal';
-import GiftList from '@/app/_components/List/GiftList';
 import BlindBoxList from '@/app/_components/List/BlindBoxList';
 import { fetchBlindBoxAPI } from '@/utils/fetchAPI';
 import { boxData } from '@/types/BlindBox';
@@ -14,7 +13,6 @@ import Link from 'next/link';
 const BlindBoxPage = () => {
   const pathName = usePathname();
   const boxName = pathName.split("/")[pathName.split('/').length - 1]
-  const [boxItems, setBoxItems] = useState([]);
   const [boxGifts, setBoxGifts] = useState<boxData[]>([])
   const walletAddress = useSelector((state: RootState) => state.wallet.wallet?.address);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
@@ -44,11 +42,12 @@ const BlindBoxPage = () => {
   }
 
   const removeGifts = async (ids: string[]) => {
+    console.log(ids)
     const data = await fetchBlindBoxAPI({ 
       action: 'remove', 
       key: walletAddress!!, 
       name: decodeURIComponent(boxName), 
-      ids: convertToObjects(ids)
+      ids: ids
     });
     setBoxGifts(data.data)
   }
@@ -92,7 +91,14 @@ const BlindBoxPage = () => {
 
   return (
     <div className='flex flex-col flex-1 px-4'>
-      {isModalOpen && <AddGiftsModal onConfirm={onConfirm} onClose={handleCloseModal} walletAddress={walletAddress!!} listItems={boxGifts} />}
+      {isModalOpen && 
+        <AddGiftsModal 
+          onConfirm={onConfirm} 
+          onClose={handleCloseModal} 
+          walletAddress={walletAddress!!} 
+          listItems={boxGifts} 
+          disableList={boxGifts.map(item => item.id)}
+        />}
       <div className='text-white text-hd2mb font-bold px-4 py-8 border-b'>{decodeURIComponent(boxName)}</div>
       <div className={`flex-1 flex ${boxGifts.length > 0 ? 'items-start' : 'items-center'}  justify-center`}> 
         {(boxGifts && !boxGifts.length) && (
@@ -103,7 +109,12 @@ const BlindBoxPage = () => {
         )}
         {boxGifts.length > 0 ? (
           <div className='w-full'>
-            <BlindBoxList list={boxGifts}  interactionType={3} updateGiftList={getSelectedList} selectedList={selectedGifts}/>
+            <BlindBoxList 
+              list={boxGifts}  
+              interactionType={3} 
+              updateGiftList={getSelectedList} 
+              selectedList={selectedGifts}
+            />
           </div>
         ) : (
           <></>
@@ -131,12 +142,16 @@ const BlindBoxPage = () => {
           )
         }
         {boxGifts && boxGifts.length > 0 && selectedGifts.length <= 0 && (
-            <Link 
-              href={`/send?type=BlindBox&name=${decodeURIComponent(boxName)}`}
-              className="flex-1 flex items-center justify-center h-12 mb-8 font-PlayfairDisplay border border-white002 bg-white001 text-primary011 py-2 px-4 rounded"         
-            >
-              Send Blind Box
-            </Link>
+            <>
+              <button className="flex-1 h-12 mb-8 font-PlayfairDisplay border border-white002 bg-white001 text-primary011 py-2 px-4 rounded" onClick={handleOpenModal}>Add Gifts</button>
+              <Link 
+                href={`/send?type=BlindBox&name=${decodeURIComponent(boxName)}`}
+                className="flex-1 flex items-center justify-center h-12 mb-8 font-PlayfairDisplay border border-white002 bg-white001 text-primary011 py-2 px-4 rounded"         
+              >
+                Send Blind Box
+              </Link>
+            </>
+            
         )}
       </div>
     </div>

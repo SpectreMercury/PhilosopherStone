@@ -10,9 +10,10 @@ interface AddGiftsModalProps {
   onConfirm: (selectedIds: string[]) => void;
   listItems: boxData[]; 
   walletAddress: string;
+  disableList?: string[];
 }
 
-const AddGiftsModal: React.FC<AddGiftsModalProps> = ({ onClose, onConfirm, listItems, walletAddress}) => {
+const AddGiftsModal: React.FC<AddGiftsModalProps> = ({ onClose, onConfirm, listItems, walletAddress, disableList}) => {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [viewMode, setViewMode] = useState<'list' | 'grid'>('grid');
   const [selectedGifts, setSelectedGifts] = useState<boxData[]>(listItems);
@@ -43,7 +44,7 @@ const AddGiftsModal: React.FC<AddGiftsModalProps> = ({ onClose, onConfirm, listI
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+    <div className="fixed z-10 inset-0 bg-black bg-opacity-50 flex items-center justify-center">
       <div className="bg-primary011 rounded-lg p-4 max-w-lg w-full relative mx-4">
         <div className='relative text-white001 text-hd2mb font-PlayfairDisplay my-4'>Pick Gifts to Blind Box 
           <Close onClick={onClose} className="absolute right-0 text-white001 text-hd2mb font-PlayfairDisplay"/>
@@ -56,6 +57,7 @@ const AddGiftsModal: React.FC<AddGiftsModalProps> = ({ onClose, onConfirm, listI
             viewMode={viewMode}
             interactionType={3}
             selectedList={selectedIds}
+            disableList={disableList}
           />
         </div>
         <div className="flex justify-between mt-4 gap-6">

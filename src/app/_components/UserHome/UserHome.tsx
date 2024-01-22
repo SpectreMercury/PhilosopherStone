@@ -1,17 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import CreateModal from '../CreateModal/CreateModal';
 import CreateGift from '../CreateModal/Gift';
-import GiftList from '@/app/_components/List/GiftList';
 import CreateBlindBox from '../CreateModal/CreateBlindBox';
-import { useSporesByAddressQuery } from '@/hooks/useQuery/useSporesByAddress';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { QuerySpore } from '@/hooks/useQuery/type';
-import { FAQData } from '@/settings/FAQData';
-import Faq from '../FAQ/FAQ';
 import Link from 'next/link';
-import SporeService from '@/spore';
 
 const LoadingSkeleton = () => {
   return (
@@ -93,10 +88,9 @@ const UserHome: React.FC = () => {
       >
         Design {activeTab}
       </Link>
-      <p className=' text-primary009 font-SourceSanPro text-body1mb text-center mt-6'>
+      <Link href={'/FAQ'} className='block mx-auto text-primary009 font-SourceSanPro text-body1mb text-center mt-6'>
         { activeTab === 'Gift' ? 'Learn More': 'What is blind box?' }
-      </p>
-      <Faq items={FAQData} linkColor='text-primary007' />
+      </Link>
       {isModalOpen && (
         <CreateModal title={`Create New ${activeTab}`} onClose={handleCloseModal}>
           {activeTab === 'Gift' ? <CreateGift onClose={handleCloseModal}/> : (
