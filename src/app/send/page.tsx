@@ -1,8 +1,6 @@
 "use client"
 
 import React, { useCallback, useEffect, useState } from 'react';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { transferSpore as _transferSpore, predefinedSporeConfigs } from '@spore-sdk/core';
 import { QuerySpore } from '@/hooks/useQuery/type';

@@ -1,6 +1,5 @@
 import React from 'react';
 import Image from 'next/image';
-import CloseIcon from '@mui/icons-material/Close';
 import Link from 'next/link';
 
 interface ReceiveGiftModalProps {
@@ -12,7 +11,14 @@ const ReceiveGiftModal: React.FC<ReceiveGiftModalProps> = ({isReceiveGiftModalOp
     return (
         <div className={`${isReceiveGiftModalOpen ? 'fixed' : 'hidden'} w-full inset-0 bg-primary006 bg-opacity-30 flex justify-center items-center z-10`}>
             <div className=" bg-primary011 border border-primary004 p-6 rounded-lg shadow-l relative w-ful flex flex-col gap-6">
-                <CloseIcon className='text-white001 absolute top-2 right-2' onClick={closeReceiveGiftModal}/>
+                <button onClick={closeReceiveGiftModal} className="absolute top-2 right-2">
+                    <Image 
+                        src='/svg/icon-x.svg'
+                        width={24}
+                        height={24}
+                        alt='close modal'
+                    />
+                </button>
                 <img
                     alt='gift'
                     src='/svg/BlindBox.svg'

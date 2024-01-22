@@ -1,7 +1,4 @@
 import React, { useState, useEffect, MouseEventHandler } from 'react';
-import MenuIcon from '@mui/icons-material/Menu';
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import Close from '@mui/icons-material/Close';
 import { useSelector, useDispatch } from 'react-redux'
 import { AppDispatch, RootState } from "@/store/store";
 import { useRouter, usePathname } from 'next/navigation';
@@ -91,7 +88,21 @@ const Header:React.FC = () => {
           />
         </div>
         <div className="cursor-pointer flex space-y-2 bg-primary008 w-10 h-10 rounded-md items-center justify-center" onClick={toggleMenu}>
-          {isMenuOpen ? <Close className='text-white001 h-6 w-6' /> : <MenuIcon className='text-white001 h-6 w-6' />}
+          {isMenuOpen ? 
+            <Image 
+              src='/svg/icon-x.svg'
+              width={24}
+              height={24}
+              alt='Close menu'
+            />
+            :
+            <Image 
+              src='/svg/icon-menu.svg'
+              width={24}
+              height={24}
+              alt='Open modal'
+            />
+          }
         </div>
       </div>
       {
@@ -120,9 +131,14 @@ const Header:React.FC = () => {
                       />
                       <div className='text-white001 text-labelmb'>{walletAddress.slice(0, 10)}...{walletAddress.slice(walletAddress.length - 10, walletAddress.length)}</div>
                     </div>
-                    <ContentCopyIcon className='text-white001 cursor-pointer' 
-                      onClick={() => {handleCopy(walletAddress)}}
-                    />
+                    <button onClick={() => {handleCopy(walletAddress)}}>
+                      <Image
+                        src='/svg/icon-copy.svg'
+                        width={18}
+                        height={18}
+                        alt='Copy address'
+                      />
+                    </button>
                   </div>
                   <div 
                     className='border justify-center h-12 my-8 flex items-center rounded-md cursor-pointer text-white001'

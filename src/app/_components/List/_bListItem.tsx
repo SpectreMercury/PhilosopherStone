@@ -1,6 +1,5 @@
 import React from 'react';
 import Image from 'next/image';
-import CheckIcon from '@mui/icons-material/Check';
 import { QuerySpore } from '@/hooks/useQuery/type'; // 这应该替换为您的盲盒类型
 import Link from 'next/link';
 import { boxData } from '@/types/BlindBox';
@@ -34,7 +33,12 @@ const BlindBoxItem: React.FC<BlindBoxItemProps> = ({ blindBox, isSelected, onSel
       </div>
       {isSelected && (
         <div className={`absolute ${viewMode === 'list' ? 'right-4' : 'top-2 right-2'} w-6 h-6 rounded-full bg-green-500 border-green-500 flex items-center justify-center`}>
-          <CheckIcon className='text-white001' />
+          <Image 
+            src='/svg/icon-check.svg'
+            width={24}
+            height={24}
+            alt="Selected"
+          />
         </div>
       )}
     </div>
