@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import Image from 'next/image';
 
 interface FaqItem {
   question: string;
@@ -26,6 +27,7 @@ const Faq: React.FC<FaqProps> = ({ items, linkColor }) => {
 
   return (
     <div id="faq">
+<<<<<<< HEAD
       <div className='w-full text-primary001 text-hd1mb mt-8 w-[66px] py-2 text-center'>FAQ</div>
       {items.map((item, index) => (
         <div key={index} className="border-b border-white009">
@@ -33,6 +35,29 @@ const Faq: React.FC<FaqProps> = ({ items, linkColor }) => {
             <h2 className="text-white001 font-SourceSanPro text-hd3mb">{item.question}</h2>
             <button className='text-white001' onClick={() => toggleItem(index)}>
               {openItemIndex === index ? '-' : '+'}
+=======
+      <div className='w-full text-primary001 text-center text-hd3mb font-Montserrat mt-8 w-[66px] py-2'>FAQ</div>
+      {items.map((item, index) => (
+        <div key={index} className="border-b border-white009">
+          <div className="flex justify-between items-center p-4 cursor-pointer" onClick={() => toggleItem(index)}>
+            <p className="text-white001 font-SourceSanPro text-body1bdmb">{item.question}</p>
+            <button className='text-white001'>
+              {openItemIndex === index ? 
+                <Image 
+                  src='/svg/icon-minus.svg' 
+                  width={18}
+                  height={18}
+                  alt='Collapse answer'
+                />
+              : 
+              <Image 
+                  src='/svg/icon-plus.svg' 
+                  width={18}
+                  height={18}
+                  alt='View answer'
+                />
+              }
+>>>>>>> main
             </button>
           </div>
           {openItemIndex === index && (

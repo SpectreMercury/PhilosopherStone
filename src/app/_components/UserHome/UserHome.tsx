@@ -14,7 +14,7 @@ const LoadingSkeleton = () => {
       <div className="relative my-8 h-[180px] bg-gray-200 animate-pulse">
         {/* You can add additional styling here to mimic the layout */}
       </div>
-      <p className="text-center my-8 text-white001 text-hd2mb font-PlayfairDisplay bg-gray-300 rounded">
+      <p className="text-center my-8 text-white001 text-hd2mb font-Montserrat bg-gray-300 rounded">
         {/* This is for the text skeleton */}
         &nbsp;
       </p>
@@ -55,7 +55,7 @@ const UserHome: React.FC = () => {
             objectFit='cover'
           />
         </div>
-        <p className="text-center my-8 text-white001 text-hd2mb font-PlayfairDisplay">
+        <p className="text-center my-8 text-white001 text-hd2mb font-Montserrat">
           { activeTab === 'Gift' ? 'Create Your Gift and Let Smiles Bloom!': 'Craft Joy, Share Wonder: Design Your Blind Box Surprise!' }
         </p>
       </div>
@@ -67,13 +67,13 @@ const UserHome: React.FC = () => {
     <div className="container mx-auto p-4">
       <div className="flex rounded-md bg-primary011">
         <button
-          className={`flex-1 py-2 m-1 font-semibold text-white font-SourceSanPro ${activeTab === 'Gift' ? 'bg-primary010' : ''} rounded-md`}
+          className={`flex-1 py-2 m-1 text-white text-buttonmb font-SourceSanPro ${activeTab === 'Gift' ? 'bg-primary010' : ''} rounded-md`}
           onClick={() => setActiveTab('Gift')}
         >
           Gift
         </button>
         <button
-          className={`flex-1 py-1 m-1 font-semibold text-white font-SourceSanPro ${activeTab === 'Blind Box' ? 'text-blue-500 bg-primary010' : ''} rounded-md `}
+          className={`flex-1 py-1 m-1 text-white text-buttonmb font-SourceSanPro ${activeTab === 'Blind Box' ? 'text-blue-500 bg-primary010' : ''} rounded-md `}
           onClick={() => {
             setActiveTab('Blind Box')
           }}
