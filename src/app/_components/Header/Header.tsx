@@ -4,7 +4,7 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import Close from '@mui/icons-material/Close';
 import { useSelector, useDispatch } from 'react-redux'
 import { AppDispatch, RootState } from "@/store/store";
-import { useRouter, usePathname } from 'next/navigation';
+import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import { setWallet, clearWallet } from '@/store/walletSlice';
 import { enqueueSnackbar, useSnackbar } from 'notistack';
@@ -17,10 +17,10 @@ const Header:React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState<Boolean>(false);
   const [activeRoute, setActiveRoute] = useState<string>('');
   const [showHeaderModal, setHeaderShowModal] = useState(false);
-
   const router = useRouter();
   const dispatch = useDispatch()
   const pathname = usePathname()
+  const searchParams = useSearchParams();
   const walletAddress = useSelector((state: RootState) => state.wallet.wallet?.address);
   const balance = useWalletBalance(walletAddress!!)
   const toggleMenu = () => {
@@ -33,6 +33,16 @@ const Header:React.FC = () => {
     }
     setIsMenuOpen(!isMenuOpen);
   }
+
+  let queryString = '';
+  searchParams.forEach((value, key) => {
+    if (queryString !== '') {
+      queryString += '&';
+    }
+    queryString += `${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
+  });
+
+  const fullPath = `${pathname}?${queryString}`;
 
   useEffect(() => {
     const storedWallet = localStorage.getItem('wallet');
@@ -47,7 +57,7 @@ const Header:React.FC = () => {
   }, [pathname]);
 
   const isRouteActive = (route: string) => {
-    return pathname === route;
+    return fullPath === route;
   };
 
   const backToHome = () => {
@@ -98,10 +108,9 @@ const Header:React.FC = () => {
         isMenuOpen && (
           <div className='absoulte bg-primary010 w-full top-16 flex flex-col justify-between' style={{ height: `calc(100vh - 64px)`}}>
             <div className='px-4 mt-4'>
-              <MenuList text={"Create Gift & Blind Box"} isActive={isRouteActive('/')} onClick={() => NaviTo('/')} />
-              <MenuList text={"Send Gift"} isActive={isRouteActive('/send')} onClick={() => NaviTo('/send')} />
-              <MenuList text={"My Box"} isActive={isRouteActive('/my')} onClick={() => NaviTo('/')} />
-              <MenuList text={"History"} isActive={isRouteActive('/history')} onClick={() => NaviTo('/')} />
+              <MenuList text={"Create Gift"} isActive={isRouteActive('/my?type=Gift')} onClick={() => NaviTo('/my?type=Gift')} />
+              <MenuList text={"Create BlindBox"} isActive={isRouteActive('/my?type=Blind Box')} onClick={() => NaviTo('/my?type=Blind Box')} />
+              <MenuList text={"FAQ"} isActive={isRouteActive('/')} onClick={() => NaviTo('/')} />
             </div>
             <div className='px-4 border-t border-white009'>
               {
@@ -159,18 +168,18 @@ interface MenuListProps {
 const MenuList: React.FC<MenuListProps> = ({ text, onClick, isActive }) => { 
   return (
     <div 
-      className={`h-11 cursor-pointer flex gap-4 ${isActive? 'text-white001 font-bold': 'text-white005'} text-body1mb items-center`} 
+      className={`h-11 cursor-pointer flex gap-4 ${isActive? 'text-white005': 'text-white005'} text-body1mb items-center`} 
       onClick={onClick}
     >
       {text}
-      {isActive && 
+      {/* {isActive && 
         <Image 
           alt='active tab'
           src='/svg/icon-star.svg'
           width={24}
           height={24}
         />
-      }
+      } */}
   </div>
   )
 }

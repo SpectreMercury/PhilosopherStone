@@ -10,6 +10,8 @@ import { useSporesByAddressQuery } from '@/hooks/useQuery/useSporesByAddress';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { QuerySpore } from '@/hooks/useQuery/type';
+import { useRouter, useSearchParams } from 'next/navigation';
+
 
 const LoadingSkeleton = () => {
   return (
@@ -21,7 +23,8 @@ const LoadingSkeleton = () => {
 };
 
 const My: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'Gift' | 'Blind Box'>('Gift');
+  const searchParams = useSearchParams();
+  const [activeTab, setActiveTab] = useState<'Gift' | 'Blind Box'>(decodeURIComponent(searchParams.get('type') || '') === 'Blind Box' ? 'Blind Box' : 'Gift');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const walletAddress = useSelector((state: RootState) => state.wallet.wallet?.address);
   const { data: spores, isLoading: isSporesLoading } = useSporesByAddressQuery(
@@ -63,6 +66,15 @@ const My: React.FC = () => {
       getBlindBoxData()
     }
   }, [storeSporesList, activeTab]);
+
+  useEffect(() => {
+    let type = searchParams.get('type')
+    if (type && decodeURIComponent(type) === 'Gift') {
+      setActiveTab('Gift')
+    } else if (type && decodeURIComponent(type) === 'Blind Box') {
+      setActiveTab('Blind Box')
+    }
+  }, [searchParams])
 
   useEffect(() => {
     getBlindBoxData()

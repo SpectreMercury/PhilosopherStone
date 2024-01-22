@@ -31,9 +31,6 @@ const UserHome: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'Gift' | 'Blind Box'>('Gift');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const walletAddress = useSelector((state: RootState) => state.wallet.wallet?.address);
-  const { data: spores, isLoading: isSporesLoading } = useSporesByAddressQuery(
-    walletAddress as string,
-  );
   const storeSporesList = useSelector((state: RootState) => state.spores.spores);
   const [sporesList, setSporesList] = useState<QuerySpore[] | []>([])
   const [blindBoxList, setBlindBoxList] = useState<[]>([]) 
@@ -91,7 +88,7 @@ const UserHome: React.FC = () => {
       </div>
       { renderContent() }
       <Link 
-        href={'/my'}
+        href={`/my?type=${activeTab}`}
         className="w-full h-12 font-PlayfairDisplay border border-white002 bg-white001 text-primary011 py-2 px-4 rounded flex items-center justify-center"
       >
         Design {activeTab}
