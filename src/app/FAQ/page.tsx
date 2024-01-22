@@ -1,14 +1,14 @@
 "use client"
 
 import React from "react";
-import Faq from "../_components/FAQ/FAQ";
+import FAQComponent from "@/app/_components/FAQComponent/FAQComponent";
 import { FAQData } from "@/settings/FAQData";
 import Image from "next/image";
 
 const FAQ:React.FC = () => {
     return (
         <div className="universe-bg px-4 h-full flex-1 flex flex-col">
-            <Faq items={FAQData} linkColor='text-primary007' />
+            <FAQComponent items={FAQData} linkColor='text-primary007' />
             <div className="w-[343px] h-[82px] rounded-md bg-primary010 flex justify-between items-center mx-auto mt-8 px-4">
                 <div className="w-12 h-12 relative flex items-center">
                     <Image src={'/svg/faq.svg'} layout='fill' objectFit='cover' alt={'faq'} />
