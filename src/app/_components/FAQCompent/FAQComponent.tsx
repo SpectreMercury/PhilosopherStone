@@ -14,7 +14,7 @@ interface FaqProps {
   linkColor: string;
 }
 
-const Faq: React.FC<FaqProps> = ({ items, linkColor }) => {
+const FAQComponent: React.FC<FaqProps> = ({ items, linkColor }) => {
   const [openItemIndex, setOpenItemIndex] = useState<number | null>(null);
 
   const toggleItem = (index: number) => {
@@ -26,8 +26,8 @@ const Faq: React.FC<FaqProps> = ({ items, linkColor }) => {
   };
 
   return (
-    <div id="faq">
-      <div className='w-full text-primary001 text-center text-hd3mb font-Montserrat mt-8 w-[66px] py-2'>FAQ</div>
+    <div>
+      <div className='text-primary001 text-center text-hd3mb font-Montserrat mt-8 w-[66px] py-2'>FAQ</div>
       {items.map((item, index) => (
         <div key={index} className="border-b border-white009">
           <div className="flex justify-between items-center p-4 cursor-pointer" onClick={() => toggleItem(index)}>
@@ -63,4 +63,4 @@ const Faq: React.FC<FaqProps> = ({ items, linkColor }) => {
   );
 };
 
-export default Faq;
+export default FAQComponent;

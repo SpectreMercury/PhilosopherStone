@@ -206,24 +206,6 @@ const SendGift: React.FC = () => {
             className='w-full h-24 border rounded-lg bg-primary008 mt-2 px-4 py-2 text-white001' 
             onChange={(e) => setMessage(e.target.value)}/>
         </div>
-
-        {/* <p className='text-white001 font-SourceSanPro text-body1bdmb mt-4 px-4'>Delivery Method</p>
-        <div className="flex rounded-md bg-primary011 m-4">
-          <button
-            className={`flex-1 py-2 m-1 font-semibold text-white font-SourceSanPro ${activeTab === 'Gift' ? 'bg-primary010' : ''} rounded-md`}
-            onClick={() => setActiveTab('Gift')}
-          >
-            Gift
-          </button>
-          <button
-            className={`flex-1 py-1 m-1 font-semibold text-white font-SourceSanPro ${activeTab === 'Blind Box' ? 'text-blue-500 bg-primary010' : ''} rounded-md `}
-            onClick={() => {
-              setActiveTab('Blind Box')
-            }}
-          >
-            Blind Box
-          </button>
-        </div> */}
         <div className='flex flex-col px-4'>
           <p className='text-white001 font-SourceSanPro text-body1bdmb mt-4'>Recipient’s wallet address*</p>
           <input 
@@ -236,7 +218,8 @@ const SendGift: React.FC = () => {
         <div className='flex flex-col px-4 mt-8'>
           <button 
             onClick={() => {handleSubmit({to: toWalletAddress})}}
-            className="w-full h-12 text-buttonmb font-SourceSansPro border border-white002 bg-white001 text-primary011 py-2 px-4 rounded flex items-center justify-center"
+            disabled={!toWalletAddress}
+            className="w-full h-12 font-PlayfairDisplay border border-white002 bg-white001 text-primary011 py-2 px-4 rounded flex items-center justify-center"
           >
             Send Gift
           </button>

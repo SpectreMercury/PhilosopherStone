@@ -10,10 +10,11 @@ interface BlindBoxListProps {
   updateGiftList?: (ids: string[]) => void;
   list: boxData[];
   interactionType?: number;
-  selectedList: string[]
+  selectedList: string[];
+  disableList?: string[]; 
 }
 
-const BlindBoxList: React.FC<BlindBoxListProps> = ({ onNewGiftClick, list, interactionType = 1,updateGiftList, selectedList }) => {
+const BlindBoxList: React.FC<BlindBoxListProps> = ({ onNewGiftClick, list, interactionType = 1,updateGiftList, selectedList, disableList }) => {
   const [gifts, setGifts] = useState<boxData[]>(list);
   const [searchTerm, setSearchTerm] = useState('');
   const [viewMode, setViewMode] = useState<'list' | 'grid'>('grid');
@@ -45,22 +46,6 @@ const BlindBoxList: React.FC<BlindBoxListProps> = ({ onNewGiftClick, list, inter
 
   return (
     <div className='mb-8'>
-      {/* <div className={`mt-4 ${width >= 1280 && 'flex gap-8 justify-between items-center'}`}>
-        <input
-            type="text"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className={`px-4 py-3 rounded-full bg-primary008 ${width < 1280 && "w-full"}`}
-            placeholder="Search gifts..."
-        />
-        {width >= 1280 &&
-          <div 
-            className="text-primary003 font-SourceSanPro text-body1mb" 
-            onClick={onNewGiftClick}>
-              + New Gift
-          </div>
-        }
-      </div> */}
       <div className="flex justify-between items-center mt-4">
         <div>
           <span className='text-white001'>{list.length} {list.length === 1 ? "Gift" : "Gifts"}</span>

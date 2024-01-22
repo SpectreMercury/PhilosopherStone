@@ -1,7 +1,7 @@
 import React, { useState, useEffect, MouseEventHandler } from 'react';
 import { useSelector, useDispatch } from 'react-redux'
 import { AppDispatch, RootState } from "@/store/store";
-import { useRouter, usePathname } from 'next/navigation';
+import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import { setWallet, clearWallet } from '@/store/walletSlice';
 import { enqueueSnackbar, useSnackbar } from 'notistack';
@@ -14,12 +14,11 @@ const Header:React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState<Boolean>(false);
   const [activeRoute, setActiveRoute] = useState<string>('');
   const [showHeaderModal, setHeaderShowModal] = useState(false);
-
   const router = useRouter();
-  const dispatch = useDispatch()
-  const pathname = usePathname()
+  const dispatch = useDispatch();
+  const pathname = usePathname();
   const walletAddress = useSelector((state: RootState) => state.wallet.wallet?.address);
-  const balance = useWalletBalance(walletAddress!!)
+  const balance = useWalletBalance(walletAddress!!);
   const toggleMenu = () => {
     if (!isMenuOpen) {
       document.body.style.height = '100vh';
@@ -108,11 +107,10 @@ const Header:React.FC = () => {
       {
         isMenuOpen && (
           <div className='absoulte bg-primary010 w-full top-16 flex flex-col justify-between' style={{ height: `calc(100vh - 64px)`}}>
-            <div className='px-4 mt-4'>
-              <MenuList text={"Create Gift & Blind Box"} isActive={isRouteActive('/')} onClick={() => NaviTo('/')} />
-              <MenuList text={"Send Gift"} isActive={isRouteActive('/send')} onClick={() => NaviTo('/send')} />
-              <MenuList text={"My Box"} isActive={isRouteActive('/my')} onClick={() => NaviTo('/')} />
-              <MenuList text={"History"} isActive={isRouteActive('/history')} onClick={() => NaviTo('/')} />
+            <div className='px-4 mt-4'>              
+              <MenuList text={"Home"} isActive={isRouteActive('/')} onClick={() => NaviTo('/')} />
+              <MenuList text={"Create"} isActive={isRouteActive('/my')} onClick={() => NaviTo('/my?type=Gift')} />
+              <MenuList text={"FAQ"} isActive={isRouteActive('/FAQ')} onClick={() => NaviTo('/')} />
             </div>
             <div className='px-4 border-t border-white009'>
               {

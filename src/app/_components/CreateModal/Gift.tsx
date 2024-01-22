@@ -55,21 +55,34 @@ const CreateGift: React.FC<CreateGiftProps> = ({ onClose }) => {
   const balance = useWalletBalance(walletAddress!!)
   const { refresh: refreshSporesByAddress } = useSporesByAddressQuery(walletAddress, false);
 
+  // const onDrop = useCallback(async (acceptedFiles: File[]) => {
+  //   const newImages = acceptedFiles.map(file => ({
+  //     file,
+  //     preview: URL.createObjectURL(file),
+  //     onChainSize,
+  //   }));
+  //   acceptedFiles.filter(file => {
+  //     if (file.size > 300 * 1024) {
+  //       enqueueSnackbar('File size exceeds 300 KB', { variant: 'error' });
+  //       return false;
+  //     } else {
+  //       setUploadedImages(current => [...current, ...newImages]);
+  //       setFile(acceptedFiles[0]);
+  //     }
+  //   });
+  // }, []);
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
-    const newImages = acceptedFiles.map(file => ({
-      file,
-      preview: URL.createObjectURL(file),
-      onChainSize,
-    }));
-    acceptedFiles.filter(file => {
-      if (file.size > 300 * 1024) {
-        enqueueSnackbar('File size exceeds 300 KB', { variant: 'error' });
-        return false;
-      } else {
-        setUploadedImages(current => [...current, ...newImages]);
-        setFile(acceptedFiles[0]);
-      }
-    });
+    const newFile = acceptedFiles[0];
+
+    if (!newFile) return;
+
+    if (newFile.size > 300 * 1024) {
+      enqueueSnackbar('File size exceeds 300 KB', { variant: 'error' });
+      return;
+    }
+
+    setUploadedImages([{ file: newFile, preview: URL.createObjectURL(newFile) }]);
+    setFile(newFile);
   }, []);
 
   const addSpore = useCallback(
@@ -97,8 +110,6 @@ const CreateGift: React.FC<CreateGiftProps> = ({ onClose }) => {
     if (!content || !walletAddress || !lock) {
       return;
     }
-
-    // Show the loading overlay
     showOverlay();
     const latestLumosScript = await getLumosScript();
     let latest = JSON.parse(JSON.stringify(predefinedSporeConfigs.Aggron4))
@@ -147,6 +158,7 @@ const CreateGift: React.FC<CreateGiftProps> = ({ onClose }) => {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   const handleRemoveImage = (index: number) => {
+    setFile(null);
     setUploadedImages(current => current.filter((_, idx) => idx !== index));
     setCapacityList(currentList => currentList.filter((_, idx) => idx !== index));
   };
@@ -169,7 +181,7 @@ const CreateGift: React.FC<CreateGiftProps> = ({ onClose }) => {
   return (
     <div>
       <LoadingOverlay isVisible={isVisible} texts={texts} progressStatus={progressStatus}/>
-      <p className='text-white001 font-SourceSanPro font-normal mb-2'>Assign to a blind box(optional)</p>
+      {/* <p className='text-white001 font-SourceSanPro font-normal mb-2'>Assign to a blind box(optional)</p> */}
       {/* <Select options={selectOptions} onSelect={handleSelectChange} /> */}
       <div 
         {...getRootProps()} 
@@ -224,7 +236,7 @@ const CreateGift: React.FC<CreateGiftProps> = ({ onClose }) => {
         }
         <div className='flex justify-center'>
           <div className='text-white001 font-SourceSanPro text-body1mb'>Estimate Total On-Chain Size: </div>
-          <div className='text-white001 font-SourceSanPro text-body1bdmb'>{` ${totalCapacity} CKB`}</div>
+          <div className='text-white001 font-SourceSanPro text-body1bdmb'>{` ${onChainSize} CKB`}</div>
         </div>
       </div>
       <button 

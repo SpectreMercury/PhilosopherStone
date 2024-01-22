@@ -10,9 +10,10 @@ interface AddGiftsModalProps {
   onConfirm: (selectedIds: string[]) => void;
   listItems: boxData[]; 
   walletAddress: string;
+  disableList?: string[];
 }
 
-const AddGiftsModal: React.FC<AddGiftsModalProps> = ({ onClose, onConfirm, listItems, walletAddress}) => {
+const AddGiftsModal: React.FC<AddGiftsModalProps> = ({ onClose, onConfirm, listItems, walletAddress, disableList}) => {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [viewMode, setViewMode] = useState<'list' | 'grid'>('grid');
   const [selectedGifts, setSelectedGifts] = useState<boxData[]>(listItems);
@@ -64,6 +65,7 @@ const AddGiftsModal: React.FC<AddGiftsModalProps> = ({ onClose, onConfirm, listI
             viewMode={viewMode}
             interactionType={3}
             selectedList={selectedIds}
+            disableList={disableList}
           />
         </div>
         <button 

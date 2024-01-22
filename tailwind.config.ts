@@ -29,6 +29,7 @@ const config: Config = {
         'primary009': '#737AAB',
         'primary010': '#252A48',
         'primary011': '#1C203B',
+        'linkColor': '#B7C4FF',
         'white001': '#FFFFFF',
         'white002': 'rgba(255, 255, 255, 0.90)',
         'white003': 'rgba(255, 255, 255, 0.80)',
