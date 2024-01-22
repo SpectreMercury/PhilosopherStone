@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
-import AutoAwesomeMosaicIcon from '@mui/icons-material/AutoAwesomeMosaic';
-import CheckIcon from '@mui/icons-material/Check';
 import List from './List';
 import { QuerySpore } from '@/hooks/useQuery/type';
 import useWindowDimensions from '@/hooks/getWindowDimension';
@@ -66,7 +64,7 @@ const BlindBoxList: React.FC<BlindBoxListProps> = ({ onNewGiftClick, list, inter
       <div className="flex justify-between items-center mt-4">
         <div>
           <span className='text-white001'>{list.length} {list.length === 1 ? "Gift" : "Gifts"}</span>
-          <button className="cursor-pointer ml-4 text-primary004">Select All</button>
+          {/* <button className="cursor-pointer ml-4 text-primary004">Select All</button> */}
         </div>
         <div onClick={() => setViewMode(viewMode === 'list' ? 'grid' : 'list')}>
           {viewMode === "grid" ? 

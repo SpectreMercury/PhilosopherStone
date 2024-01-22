@@ -46,7 +46,12 @@ const CreateBlindBox: React.FC<CreateBlindBoxProps> = ({ onClose, onCreateGift, 
           placeholder="Blind Box Title" 
         />
 
-        <button className="w-full h-12 mt-8 font-PlayfairDisplay border border-white002 bg-white001 text-primary011 py-2 px-4 rounded" onClick={createBlindBox}>Create Blind Box</button>
+        <button 
+          className="w-full h-12 mt-8 text-buttonmb font-SourceSansPro border border-white002 bg-white001 text-primary011 py-2 px-4 rounded" 
+          onClick={createBlindBox}
+        >
+          Create Blind Box
+        </button>
       </div>
   );
 };

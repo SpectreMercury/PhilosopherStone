@@ -47,7 +47,7 @@ export default function Home() {
   return (
     <main className="universe-bg max-w-3xl flex-1 overflow-auto">
       <ReceiveGiftModal isReceiveGiftModalOpen={isGiftReceiveModalOpen} closeReceiveGiftModal={closeGiftReceiveModal} />
-      <div className="text-hd1mb font-PlayfairDisplay text-white001 text-center py-12">
+      <div className="text-hd1mb font-Montserrat text-white001 text-center py-12">
         Philosopher Stone
       </div>
       {

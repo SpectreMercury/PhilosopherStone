@@ -3,10 +3,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
-import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import { predefinedSporeConfigs, meltSpore as _meltSpore } from '@spore-sdk/core';
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import LanguageIcon from '@mui/icons-material/Language';
 import Link from 'next/link';
 import { enqueueSnackbar } from 'notistack';
 import { useSporeQuery } from '@/hooks/useQuery/useQuerybySpore';
@@ -121,30 +118,58 @@ const Gift: React.FC = () => {
     <div className="flex flex-col items-center p-4">
       <LoadingOverlay isVisible={isVisible} texts={texts} progressStatus={progressStatus}/>
       <MeltGiftModal onClose={handleMeltModal} amount={occupied} onMelt={handleMelt} isOpen={isMeltModal}/>
-      <div className='w-full flex justify-between'>
-        <div className='flex items-center gap-2'>
+      <div className='w-full flex justify-between my-8'>
+        <div className='flex items-center'>
           <button onClick={() => router.back()} className="self-start">
-            <KeyboardBackspaceIcon className='text-white001' />
+            <Image
+              src='/svg/icon-arrow-left.svg'
+              width={24}
+              height={24}
+              alt='Go back'
+            />
           </button>
-          <div className='text-white001 font-SourceSanPro text-body1mb font-bold'>{pathAddress.slice(0,6)}...{pathAddress.slice(pathAddress.length - 6, pathAddress.length)}</div>
+          <div className='text-white001 font-SourceSanPro text-subheadermb ml-3'>
+            {pathAddress.slice(0,6)}...{pathAddress.slice(pathAddress.length - 6, pathAddress.length)}
+          </div>
         </div>
         <div className='flex gap-2'>
-          <ContentCopyIcon className='text-white001 cursor-pointer' onClick={() => {handleCopy(pathAddress)}}/>
+          <button onClick={() => {handleCopy(pathAddress)}} className="mr-4">
+            <Image
+              src='/svg/icon-copy.svg'
+              width={24}
+              height={24}
+              alt='Copy address'
+            />
+          </button>
           <Link href={`https://pudge.explorer.nervos.org/transaction/${spore?.cell?.outPoint?.txHash}`} target='_blank'>
-            <LanguageIcon className='text-white001 cursor-pointer' />
+            <Image
+              src='/svg/icon-globe.svg'
+              width={24}
+              height={24}
+              alt='Check on CKB Explorer'
+            />
           </Link>
         </div>
       </div>
       <div className="py-4">
         <img src={`/api/media/${pathAddress}`} width={300} height={200} className="px-4" alt="Gift" />
       </div>
-      <div className='text-white001 font-PlayfairDisplay text-hd2mb'>
+      <div className='text-white001 font-Montserrat text-hd2mb'>
         {occupied} CKB 
       </div>
       <p className="py-4 font-SourceSanPro text-white001 text-body1mb">“{giftMessage}”</p>
-      <button className="w-full h-12 font-PlayfairDisplay border border-white002 my-4 py-2 px-4 rounded text-white001" onClick={handleMeltModal}>Melt</button>
-      <Link className="w-full h-12 flex justify-center items-center font-PlayfairDisplay border border-white002 bg-white001 text-primary011 py-2 px-4 rounded" 
-        href={`/send?hasGift=${pathAddress}`}>Send as Gift</Link>
+      <Link 
+        className="w-full h-12 flex justify-center items-center text-buttonmb font-SourceSansPro border border-white002 bg-white001 text-primary011 py-2 px-4 rounded" 
+        href={`/send?hasGift=${pathAddress}`}
+      >
+        Send as Gift
+      </Link>
+      <button 
+        className="w-full h-12 text-buttonmb font-SourceSansPro border border-white002 my-4 py-2 px-4 rounded text-white001" 
+        onClick={handleMeltModal}
+      >
+        Melt
+      </button>
     </div>
   );
 };

@@ -228,7 +228,7 @@ const CreateGift: React.FC<CreateGiftProps> = ({ onClose }) => {
         </div>
       </div>
       <button 
-        className={`cursor-pointer w-full h-[48px] bg-white001 border border-primary009 font-PlayfairDisplay text-primary011 py-2 px-4 rounded mt-4 ${!file && 'opacity-50 cursor-not-allowed'}`}
+        className={`cursor-pointer w-full h-[48px] bg-white001 border border-primary009 text-buttonmb font-SourceSansPro text-primary011 py-2 px-4 rounded mt-4 ${!file && 'opacity-50 cursor-not-allowed'}`}
         disabled={!file}
         onClick={async () => {
           await handleSubmit(file, undefined, true)

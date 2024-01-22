@@ -45,11 +45,11 @@ const NewGifts: React.FC = () => {
 
     return (
         <div className='h-full flex flex-col justify-center items-center'>
-            <div className='text-white001 font-PlayfairDisplay text-hd1mb mt-8'>New Gifts</div>
+            <div className='text-white001 font-Montserrat text-hd1mb mt-8'>New Gifts</div>
             <div className='mt-8 w-full px-2'>
                 <div className='border-t border-white005 flex justify-around py-2'>
-                    <div className='text-white001 text-body1bdmb flex-grow-3 basis-3/4 text-center'>#Transaction</div>
-                    <div className='text-white001 text-body1bdmb flex-grow basis-1/4'>Action</div>
+                    <div className='text-white001 text-labelmb font-SourceSansPro flex-grow-3 basis-3/4 text-center'>#Transaction</div>
+                    <div className='text-white001 text-labelmb font-SourceSansPro flex-grow basis-1/4'>Action</div>
                 </div>
                 {gifts.map((gift, index) => (
                     <div key={index} className='border-t border-white005 flex justify-around py-2 items-center'>
@@ -57,7 +57,7 @@ const NewGifts: React.FC = () => {
                             <img src={`/api/media/${gift}`} width={80} height={64} className="px-4" alt="Gift" />
                             <div>{gift.slice(0,10)}...{gift.slice(gift.length - 10, gift.length)}</div>
                         </div>
-                        <Link href={`/gift/${gift}`} className='text-body1mb flex-grow basis-1/4 text-primary005'>View</Link>
+                        <Link href={`/gift/${gift}`} className='text-body1mb font-SourceSansPro flex-grow basis-1/4 text-primary005'>View</Link>
                     </div>
                 ))}
             </div>
