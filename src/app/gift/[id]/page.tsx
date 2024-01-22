@@ -138,13 +138,22 @@ const Gift: React.FC = () => {
       <div className="py-4">
         <img src={`/api/media/${pathAddress}`} width={300} height={200} className="px-4" alt="Gift" />
       </div>
-      <div className='text-white001 font-PlayfairDisplay text-hd2mb'>
+      <div className='text-white001 font-Montserrat text-hd2mb'>
         {occupied} CKB 
       </div>
       <p className="py-4 font-SourceSanPro text-white001 text-body1mb">“{giftMessage}”</p>
-      <button className="w-full h-12 font-PlayfairDisplay border border-white002 my-4 py-2 px-4 rounded text-white001" onClick={handleMeltModal}>Melt</button>
-      <Link className="w-full h-12 flex justify-center items-center font-PlayfairDisplay border border-white002 bg-white001 text-primary011 py-2 px-4 rounded" 
-        href={`/send?hasGift=${pathAddress}`}>Send as Gift</Link>
+      <button 
+        className="w-full h-12 text-buttonmb font-SourceSansPro border border-white002 my-4 py-2 px-4 rounded text-white001" 
+        onClick={handleMeltModal}
+      >
+        Melt
+      </button>
+      <Link 
+        className="w-full h-12 flex justify-center items-center text-buttonmb font-SourceSansPro border border-white002 bg-white001 text-primary011 py-2 px-4 rounded" 
+        href={`/send?hasGift=${pathAddress}`}
+      >
+        Send as Gift
+      </Link>
     </div>
   );
 };

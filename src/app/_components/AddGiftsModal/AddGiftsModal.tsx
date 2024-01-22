@@ -45,8 +45,8 @@ const AddGiftsModal: React.FC<AddGiftsModalProps> = ({ onClose, onConfirm, listI
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
       <div className="bg-primary011 rounded-lg p-4 max-w-lg w-full relative mx-4">
-        <div className='relative text-white001 text-hd2mb font-PlayfairDisplay my-4'>Pick Gifts to Blind Box 
-          <Close onClick={onClose} className="absolute right-0 text-white001 text-hd2mb font-PlayfairDisplay"/>
+        <div className='relative text-white001 text-hd3mb font-Montserrat my-4'>Pick Gifts to Blind Box 
+          <Close onClick={onClose} className="absolute right-0 text-white001 text-hd3mb font-Montserrat"/>
         </div>
         <div style={{ maxHeight: '600px', overflow: 'auto' }}>
           <List
@@ -59,8 +59,8 @@ const AddGiftsModal: React.FC<AddGiftsModalProps> = ({ onClose, onConfirm, listI
           />
         </div>
         <div className="flex justify-between mt-4 gap-6">
-          <button onClick={onClose} className="text-center text-white001 flex-1 border border-primary001 py-4 rounded-lg font-PlayfairDisplay">Cancel</button>
-          <button onClick={handleConfirm} className="text-center flex-1 border border-primary001 py-4 rounded-lg font-PlayfairDisplay bg-white001 text-primary011">Confirm</button>
+          <button onClick={onClose} className="text-center text-white001 flex-1 border border-primary001 py-4 rounded-lg text-buttonmb font-SourceSansPro">Cancel</button>
+          <button onClick={handleConfirm} className="text-center flex-1 border border-primary001 py-4 rounded-lg text-buttonmb font-SourceSansPro bg-white001 text-primary011">Confirm</button>
         </div>
       </div>
     </div>

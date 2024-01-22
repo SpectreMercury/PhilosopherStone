@@ -18,7 +18,7 @@ const ReceiveGiftModal: React.FC<ReceiveGiftModalProps> = ({isReceiveGiftModalOp
                     src='/svg/BlindBox.svg'
                     className='mt-6'
                 />
-                <Link href='/newGifts' className="w-full h-12 text-center font-PlayfairDisplay border border-white002 bg-white001 text-primary011 py-2 px-4 rounded">
+                <Link href='/newGifts' className="w-full h-12 text-center text-buttonmb font-SourceSansPro border border-white002 bg-white001 text-primary011 py-2 px-4 rounded">
                 Open Gift
                 </Link>
             </div>

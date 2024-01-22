@@ -9,7 +9,7 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        'PlayfairDisplay': ['PlayfairDisplay'],
+        'Montserrat': ['Montserrat'],
         'SourceSanPro': ['SourceSanPro']
       },
       backgroundImage: {
@@ -53,8 +53,8 @@ const config: Config = {
         'body1bdmb': ['16px', {lineHeight: '160%', fontWeight: 700}],
         'labelmb': ['14px', {lineHeight: '160%', fontWeight: 400}],
         'labelbdmb': ['14px', {lineHeight: '160%', fontWeight: 700}],
-        'buttonmb': ['16px', {lineHeight: '100%', fontWeight: 700}],
-        'codemb': ['14px', {lineHeight: '160%', fontWeight: 700}],
+        'buttonmb': ['16px', {lineHeight: '100%', fontWeight: 500}],
+        'codemb': ['14px', {lineHeight: '160%', fontWeight: 400}],
       },
       animation: {
         'wiggle': 'wiggle 1s linear infinite',

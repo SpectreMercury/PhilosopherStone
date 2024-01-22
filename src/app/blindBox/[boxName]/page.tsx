@@ -97,8 +97,13 @@ const BlindBoxPage = () => {
       <div className={`flex-1 flex ${boxGifts.length > 0 ? 'items-start' : 'items-center'}  justify-center`}> 
         {(boxGifts && !boxGifts.length) && (
           <div className='px-4'>
-            <p className="font-PlayfairDisplay text-hd2mb text-center text-white001">There is no gifts in this blind box</p>
-            <button className="w-full h-12 mt-8 font-PlayfairDisplay border border-white002 bg-white001 text-primary011 py-2 px-4 rounded" onClick={handleOpenModal}>Add Gifts</button>
+            <p className="text-labelmb font-SourceSansPro text-center text-white005">No gifts in this blind box</p>
+            <button 
+              className="w-full h-12 mt-8 text-buttonmb font-SourceSansPro border border-white002 bg-white001 text-primary011 py-2 px-4 rounded" 
+              onClick={handleOpenModal}
+            >
+              Add Gifts
+            </button>
           </div>
         )}
         {boxGifts.length > 0 ? (
@@ -115,13 +120,13 @@ const BlindBoxPage = () => {
           selectedGifts.length > 0 && (
             <>
               <button 
-                className="flex-1 h-12 mb-8 font-PlayfairDisplay border border-white002 bg-white001 text-primary011 py-2 px-4 rounded"     
+                className="flex-1 h-12 mb-8 text-buttonmb font-SourceSansPro border border-white002 bg-white001 text-primary011 py-2 px-4 rounded"     
                 onClick={onRemoveGifts}    
               >
-                Romove Gifts
+                Remove Gifts
               </button>
               <button 
-                className="flex-1 h-12 mb-8 font-PlayfairDisplay border border-white002 bg-white001 text-primary011 py-2 px-4 rounded"     
+                className="flex-1 h-12 mb-8 text-buttonmb font-SourceSansPro border border-white002 bg-white001 text-primary011 py-2 px-4 rounded"     
                 onClick={cancelRemove}    
               >
                 Back
@@ -133,7 +138,7 @@ const BlindBoxPage = () => {
         {boxGifts && boxGifts.length > 0 && selectedGifts.length <= 0 && (
             <Link 
               href={`/send?type=BlindBox&name=${decodeURIComponent(boxName)}`}
-              className="flex-1 flex items-center justify-center h-12 mb-8 font-PlayfairDisplay border border-white002 bg-white001 text-primary011 py-2 px-4 rounded"         
+              className="flex-1 flex items-center justify-center h-12 mb-8 text-buttonmb font-SourceSansPro border border-white002 bg-white001 text-primary011 py-2 px-4 rounded"         
             >
               Send Blind Box
             </Link>

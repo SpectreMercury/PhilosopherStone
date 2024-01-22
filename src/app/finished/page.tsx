@@ -11,7 +11,7 @@ const Finished: React.FC = () => {
                 alt='gift demo'
                 src={'/svg/gift.svg'}
             />
-            <div className="px-4 text-white001 text-hd2mb font-PlayfairDisplay text-center">
+            <div className="px-4 text-white001 text-hd2mb font-Montserrat text-center">
                 🎉 Hooray! Your Blind Box has been sent successfully! 🎁
             </div>
             <div className="px-4 text-white001 text-center font-SourceSanPro">

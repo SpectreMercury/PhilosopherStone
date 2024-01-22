@@ -14,53 +14,12 @@ html, body {
 }
 
 @font-face {
-  font-family: 'PlayfairDisplay';
-  src: url('/font/PlayfairDisplay/PlayfairDisplay-Regular.ttf') format('ttf');
-  font-weight: 400;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'PlayfairDisplay';
-  src: url('/font/PlayfairDisplay/PlayfairDisplay-Medium.ttf') format('truetype');
-  font-weight: 500;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'PlayfairDisplay';
-  src: url('/font/PlayfairDisplay/PlayfairDisplay-Bold.ttf') format('truetype');
-  font-weight: 600;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'PlayfairDisplay';
-  src: url('../../public/font/PlayFairDisplay/PlayfairDisplay-SemiBold.ttf') format('truetype');
-  font-weight: 700;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'PlayfairDisplay';
-  src: url('../../public/font/PlayFairDisplay/PlayfairDisplay-ExtraBold.ttf') format('truetype');
+  font-family: 'Montserrat';
+  src: url('/font/Montserrat/Montserrat-ExtraBold.ttf') format('truetype');
   font-weight: 800;
   font-style: normal;
 }
 
-@font-face {
-  font-family: 'PlayfairDisplay';
-  src: url('../../public/font/PlayFairDisplay/PlayfairDisplay-Black.ttf') format('truetype');
-  font-weight: 900;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'PlayfairDisplay';
-  src: url('/font/PlayfairDisplay/PlayfairDisplay-Black.ttf') format('truetype');
-  font-weight: 900;
-  font-style: normal;
-}
 
 @font-face {
   font-family: 'SourceSanPro';

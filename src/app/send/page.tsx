@@ -238,7 +238,7 @@ const SendGift: React.FC = () => {
         <div className='flex flex-col px-4 mt-8'>
           <button 
             onClick={() => {handleSubmit({to: toWalletAddress})}}
-            className="w-full h-12 font-PlayfairDisplay border border-white002 bg-white001 text-primary011 py-2 px-4 rounded flex items-center justify-center"
+            className="w-full h-12 text-buttonmb font-SourceSansPro border border-white002 bg-white001 text-primary011 py-2 px-4 rounded flex items-center justify-center"
           >
             Send Gift
           </button>

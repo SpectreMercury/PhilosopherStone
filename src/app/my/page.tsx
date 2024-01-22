@@ -15,7 +15,7 @@ const LoadingSkeleton = () => {
   return (
     <div>
       <div className="relative my-8 h-[180px] bg-gray-200 animate-pulse"></div>
-      <p className="text-center my-8 text-white001 text-hd2mb font-PlayfairDisplay bg-gray-300 rounded"></p>
+      <p className="text-center my-8 text-white001 text-hd2mb font-Montserrat bg-gray-300 rounded"></p>
     </div>
   );
 };
@@ -89,7 +89,7 @@ const My: React.FC = () => {
               objectFit='cover'
             />
           </div>
-          <p className="text-center my-8 text-white001 text-hd2mb font-PlayfairDisplay">
+          <p className="text-center my-8 text-white001 text-hd2mb font-Montserrat">
             Create Your Gift and Let Smiles Bloom!
           </p>
         </div>
@@ -118,7 +118,7 @@ const My: React.FC = () => {
       </div>
       { renderContent() }
       <button 
-        className="w-full h-12 font-PlayfairDisplay border border-white002 bg-white001 text-primary011 py-2 px-4 rounded"
+        className="w-full h-12 text-buttonmb font-SourceSansPro border border-white002 bg-white001 text-primary011 py-2 px-4 rounded"
         onClick={handleOpenModal}
       >
         Design {activeTab}

@@ -23,8 +23,8 @@ const CreateModal: React.FC<ModalProps> = ({ title, onClose, children }) => {
     <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center">
       <div className="w-full max-w-lg bg-primary010 border border-white008 mx-4 px-4 py-6 rounded-lg">
         <div className="flex justify-between items-center mb-8">
-          <p className='text-white001 text-hd3mb font-semibold font-PlayfairDisplay'>{title}</p>
-          <button className='text-white001 text-hd3mb font-semibold font-PlayfairDisplay' onClick={onClose}>
+          <p className='text-white001 text-hd3mb font-Montserrat'>{title}</p>
+          <button className='text-white001 text-hd3mb font-Montserrat' onClick={onClose}>
             <CloseIcon className='text-white001' />
           </button>
         </div>
