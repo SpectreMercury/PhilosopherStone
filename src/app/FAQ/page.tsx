@@ -1,9 +1,9 @@
 "use client"
 
 import React from "react";
-import FAQComponent from "@/app/_components/FAQComponent/FAQComponent";
 import { FAQData } from "@/settings/FAQData";
 import Image from "next/image";
+import FAQComponent from "@/app/_components/FAQCompent/FAQComponent";
 
 const FAQ:React.FC = () => {
     return (
