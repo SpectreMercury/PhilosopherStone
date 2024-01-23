@@ -87,7 +87,7 @@ const GiftList: React.FC<GiftListProps> = ({ onNewGiftClick, list, type, blindbo
       {/* Floating add icon */}
       {width < 1280 &&
         <div 
-          style={{width: 44, height: 44, position:"absolute", bottom: 32, right: 16}} 
+          style={{width: 44, height: 44, position:"fixed", bottom: 32, right: 16}} 
           className="cursor-pointer flex items-center justify-center rounded-full bg-primary007 text-primary003 text-body1mb" 
           onClick={onNewGiftClick}>
             <Image 

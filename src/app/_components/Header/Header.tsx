@@ -8,16 +8,19 @@ import { enqueueSnackbar, useSnackbar } from 'notistack';
 import useWalletBalance from '@/hooks/useBalance';
 import WalletModal from '../WalletModal/WalletModal';
 import { kv } from '@vercel/kv';
+import { useConnect } from '@/hooks/useConnect';
 
 
 const Header:React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState<Boolean>(false);
   const [activeRoute, setActiveRoute] = useState<string>('');
   const [showHeaderModal, setHeaderShowModal] = useState(false);
+  const { disconnect } = useConnect();
   const router = useRouter();
   const dispatch = useDispatch();
   const pathname = usePathname();
   const walletAddress = useSelector((state: RootState) => state.wallet.wallet?.address);
+  const walletType = useSelector((state: RootState) => state.wallet.wallet?.walletType);
   const balance = useWalletBalance(walletAddress!!);
   const toggleMenu = () => {
     if (!isMenuOpen) {
@@ -58,6 +61,7 @@ const Header:React.FC = () => {
   const handleDisconnect = () => {
     dispatch(clearWallet());
     localStorage.removeItem('wallet');
+    disconnect();
   };
 
   const handleCopy = async (textToCopy: string) => {
@@ -121,12 +125,20 @@ const Header:React.FC = () => {
                   </div>
                   <div className='flex justify-between'>
                     <div className='flex gap-2'>
-                      <Image 
-                        alt='wallet-icon'
-                        src='/svg/joyid-icon.svg'
-                        width={24}
-                        height={24}
-                      />
+                      {walletType === 'JoyID' ? 
+                        <Image 
+                          alt='wallet-icon'
+                          src='/svg/joyid-icon.svg'
+                          width={24}
+                          height={24}
+                        />:
+                        <Image 
+                          alt='wallet-icon'
+                          src='/svg/metamask-icon.svg'
+                          width={24}
+                          height={24}
+                        />
+                      }
                       <div className='text-white001 text-labelmb'>{walletAddress.slice(0, 10)}...{walletAddress.slice(walletAddress.length - 10, walletAddress.length)}</div>
                     </div>
                     <button onClick={() => {handleCopy(walletAddress)}}>

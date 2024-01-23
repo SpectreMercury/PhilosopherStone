@@ -18,7 +18,7 @@ interface BlindBoxListProps {
 const _bList: React.FC<BlindBoxListProps> = ({ gifts, onGiftClick, isGiftSelected, viewMode, interactionType }) => {
   return (
     <div className='mb-8'>
-      <div className={`${viewMode === 'list' ? 'flex flex-col gap-4' : 'grid grid-cols-2 gap-4'} mt-4`}>
+      <div className={`${viewMode === 'list' ? 'flex flex-col' : 'grid grid-cols-2 gap-4'} mt-4`}>
         {gifts.map(box => (
           <BlindBoxItem 
             key={box.id}

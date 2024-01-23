@@ -84,6 +84,7 @@ const SendGift: React.FC = () => {
   const transferSpore = useCallback(
     async (...args: Parameters<typeof _transferSpore>) => {
       const { txSkeleton, outputIndex } = await _transferSpore(...args);
+      //@ts-ignore
       const signedTx = await signTransaction(txSkeleton);
       const txHash = await sendTransaction(signedTx);
       return {
@@ -121,7 +122,7 @@ const SendGift: React.FC = () => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ action: 'update', key, value }),
+      body: JSON.stringify({ action: 'clear', key, ids: [value] }),
     });
     const data = await response.json();
     return data;
@@ -136,7 +137,7 @@ const SendGift: React.FC = () => {
       if (!walletAddress || !values.to || !spore) {
         return;
       }
-      await transferSporeMutation.mutateAsync({
+      let rlt = await transferSporeMutation.mutateAsync({
         outPoint: spore.cell?.outPoint!,
         fromInfos: [walletAddress!!],
         toLock: helpers.parseAddress(values.to, {
@@ -146,13 +147,14 @@ const SendGift: React.FC = () => {
         useCapacityMarginAsFee: true,
       });
       await callSaveAction(spore.id, {
-        'giftMessage': ''
+        'giftMessage': message
       })
+      console.log(rlt)
       await callUpdateGiftReadStatusAction(values.to, spore.id)
       setProgressStatus('done')
       enqueueSnackbar('Gift Send Successful', { variant: 'success' });
       refreshSporesByAddress()
-      router.push('/finished');
+      router.push(`/finished?tx=${rlt.txHash}`);
     },
     [transferSporeMutation],
   );

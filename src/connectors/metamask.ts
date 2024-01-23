@@ -10,6 +10,7 @@ import {
 import { publicProvider } from '@wagmi/core/providers/public';
 import { InjectedConnector } from '@wagmi/core/connectors/injected';
 import CKBConnector from './base';
+import { setWallet, WalletInfo } from '@/store/walletSlice';
 import {
   Script,
   Transaction,
@@ -38,46 +39,45 @@ export default class MetaMaskConnector extends CKBConnector {
     });
   }
 
-//   private setAddress(ethAddress: `0x${string}` | undefined) {
-//     if (!ethAddress) {
-//       this.setData(defaultWalletValue);
-//       return;
-//     }
-//     config.initializeConfig(config.predefined.AGGRON4);
-//     const lock = commons.omnilock.createOmnilockScript({
-//       auth: { flag: 'ETHEREUM', content: ethAddress ?? '0x' },
-//     });
-//     const address = helpers.encodeToAddress(lock, {
-//       config: config.predefined.AGGRON4,
-//     });
-//     this.setData({
-//       address,
-//       connectorType: this.type.toLowerCase(),
-//       data: ethAddress,
-//     });
-//   }
+  private setAddress(ethAddress: `0x${string}` | undefined) {
+    if (!ethAddress) {
+      return;
+    }
+    config.initializeConfig(config.predefined.AGGRON4);
+    const lock = commons.omnilock.createOmnilockScript({
+      auth: { flag: 'ETHEREUM', content: ethAddress ?? '0x' },
+    });
+    const address = helpers.encodeToAddress(lock, {
+      config: config.predefined.AGGRON4,
+    });
+    this.store.dispatch(setWallet({
+      address,
+      walletType: 'MetaMask',
+      ethAddress: ethAddress,
+    }));
+  }
 
   public async connect() {
     const { account } = await connect({ connector: new InjectedConnector() });
-    // this.setAddress(account);
-    // this.isConnected = true;
-    // this.listeners.push(
-    //   watchAccount((account) => {
-    //     if (account.isConnected) {
-    //       this.setAddress(account.address);
-    //     }
-    //     if (account.isDisconnected) {
-    //       this.setAddress(undefined);
-    //     }
-    //   }),
-    // );
+    this.setAddress(account);
+    this.isConnected = true;
+    this.listeners.push(
+      watchAccount((account) => {
+        if (account.isConnected) {
+          this.setAddress(account.address);
+        }
+        if (account.isDisconnected) {
+          this.setAddress(undefined);
+        }
+      }),
+    );
   }
 
-//   public async disconnect(): Promise<void> {
-//     await disconnect();
-//     this.listeners.forEach((unlisten) => unlisten());
-//     this.isConnected = false;
-//   }
+  public async disconnect(): Promise<void> {
+    await disconnect();
+    this.listeners.forEach((unlisten) => unlisten());
+    this.isConnected = false;
+  }
 
   public getAnyoneCanPayLock(minimalCkb = 0, minimalUdt = 0): Script {
     const lock = this.getLockFromAddress();

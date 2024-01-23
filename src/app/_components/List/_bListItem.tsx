@@ -26,10 +26,12 @@ const BlindBoxItem: React.FC<BlindBoxItemProps> = ({ blindBox, isSelected, onSel
       onClick={interactionType && interactionType > 1 ? onSelect : undefined}
     >
       <div className={`${viewMode === 'list' ? 'w-12 h-12 mr-4' : 'h-[120px]'} relative`}>
-        <img alt={blindBox.id!} src={`/svg/BlindBox.svg`} className="rounded max-h-[120px] object-cover w-full"/>
+        <Image alt={blindBox.id!} src={`/svg/blindbox-animation-${Math.ceil(Math.random()*6)}.svg`} className="rounded" layout='fill' objectFit='cover'/>
       </div>
       <div className="w-[115px] ml-4 h-[80px] flex-grow flex flex-col items-start justify-center">
-        <p className="font-semibold font-SourceSanPro text-body1mb text-white001">{blindBox.id}</p>
+        <p className="font-semibold font-SourceSanPro text-body1mb text-white001 max-w-[300px] truncate">
+          {blindBox.id}
+        </p>      
       </div>
       {isSelected && (
         <div className={`absolute ${viewMode === 'list' ? 'right-4' : 'top-2 right-2'} w-6 h-6 rounded-full bg-green-500 border-green-500 flex items-center justify-center`}>
