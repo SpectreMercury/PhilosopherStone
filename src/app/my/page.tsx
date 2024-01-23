@@ -57,8 +57,7 @@ const My: React.FC = () => {
     const data = await response.json();
     setBlindBoxList(data.data);
   }
-
-
+  
   useEffect(() => {
     if (activeTab === 'Gift') {
       setSporesList(storeSporesList || []);
