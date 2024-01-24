@@ -20,6 +20,7 @@ const BlindBoxPage = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [viewMode, setViewMode] = useState('grid')
   const [selectedGifts, setSelectedGifts] = useState<string[]>([])
+  const [inBlindBoxList, setInBlindBoxList] = useState<string[]>([])
   
   const getBlindBox = async () => {
     const data = await fetchBlindBoxAPI({
@@ -28,6 +29,15 @@ const BlindBoxPage = () => {
       name: boxName
     })
     setBoxGifts(data.box.boxData)
+  }
+
+  const getInBlindBoxList = async () => {
+    const data = await fetchBlindBoxAPI({
+      action: 'getInBlindBoxList',
+      key: walletAddress!!,
+      name: boxName
+    })
+    setInBlindBoxList(data.data)
   }
 
   const addToBlindBox = async (ids: string[]) => {
@@ -83,7 +93,8 @@ const BlindBoxPage = () => {
 
   useEffect(() => {
     if(walletAddress) {
-      getBlindBox()
+      getBlindBox();
+      getInBlindBoxList();
     }
   }, [boxName, walletAddress]);
 
@@ -99,7 +110,7 @@ const BlindBoxPage = () => {
           onClose={handleCloseModal} 
           walletAddress={walletAddress!!} 
           listItems={boxGifts} 
-          disableList={boxGifts.map(item => item.id)}
+          disableList={inBlindBoxList}
         />}
       <div className='text-white text-hd2mb font-bold px-4 py-8 border-b'>{decodeURIComponent(boxName)}</div>
       <div className={`flex-1 flex ${boxGifts.length > 0 ? 'items-start' : 'items-center'}  justify-center`}> 

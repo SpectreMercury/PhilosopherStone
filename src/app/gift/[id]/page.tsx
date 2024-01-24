@@ -15,6 +15,8 @@ import { useMutation } from '@tanstack/react-query';
 import useLoadingOverlay from '@/hooks/useLoadOverlay';
 import LoadingOverlay from '@/app/_components/LoadingOverlay/LoadingOverlay';
 import { getLumosScript } from '@/utils/updateLumosConfig';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
 
 
 const Gift: React.FC = () => {
@@ -29,6 +31,8 @@ const Gift: React.FC = () => {
   const [isMeltModal, setIsMeltModal] = useState<boolean>(false)
   const [giftMessage, setGiftMessage] = useState<string>("") 
   const { address, signTransaction } = useConnect()
+  const walletAddress = useSelector((state: RootState) => state.wallet.wallet?.address);
+
   const { isVisible, showOverlay, hideOverlay, progressStatus, setProgressStatus } = useLoadingOverlay(); 
   const texts = ["Unmatched Flexibility and Interopera­bility", "Supreme Security and Decentrali­zation", "Inventive Tokenomics"]; 
 
@@ -82,14 +86,27 @@ const Gift: React.FC = () => {
       outPoint: spore!.cell!.outPoint!,
       config: latest,
     });
+    await callUpdateGiftReadStatusAction(walletAddress!!, pathAddress)
     setProgressStatus('done')
-      setTimeout(() => {
-        hideOverlay();
-      }, 1000)
+    setTimeout(() => {
+      hideOverlay();
+    }, 1000)
     enqueueSnackbar('Melt Successful', {variant: 'success'})
     router.push('/')
   }
 
+  async function callUpdateGiftReadStatusAction(key: string, value: string) {
+    const response = await fetch('/api/gift', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ action: 'remove', key, ids: [value] }),
+    });
+    const data = await response.json();
+    return data;
+  }
+  
 
   const getGiftStatus = async () => {
     const response = await fetch('/api/gift', {

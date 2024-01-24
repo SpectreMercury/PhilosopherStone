@@ -122,7 +122,7 @@ const SendGift: React.FC = () => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ action: 'clear', key, ids: [value] }),
+      body: JSON.stringify({ action: 'remove', key, ids: [value] }),
     });
     const data = await response.json();
     return data;

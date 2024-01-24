@@ -14,24 +14,36 @@ async function getCurrentBlindBoxes(k: string): Promise<BlindBox[]> {
     return currBlindBoxes || [];
 }
 
+async function getInBlindBoxGifts(k: string): Promise<string[]> {
+  let inBlindBoxGifts: string [] | null = await kv.get(k)
+  return inBlindBoxGifts || [];
+}
+
 function handleError(error: string, errno: number = 400) {
     return NextResponse.json({ error, errno }, { status: errno });
 }
 
-const create = async (k: string, boxName: string) => {
+const create = async (k: string, boxName: string, ids = []) => {
   let currBlindBoxes = await getCurrentBlindBoxes(k);
+  let inBlindBoxGifts = await getInBlindBoxGifts(`${k}-include`);
   if (currBlindBoxes.some(box => box.id === boxName)) {
     return handleError('A blind box with the same name already exists.');
   }
 
-  const newBlindBox: BlindBox = { id: boxName, boxData: [] };
+  const newBlindBox: BlindBox = { id: boxName, boxData: ids };
   currBlindBoxes.push(newBlindBox);
   await kv.set(k, JSON.stringify(currBlindBoxes));
+  await kv.set(`${k}-include`, JSON.stringify(inBlindBoxGifts.concat(ids)))
   return NextResponse.json({ data: [], message: 'successful', errno: 200 }, { status: 200 });
 }
 
 const getList = async (k: string) => {
     return await getCurrentBlindBoxes(k);
+}
+
+const getInBlindBoxList = async(k: string) => {
+  let rlt : string[] | null = await kv.get(`${k}-include`);
+  return NextResponse.json({ data: rlt, message: 'successful', errno: 200 }, { status: 200 });
 }
 
 const getBlindBoxByName = async (k: string, boxName: string): Promise<NextResponse> => {
@@ -47,33 +59,46 @@ const getBlindBoxByName = async (k: string, boxName: string): Promise<NextRespon
 
 const add = async (k: string, boxName: string, giftIds: string[]) => {
   let currBlindBoxes = await getCurrentBlindBoxes(k);
+  let inBlindBoxGifts = await getInBlindBoxGifts(`${k}-include`);
   const boxIndex = currBlindBoxes.findIndex(box => box.id === boxName);
 
   if (boxIndex === -1) {
     return handleError('No blind box found with the given name.');
+  }
+
+  const hasDuplicates = giftIds.some(id => inBlindBoxGifts.includes(id));
+  if (hasDuplicates) {
+    return handleError('Some gifts are already present in the list.');
   }
 
   const newGiftObjects = giftIds.map(id => ({ id }));
   currBlindBoxes[boxIndex].boxData.push(...newGiftObjects);
   await kv.set(k, JSON.stringify(currBlindBoxes));
+  await kv.set(`${k}-include`, JSON.stringify(inBlindBoxGifts.concat(giftIds)))
   return NextResponse.json({ data: currBlindBoxes[boxIndex].boxData, errno: 200 }, { status: 200 });
 };
 
 const remove = async (k: string, boxName: string, giftIds: string[]) => {
   let currBlindBoxes = await getCurrentBlindBoxes(k);
+  let inBlindBoxGifts = await getInBlindBoxGifts(`${k}-include`);
+
   const boxIndex = currBlindBoxes.findIndex(box => box.id === boxName);
 
   if (boxIndex === -1) {
     return handleError('No blind box found with the given name.');
   }
 
+  inBlindBoxGifts = inBlindBoxGifts.filter(id => !giftIds.includes(id));
+
   currBlindBoxes[boxIndex].boxData = currBlindBoxes[boxIndex].boxData.filter(gift => !giftIds.includes(gift.id));
   await kv.set(k, JSON.stringify(currBlindBoxes));
+  await kv.set(`${k}-include`, JSON.stringify(inBlindBoxGifts));
   return NextResponse.json({ data: currBlindBoxes[boxIndex].boxData, errno: 200 }, { status: 200 });
 };
 
 const clear = async (k: string, giftIds: string[]) => {
   let currBlindBoxes = await getCurrentBlindBoxes(k);
+  
   currBlindBoxes.forEach(blindBox => {
     blindBox.boxData = blindBox.boxData.filter(gift => !giftIds.includes(gift.id));
   });
@@ -104,6 +129,8 @@ export async function POST(req: NextRequest, res: NextApiResponse) {
         return NextResponse.json({ data: await getList(`${body.key}-blindbox`), errno: 200 }, { status: 200 });
       case 'add':
         return await add(`${body.key}-blindbox`, body.name, body.ids);
+      case 'getInBlindBoxList':
+        return await getInBlindBoxList(`${body.key}-blindbox`);
       case 'remove':
         return await remove(`${body.key}-blindbox`, body.name, body.ids);
       case 'send':
