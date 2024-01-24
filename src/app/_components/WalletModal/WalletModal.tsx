@@ -65,12 +65,16 @@ const WalletModal: React.FC<WalletModalProps> = ({ onClose }) => {
 
   const connectWallet = async (name: string) => {
     if (name === 'JoyID') {
-      connectJoyID()
+      // connectJoyID()
+      let connectors = connect()
+      connectors!![0  ].connect()
+      onClose()
     }
 
     if (name === 'Metamask') {
       let connectors = connect()
       connectors!![1].connect()
+      onClose()
     }
   }
 
