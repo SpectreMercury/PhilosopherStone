@@ -94,10 +94,10 @@ const WalletModal: React.FC<WalletModalProps> = ({ onClose }) => {
                     <div className="flex-shrink-0">
                         {wallet.logo}
                     </div>
-                    <span className="flex-grow text-body1mb font-SourceSansPro ml-2">{wallet.name}</span>
+                    <span className="flex-grow text-body1mb font-SourceSanPro ml-2">{wallet.name}</span>
                 </div>
                 {wallet.recommended && (
-                <span className="ml-2 bg-primary006 text-white text-labelmb font-SourceSansPro rounded-sm px-2 py-1">
+                <span className="ml-2 bg-primary006 text-white text-labelmb font-SourceSanPro rounded-sm px-2 py-1">
                     Recommended
                 </span>
                 )}

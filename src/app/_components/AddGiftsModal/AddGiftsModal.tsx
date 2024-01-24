@@ -70,7 +70,7 @@ const AddGiftsModal: React.FC<AddGiftsModalProps> = ({ onClose, onConfirm, listI
         </div>
         <button 
           onClick={handleConfirm} 
-          className="w-full text-center flex-1 border border-primary001 py-4 rounded-lg text-buttonmb font-SourceSansPro bg-white001 text-primary011"
+          className="w-full text-center flex-1 border border-primary001 py-4 rounded-lg text-buttonmb font-SourceSanPro bg-white001 text-primary011"
         >
           Add {selectedIds.length} {selectedIds.length === 1 ? " Gift" : " Gifts"}
         </button>

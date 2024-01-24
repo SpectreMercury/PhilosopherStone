@@ -52,18 +52,18 @@ const CreateBlindBox: React.FC<CreateBlindBoxProps> = ({ onClose, onCreateGift, 
 
   return (
     <div className="rounded-lg">
-        <p className='text-white001 font-SourceSanPro text-labelmb mb-2'>Name your blind box*</p>
+        <p className='text-white001 font-SourceSanPro text-labelmb mb-2'>Name your Blind Box*</p>
         <input 
-          className='w-full px-4 py-3 mb-8 bg-primary006 text-white001 rounded-md'
+          className='w-full px-4 py-3 mb-6 bg-primary008 text-white001 text-body1mb font-SourceSanPro rounded-md'
           type="text" 
           value={title} 
           onChange={handleChange} 
-          placeholder="Blind Box Title" 
+          placeholder="e.g. Treasure Box" 
         />
         {error && <div className=' text-red-600'>{error}</div>}
         <button 
           disabled={!!error || !title}
-          className="w-full h-12 mt-8 text-buttonmb font-SourceSansPro border border-white002 bg-white001 text-primary011 py-2 px-4 rounded" 
+          className={`w-full h-12 text-buttonmb font-SourceSanPro border border-white002 bg-white001 text-primary011 py-2 px-4 rounded ${(!title || !!error) && 'opacity-50 cursor-not-allowed'}`}
           onClick={createBlindBox}
         >
           Create Blind Box

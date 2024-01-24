@@ -54,7 +54,10 @@ const GiftList: React.FC<GiftListProps> = ({ onNewGiftClick, list, type, blindbo
     <div className='mb-8'>
       <div className="flex justify-between items-center mt-4">
         <div>
-          <span className='text-white001'>{type === 'Gift' ? gifts.length : blindboxList.length} {gifts.length === 1 ? "Gift" : "Gifts"}</span>
+          <span className='text-white001 text-labelmb font-SourceSanPro'>
+            {type === 'Gift' ? gifts.length : blindboxList.length} 
+            {type === 'Gift' ? gifts.length === 1 ? " Gift" : " Gifts" : blindboxList.length !== 1 ? " Blind Box" : " Blind Boxes"}
+          </span>
           {/* <button className="cursor-pointer ml-4 text-primary004">Select All</button> */}
         </div>
         <div onClick={() => setViewMode(viewMode === 'list' ? 'grid' : 'list')}>

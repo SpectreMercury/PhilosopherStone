@@ -123,9 +123,9 @@ const BlindBoxPage = () => {
                 alt='There&apos;s no gifts in this blind box'
               />
            
-            <p className="text-labelmb font-SourceSansPro text-center text-white005">No gifts in this blind box</p>
+            <p className="text-labelmb font-SourceSanPro text-center text-white005">No gifts in this blind box</p>
             <button 
-              className="w-full h-12 text-buttonmb font-SourceSansPro border border-white002 bg-white001 text-primary011 py-2 px-4 rounded" 
+              className="w-full h-12 text-buttonmb font-SourceSanPro border border-white002 bg-white001 text-primary011 py-2 px-4 rounded" 
               onClick={handleOpenModal}
             >
               Add Gifts
@@ -151,13 +151,13 @@ const BlindBoxPage = () => {
           selectedGifts.length > 0 && (
             <>
               <button 
-                className="flex-1 h-12 mb-8 text-buttonmb font-SourceSansPro border border-white002 bg-white001 text-primary011 py-2 px-4 rounded"     
+                className="flex-1 h-12 mb-8 text-buttonmb font-SourceSanPro border border-white002 bg-white001 text-primary011 py-2 px-4 rounded"     
                 onClick={onRemoveGifts}    
               >
                 Remove Gifts
               </button>
               <button 
-                className="flex-1 h-12 mb-8 text-buttonmb font-SourceSansPro border border-white002 bg-white001 text-primary011 py-2 px-4 rounded"     
+                className="flex-1 h-12 mb-8 text-buttonmb font-SourceSanPro border border-white002 bg-white001 text-primary011 py-2 px-4 rounded"     
                 onClick={cancelRemove}    
               >
                 Back

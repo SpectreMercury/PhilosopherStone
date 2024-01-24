@@ -118,7 +118,7 @@ const UserHome: React.FC = () => {
           className={`flex-1 py-2 m-1 text-white text-buttonmb font-SourceSanPro ${activeTab === 'Gift' ? 'bg-primary010' : ''} rounded-md`}
           onClick={() => setActiveTab('Gift')}
         >
-          Gift
+          My Gifts
         </button>
         <button
           className={`flex-1 py-1 m-1 text-white text-buttonmb font-SourceSanPro ${activeTab === 'Blind Box' ? 'text-blue-500 bg-primary010' : ''} rounded-md `}
@@ -126,7 +126,7 @@ const UserHome: React.FC = () => {
             setActiveTab('Blind Box')
           }}
         >
-          Blind Box
+          My Blind Boxes
         </button>
       </div>
       { renderContent() }
@@ -134,10 +134,10 @@ const UserHome: React.FC = () => {
         className="w-full h-12 text-buttonmb font-SourceSansPro border border-white002 bg-white001 text-primary011 py-2 px-4 rounded"
         onClick={handleOpenModal}
       >
-        Design {activeTab}
+        Create {activeTab}
       </button>
       <Link href={'/FAQ'} className='block mx-auto text-primary009 font-SourceSanPro text-body1mb text-center mt-6'>
-        { activeTab === 'Gift' ? 'Learn More': 'What is blind box?' }
+        { activeTab === 'Gift' ? 'Learn More': 'What is Blind Box?' }
       </Link>
       {isModalOpen && (
         <CreateModal title={`Create New ${activeTab}`} onClose={handleCloseModal}>
