@@ -112,7 +112,17 @@ const BlindBoxPage = () => {
           listItems={boxGifts} 
           disableList={inBlindBoxList}
         />}
-      <div className='text-white text-hd2mb font-bold px-4 py-8 border-b'>{decodeURIComponent(boxName)}</div>
+      <div className={'flex items-center mt-8'}>
+        <button onClick={() => router.back()}>
+          <Image 
+            src='/svg/icon-arrow-left.svg'
+            width={24}
+            height={24}
+            alt={"Go back"}
+          />
+        </button>
+        <div className='ml-3 text-white text-subheadermb font-SourceSanPro'>{decodeURIComponent(boxName)}</div>
+      </div>
       <div className={`flex-1 flex ${boxGifts.length > 0 ? 'items-start' : 'items-center'}  justify-center`}> 
         {(boxGifts && !boxGifts.length) && (
           <div className='flex flex-col gap-8 w-full mt-12 justify-center items-center'>
@@ -120,10 +130,10 @@ const BlindBoxPage = () => {
                 src='/svg/blindbox-empty-illus.svg'
                 width={170}
                 height={170}
-                alt='There&apos;s no gifts in this blind box'
+                alt='There&apos;s no gifts in this Blind Box'
               />
            
-            <p className="text-labelmb font-SourceSanPro text-center text-white005">No gifts in this blind box</p>
+            <p className="text-labelmb font-SourceSanPro text-center text-white005">No Gifts in this Blind Box</p>
             <button 
               className="w-full h-12 text-buttonmb font-SourceSanPro border border-white002 bg-white001 text-primary011 py-2 px-4 rounded" 
               onClick={handleOpenModal}

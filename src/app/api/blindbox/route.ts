@@ -27,7 +27,7 @@ const create = async (k: string, boxName: string, ids = []) => {
   let currBlindBoxes = await getCurrentBlindBoxes(k);
   let inBlindBoxGifts = await getInBlindBoxGifts(`${k}-include`);
   if (currBlindBoxes.some(box => box.id === boxName)) {
-    return handleError('A blind box with the same name already exists.');
+    return handleError('A Blind Box with the same name already exists.');
   }
 
   const newBlindBox: BlindBox = { id: boxName, boxData: ids };
@@ -63,7 +63,7 @@ const add = async (k: string, boxName: string, giftIds: string[]) => {
   const boxIndex = currBlindBoxes.findIndex(box => box.id === boxName);
 
   if (boxIndex === -1) {
-    return handleError('No blind box found with the given name.');
+    return handleError('No Blind Box found with the given name.');
   }
 
   const hasDuplicates = giftIds.some(id => inBlindBoxGifts.includes(id));
@@ -85,7 +85,7 @@ const remove = async (k: string, boxName: string, giftIds: string[]) => {
   const boxIndex = currBlindBoxes.findIndex(box => box.id === boxName);
 
   if (boxIndex === -1) {
-    return handleError('No blind box found with the given name.');
+    return handleError('No Blind Box found with the given name.');
   }
 
   inBlindBoxGifts = inBlindBoxGifts.filter(id => !giftIds.includes(id));
@@ -112,7 +112,7 @@ const send = async (k: string, boxName: string) => {
   const box = currBlindBoxes.find(box => box.id === boxName);
 
   if (!box || box.boxData.length === 0) {
-    return handleError('No blind box found with the given name or blind box is empty.');
+    return handleError('No Blind Box found with the given name or Blind Box is empty.');
   }
 
   const randomIndex = Math.floor(Math.random() * box.boxData.length);

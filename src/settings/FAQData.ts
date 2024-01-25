@@ -1,7 +1,7 @@
 export const FAQData = [
   {
     question: 'What is Philosopher\'s Stone?',
-    answer: 'Philosopher\'s Stone is a unique platform that allows you to craft, send, and receive Gifts with delightful and mysterious experience. It integrates the excitement of Blind Box gifting with the use of Spore protocol, offering a secure and creative way to share your joy. '
+    answer: 'Philosopher\'s Stone is a unique platform that allows you to craft, send, and receive Gifts with delightful and mysterious experience. It integrates the excitement of Blind Box gifting with the use of [Spore Protocol](https://spore.pro), offering a secure and creative way to share your joy. '
   },
   {
     question: 'What is a Blind Box?',
@@ -9,7 +9,7 @@ export const FAQData = [
   },
   {
     question: 'How do I create a Gift or a Blind Box?',
-    answer: 'To create a Gift or a Blind Box, simply navigate to the "Create Gift & Blind Box" tab from the top-right menu. Here, you can upload an image as your Gift and mint it using the corresponding CKB amount.'
+    answer: 'To create a Gift or a Blind Box, simply navigate to the "Create" tab from the top-right menu. Here, you can upload an image as your Gift and mint it using the corresponding CKB amount.'
   },
   {
     question: 'How do I send a Gift or Blind Box?',

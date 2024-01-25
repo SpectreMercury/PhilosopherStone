@@ -1,6 +1,7 @@
 // components/Faq.tsx
 import React, { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
+import { useRouter } from 'next/navigation';
 import remarkGfm from 'remark-gfm';
 import Image from 'next/image';
 
@@ -15,6 +16,7 @@ interface FaqProps {
 }
 
 const FAQComponent: React.FC<FaqProps> = ({ items, linkColor }) => {
+  const router = useRouter();
   const [openItemIndex, setOpenItemIndex] = useState<number | null>(null);
 
   const toggleItem = (index: number) => {
@@ -27,10 +29,20 @@ const FAQComponent: React.FC<FaqProps> = ({ items, linkColor }) => {
 
   return (
     <div>
-      <div className='text-primary001 text-center text-hd3mb font-Montserrat mt-8 w-[66px] py-2'>FAQ</div>
+      <div className={'flex items-center mt-8 mb-4'}>
+        <div className='w-full text-primary001 text-center text-hd3mb font-Montserrat w-[66px]'>FAQ</div>
+        <button onClick={() => router.back()}>
+          <Image 
+            src='/svg/icon-x.svg'
+            width={24}
+            height={24}
+            alt={"Go back"}
+          />
+        </button>
+      </div>
       {items.map((item, index) => (
         <div key={index} className="border-b border-white009">
-          <div className="flex justify-between items-center p-4 cursor-pointer" onClick={() => toggleItem(index)}>
+          <div className="flex justify-between items-center py-4 cursor-pointer" onClick={() => toggleItem(index)}>
             <p className="text-white001 font-SourceSanPro text-body1bdmb">{item.question}</p>
             <button className='text-white001'>
               {openItemIndex === index ? 
@@ -51,8 +63,8 @@ const FAQComponent: React.FC<FaqProps> = ({ items, linkColor }) => {
             </button>
           </div>
           {openItemIndex === index && (
-            <div className="pt-2 pb-4 px-4 text-white001">
-              <ReactMarkdown className={`text-white003 font-SourceSanPro link-color-${linkColor}`} remarkPlugins={[remarkGfm]}>
+            <div className="pb-4 text-white001">
+              <ReactMarkdown className={`text-white003 font-SourceSanPro text-body1mb link-color-${linkColor}`} remarkPlugins={[remarkGfm]}>
                 {item.answer}
               </ReactMarkdown>
             </div>

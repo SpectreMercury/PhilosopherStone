@@ -56,7 +56,7 @@ const GiftList: React.FC<GiftListProps> = ({ onNewGiftClick, list, type, blindbo
         <div>
           <span className='text-white001 text-labelmb font-SourceSanPro'>
             {type === 'Gift' ? gifts.length : blindboxList.length} 
-            {type === 'Gift' ? gifts.length === 1 ? " Gift" : " Gifts" : blindboxList.length !== 1 ? " Blind Box" : " Blind Boxes"}
+            {type === 'Gift' ? gifts.length === 1 ? " Gift" : " Gifts" : blindboxList.length === 1 ? " Blind Box" : " Blind Boxes"}
           </span>
           {/* <button className="cursor-pointer ml-4 text-primary004">Select All</button> */}
         </div>

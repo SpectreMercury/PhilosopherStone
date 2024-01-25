@@ -42,6 +42,7 @@ const config: Config = {
         'white010': 'rgba(255, 255, 255, 0.10)',
         'warning-bg': 'rgba(255, 236, 168, 0.16)',
         'success-bg': 'rgba(146, 251, 145, 0.08)',
+        'selected': 'rgba(255, 255, 255, 0.08)',
         'success-function': '#1CB562',
         'error-function': '#E11717',
         'warning-function': '#FFECA8',
@@ -56,7 +57,7 @@ const config: Config = {
         'body1bdmb': ['16px', {lineHeight: '160%', fontWeight: 700}],
         'labelmb': ['14px', {lineHeight: '160%', fontWeight: 400}],
         'labelbdmb': ['14px', {lineHeight: '160%', fontWeight: 700}],
-        'buttonmb': ['16px', {lineHeight: '100%', fontWeight: 500}],
+        'buttonmb': ['16px', {lineHeight: '100%', fontWeight: 400}],
         'codemb': ['14px', {lineHeight: '160%', fontWeight: 400}],
       },
       animation: {
