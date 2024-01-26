@@ -11,6 +11,7 @@ import { publicProvider } from '@wagmi/core/providers/public';
 import { InjectedConnector } from '@wagmi/core/connectors/injected';
 import CKBConnector from './base';
 import { setWallet, WalletInfo } from '@/store/walletSlice';
+import store from '@/store/store';
 import {
   Script,
   Transaction,
@@ -25,6 +26,7 @@ export default class MetaMaskConnector extends CKBConnector {
   public icon = '/images/metamask-icon.png';
   private listeners: Array<() => void> = [];
   public config: any;
+  // protected store = store
 
   constructor() {
     super();

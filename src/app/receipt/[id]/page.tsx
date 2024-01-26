@@ -7,7 +7,7 @@ import { predefinedSporeConfigs, meltSpore as _meltSpore } from '@spore-sdk/core
 import Link from 'next/link';
 import { enqueueSnackbar } from 'notistack';
 import { useSporeQuery } from '@/hooks/useQuery/useQuerybySpore';
-import { BI } from '@ckb-lumos/lumos';
+import { BI, RPC } from '@ckb-lumos/lumos';
 import MeltGiftModal from '@/app/_components/MeltModal/MeltModal';
 import { useConnect } from '@/hooks/useConnect';
 import { sendTransaction } from '@/utils/transaction';
@@ -17,27 +17,44 @@ import LoadingOverlay from '@/app/_components/LoadingOverlay/LoadingOverlay';
 import { getLumosScript } from '@/utils/updateLumosConfig';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
-import { fetchHistoryAPI } from '@/utils/fetchAPI';
 
 
-const Gift: React.FC = () => {
+const Receipt: React.FC = () => {
+  const rpc = new RPC(predefinedSporeConfigs.Aggron4.ckbNodeUrl);
   const router = useRouter();
   const pathName = usePathname();
   const pathAddress = pathName.split("/")[pathName.split('/').length - 1]
-  const ckbOccupied = useSearchParams()
-  const { data: spore, isLoading: isSporeLoading } = useSporeQuery(
-    pathAddress as string,
-  );
+  const searchParams = useSearchParams()
+  const [transactionStatus, setTransactionStatus] = useState<string>('commited'); 
   const [occupied, setOccupied] = useState<string>('')
+  const [showPopup, setShowPopup] = useState<boolean>(false);
   const [isMeltModal, setIsMeltModal] = useState<boolean>(false)
   const [giftMessage, setGiftMessage] = useState<string>("") 
   const { address, signTransaction } = useConnect()
   const walletAddress = useSelector((state: RootState) => state.wallet.wallet?.address);
-
+  const [sporeId, setSporeId] = useState<string>('');
+  const [historyType, setHistoryType] = useState<string>('melt');
+  const [historyDate, setHistoryDate] = useState<string>('');
   const { isVisible, showOverlay, hideOverlay, progressStatus, setProgressStatus } = useLoadingOverlay(); 
   const texts = ["Unmatched Flexibility and Interopera­bility", "Supreme Security and Decentrali­zation", "Inventive Tokenomics"]; 
+  const { data: spore, isLoading: isSporeLoading } = useSporeQuery(
+    sporeId as string,
+  ); 
 
-  function formatNumberWithCommas(num: number) {
+  const formatDate = (dateStr: string): string => {
+    const dateObj = new Date(dateStr);
+
+    const suffixes = ["th", "st", "nd", "rd"];
+    const day = dateObj.getDate();
+    const daySuffix = suffixes[(day % 10) - 1] || suffixes[0];
+    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const month = monthNames[dateObj.getMonth()]; // getMonth() is zero-indexed
+    const year = dateObj.getFullYear();
+
+    return `${day}${daySuffix}, ${month}, ${year}`;
+  }
+
+  const formatNumberWithCommas = (num: number) => {
     const numStr = num.toString();
     const reversedNumStr = numStr.split('').reverse().join('');
     const commaInserted = reversedNumStr.replace(/(\d{3})(?=\d)/g, '$1,');
@@ -62,25 +79,10 @@ const Gift: React.FC = () => {
       const { txSkeleton } = await _meltSpore(...args);
       const signedTx = await signTransaction(txSkeleton);
       const txHash = await sendTransaction(signedTx);
-      await PutIntoProcessList(walletAddress!!, txHash)
       return txHash;
     },
     [signTransaction],
   );
-
-  async function PutIntoProcessList(key: string, id: string) {
-    const response = await fetchHistoryAPI({
-      action: 'setHistory',
-      key,
-      record: {
-        actions: 'melt',
-        status: 'pending',
-        from: walletAddress!!,
-        id: id
-      }
-    })
-    return response
-  }
 
   const meltSporeMutation = useMutation({
     mutationFn: meltSpore,
@@ -88,6 +90,18 @@ const Gift: React.FC = () => {
       enqueueSnackbar('Melt Successful', {variant: 'success'})
     },
   });
+
+  const handleMouseEnter = () => {
+    setShowPopup(true);
+  };
+
+  const handleMouseLeave = () => {
+    setShowPopup(false);
+  };
+
+  const handleClick = () => {
+    setShowPopup(!showPopup);
+  };
 
   const handleMelt = async () => {
     if (!address || !spore) {
@@ -102,7 +116,7 @@ const Gift: React.FC = () => {
       outPoint: spore!.cell!.outPoint!,
       config: latest,
     });
-    callUpdateGiftReadStatusAction(walletAddress!!, pathAddress)
+    await callUpdateGiftReadStatusAction(walletAddress!!, pathAddress)
     setProgressStatus('done')
     setTimeout(() => {
       hideOverlay();
@@ -137,15 +151,34 @@ const Gift: React.FC = () => {
     return data;
   }
 
+  const getTransaction = async () => {
+    const transaction = await rpc.getTransaction(pathAddress);
+    // setTransactionStatus(transaction.txStatus.status);
+    setSporeId(transaction.transaction.outputs[0].type?.args!!)
+  }
+
   useEffect(() => {
-    getGiftStatus()
+    // getGiftStatus()
   }, [])
 
   useEffect(() => {
-    if(!isSporeLoading) {
+    getTransaction()  
+  }, [])
+
+  useEffect(() => {
+    let type = searchParams.get('type');
+    let date = searchParams.get('date');
+    setHistoryType(type || 'create');
+    date ? setHistoryDate(formatDate(date)): '';
+  }, [searchParams])
+
+
+
+  useEffect(() => {
+    if(!isSporeLoading && sporeId) {
       formatNumberWithCommas(BI.from(spore?.cell?.cellOutput.capacity).toNumber() / 10 ** 8)
     }
-  }, [isSporeLoading, spore?.cell?.cellOutput.capacity])
+  }, [isSporeLoading, spore?.cell?.cellOutput.capacity, sporeId])
 
   return (
     <div className="flex flex-col items-center p-4">
@@ -184,27 +217,74 @@ const Gift: React.FC = () => {
           </Link>
         </div>
       </div>
-      <div className="py-4">
-        <img src={`/api/media/${pathAddress}`} width={300} height={200} className="px-4" alt="Gift" />
+      {
+        transactionStatus === 'pending' && 
+        <div className='w-full relative flex items-center justify-between bg-warning-bg rounded-md text-warning-function px-4 border border-warning-function font-SourceSanPro text-labelmb py-2'>
+          <p>Pending: This Gift is currently being processed.</p>
+          <Image 
+            className='cursor' 
+            onMouseEnter={handleMouseEnter} 
+            onMouseLeave={handleMouseLeave} 
+            onClick={handleClick}
+            src={'/svg/question-warning.svg'} 
+            width={18} height={18} 
+            alt={'explanation-pending'} 
+          />
+          {showPopup && (
+            <div className="absolute top-full right-0 mt-2 w-80 p-4 bg-primary008 text-white001 shadow-lg rounded-md z-10">
+              <p className='font-SourceSanPro text-labelbdmb'>Hang Tight! Here is Why It Might Take a Bit:</p>
+              <p className='font-SourceSanPro text-labelbd'>Sometimes, the blockchain gets really busy, kind of like traffic during rush hour. This can make things a bit slower. We’re keeping an eye on it to get your transaction through as soon as possible. Thanks for sticking with us!</p>
+            </div>
+          )}
+        </div>
+      }
+      {
+        transactionStatus === 'commited' && 
+        <div className='w-full relative flex items-center justify-between bg-success-bg rounded-md text-success-function px-4 border border-success-function font-SourceSanPro text-labelmb py-2'>
+          <p>Pending: This Gift is currently being processed.</p>
+        </div>
+      }
+      <div className="py-4 relative">
+        {historyType === 'melt' ? 
+        (<>
+          <Image
+            src={'/svg/melt-404.svg'}
+            width={170}
+            height={170}
+            alt={'melt so 404'}
+          />
+        </>)
+          :
+        (<>{sporeId ? 
+          <img src={`/api/media/${sporeId}`} width={300} height={200} className="px-4" alt="Gift" /> 
+            :
+          <Image alt={'unkown-sporeId'} src={`/svg/blindbox-animation-1.svg`} className="rounded" width={164} height={120}/>
+        }</>)}
       </div>
-      <div className='text-white001 font-Montserrat text-hd2mb pb-4'>
+      <div className='text-white001 font-Montserrat text-hd2mb'>
         {occupied} CKB 
       </div>
-      {giftMessage && <p className="pb-4 font-SourceSanPro text-white001 text-body1mb">“{giftMessage}”</p>}
-      <Link 
-        className="w-full h-12 flex justify-center items-center text-buttonmb font-SourceSansPro border border-white002 bg-white001 text-primary011 py-2 px-4 rounded" 
-        href={`/send?hasGift=${pathAddress}`}
-      >
-        Send as Gift
-      </Link>
-      <button 
-        className="w-full h-12 text-buttonmb font-SourceSansPro border border-white002 my-4 py-2 px-4 rounded text-white001" 
-        onClick={handleMeltModal}
-      >
-        Melt
-      </button>
+      <div className='font-SourceSanPro text-body1mb py-4 text-white005'>{ historyDate }</div>
+      {giftMessage && <p className="pb-4 font-SourceSanPro text-white001 text-body1m">“{giftMessage}”</p>}
+      {
+        transactionStatus === 'commited' && 
+        <>
+          <Link 
+            className="w-full h-12 flex justify-center items-center text-buttonmb font-SourceSansPro border border-white002 bg-white001 text-primary011 py-2 px-4 rounded" 
+            href={`/send?hasGift=${sporeId}`}
+          >
+            Send as Gift
+          </Link>
+          <button 
+            className="w-full h-12 text-buttonmb font-SourceSansPro border border-white002 my-4 py-2 px-4 rounded text-white001" 
+            onClick={handleMeltModal}
+          >
+            Melt
+          </button>
+        </>
+      }
     </div>
   );
 };
 
-export default Gift;
+export default Receipt;

@@ -5,6 +5,15 @@ export interface Gift {
   image: string;
 }
 
+export interface GiftProps {
+  [key: string]: string;
+}
+
+export interface ReceivedGift {
+  id: string;
+  date: string;
+}
+
 export interface GiftListProps {
   gifts: Gift[];
   onGiftClick: (id: string) => void;

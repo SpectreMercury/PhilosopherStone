@@ -34,7 +34,7 @@ const NewGifts: React.FC = () => {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ action: 'saveAction', key: walletAddress, value: [] }),
+            body: JSON.stringify({ action: 'clear', key: walletAddress, value: [] }),
         });
         const data = await response.json();
     }

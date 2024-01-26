@@ -1,6 +1,5 @@
 import { setWallet, clearWallet, WalletInfo } from '@/store/walletSlice';
 import { Script, Transaction, config, helpers } from '@ckb-lumos/lumos';
-
 import store from '@/store/store';
 
 export default abstract class CKBConnector {

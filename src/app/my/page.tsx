@@ -11,6 +11,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { QuerySpore } from '@/hooks/useQuery/type';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { useConnect } from '@/hooks/useConnect';
 
 
 const LoadingSkeleton = () => {
@@ -26,6 +27,7 @@ const My: React.FC = () => {
   const searchParams = useSearchParams();
   const [activeTab, setActiveTab] = useState<'Gift' | 'Blind Box'>(decodeURIComponent(searchParams.get('type') || '') === 'Blind Box' ? 'Blind Box' : 'Gift');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { address } = useConnect();
   const walletAddress = useSelector((state: RootState) => state.wallet.wallet?.address);
   const { data: spores, isLoading: isSporesLoading } = useSporesByAddressQuery(
     walletAddress as string,
@@ -33,6 +35,7 @@ const My: React.FC = () => {
   const storeSporesList = useSelector((state: RootState) => state.spores.spores);
   const [sporesList, setSporesList] = useState<QuerySpore[] | []>([])
   const [blindBoxList, setBlindBoxList] = useState<[]>([]) 
+
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -79,16 +82,15 @@ const My: React.FC = () => {
     getBlindBoxData()
   }, [isModalOpen])
 
-
   const renderContent = () => {
     if (isSporesLoading && activeTab === 'Gift') {
       return <LoadingSkeleton />;
     }
 
-    const currentList = activeTab === 'Gift' ? sporesList : blindBoxList
+    const currentList = activeTab === 'Gift' ? spores : blindBoxList
 
     if (currentList && currentList.length > 0) {
-      return <GiftList onNewGiftClick={handleOpenModal} list={sporesList} type={activeTab} blindboxList={blindBoxList} />;
+      return <GiftList onNewGiftClick={handleOpenModal} list={spores} type={activeTab} blindboxList={blindBoxList} />;
     } else {
       return (
         <div>
@@ -127,7 +129,26 @@ const My: React.FC = () => {
           Blind Box
         </button>
       </div>
-      { renderContent() }
+      {isSporesLoading && activeTab === 'Gift' ? (
+        <LoadingSkeleton />
+      ) : activeTab === 'Gift' && spores && spores.length > 0 ? (
+        <GiftList onNewGiftClick={handleOpenModal} list={spores} type={activeTab} blindboxList={blindBoxList} />
+      ) : (
+        <div>
+          <div className="relative my-8 h-[180px] bg-gray-200">
+            <Image
+              alt='gift'
+              src='/svg/BlindBox.svg'
+              layout='fill'
+              objectFit='cover'
+            />
+          </div>
+          <p className="text-center my-8 text-white001 text-hd2mb font-Montserrat">
+            Create Your Gift and Let Smiles Bloom!
+          </p>
+        </div>
+      )}
+
       <button 
         className="w-full h-12 text-buttonmb font-SourceSansPro border border-white002 bg-white001 text-primary011 py-2 px-4 rounded"
         onClick={handleOpenModal}

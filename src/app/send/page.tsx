@@ -6,7 +6,7 @@ import { transferSpore as _transferSpore, predefinedSporeConfigs } from '@spore-
 import { QuerySpore } from '@/hooks/useQuery/type';
 import { useSporeQuery } from '@/hooks/useQuery/useQuerybySpore';
 import { BI, OutPoint, config, helpers } from '@ckb-lumos/lumos';
-import { fetchBlindBoxAPI } from '@/utils/fetchAPI';
+import { fetchBlindBoxAPI, fetchGiftAPI, fetchHistoryAPI } from '@/utils/fetchAPI';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { boxData } from '@/types/BlindBox';
@@ -19,6 +19,8 @@ import { useMutation } from '@tanstack/react-query';
 import { enqueueSnackbar } from 'notistack';
 import { useSporesByAddressQuery } from '@/hooks/useQuery/useSporesByAddress';
 import { getLumosScript } from '@/utils/updateLumosConfig';
+import { GiftProps } from '@/types/Gifts';
+import { values } from 'lodash';
 
 const SendGift: React.FC = () => {
   const { isVisible, showOverlay, hideOverlay, progressStatus, setProgressStatus } = useLoadingOverlay();  const texts = ["Unmatched Flexibility and Interopera­bility", "Supreme Security and Decentrali­zation", "Inventive Tokenomics"]; 
@@ -87,6 +89,7 @@ const SendGift: React.FC = () => {
       //@ts-ignore
       const signedTx = await signTransaction(txSkeleton);
       const txHash = await sendTransaction(signedTx);
+      await PutIntoProcessList(walletAddress!!, txHash)
       return {
         txHash,
         index: BI.from(outputIndex).toHexString(),
@@ -104,30 +107,26 @@ const SendGift: React.FC = () => {
     }
   });
   
-  const callSaveAction = async (key: string, value: Object) => {
-    const response = await fetch('/api/gift', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ action: 'save', key, value }),
-    });
-    const data = await response.json();
-    return data;
-  }
-
-  async function callUpdateGiftReadStatusAction(key: string, value: string) {
-    const response = await fetch('/api/gift', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ action: 'remove', key, ids: [value] }),
-    });
-    const data = await response.json();
-    return data;
+  const callSaveAction = async (key: string, id: string, value: GiftProps) => {
+    const response = await fetchGiftAPI({ action: 'save', key, id, value });
+    return response.data;
   }
   
+  async function PutIntoProcessList(key: string, id: string) {
+    const response = await fetchHistoryAPI({
+      action: 'setHistory',
+      key,
+      record: {
+        actions: 'send',
+        status: 'pending',
+        from: walletAddress!!,
+        to: toWalletAddress,
+        id: id
+      }
+    })
+    return response
+  }
+
   const handleSubmit = useCallback(
     async (values: { to: string }) => {
       showOverlay(); 
@@ -146,11 +145,9 @@ const SendGift: React.FC = () => {
         config: latest,
         useCapacityMarginAsFee: true,
       });
-      await callSaveAction(spore.id, {
+      await callSaveAction(values.to, spore.id, {
         'giftMessage': message
       })
-      console.log(rlt)
-      await callUpdateGiftReadStatusAction(values.to, spore.id)
       setProgressStatus('done')
       enqueueSnackbar('Gift Send Successful', { variant: 'success' });
       refreshSporesByAddress()

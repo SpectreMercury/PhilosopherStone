@@ -86,10 +86,10 @@ const UserHome: React.FC = () => {
       return <LoadingSkeleton />;
     }
 
-    const currentList = activeTab === 'Gift' ? sporesList : blindBoxList
+    const currentList = activeTab === 'Gift' ? spores : blindBoxList
 
     if (currentList && currentList.length > 0) {
-      return <GiftList onNewGiftClick={handleOpenModal} list={sporesList} type={activeTab} blindboxList={blindBoxList} />;
+      return <GiftList onNewGiftClick={handleOpenModal} list={spores} type={activeTab} blindboxList={blindBoxList} />;
     } else {
       return (
         <div>

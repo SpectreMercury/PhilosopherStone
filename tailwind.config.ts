@@ -40,6 +40,8 @@ const config: Config = {
         'white008': 'rgba(255, 255, 255, 0.30)',
         'white009': 'rgba(255, 255, 255, 0.20)',
         'white010': 'rgba(255, 255, 255, 0.10)',
+        'warning-bg': 'rgba(255, 236, 168, 0.16)',
+        'success-bg': 'rgba(146, 251, 145, 0.08)',
         'success-function': '#1CB562',
         'error-function': '#E11717',
         'warning-function': '#FFECA8',
