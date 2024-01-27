@@ -17,6 +17,7 @@ import LoadingOverlay from '@/app/_components/LoadingOverlay/LoadingOverlay';
 import { getLumosScript } from '@/utils/updateLumosConfig';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
+import { fetchGiftAPI } from '@/utils/fetchAPI';
 
 
 const Receipt: React.FC = () => {
@@ -126,28 +127,8 @@ const Receipt: React.FC = () => {
   }
 
   async function callUpdateGiftReadStatusAction(key: string, value: string) {
-    const response = await fetch('/api/gift', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ action: 'remove', key, ids: [value] }),
-    });
-    const data = await response.json();
-    return data;
-  }
-  
-
-  const getGiftStatus = async () => {
-    const response = await fetch('/api/gift', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ action: 'checkStatus', key: pathAddress }),
-    });
-    const data = await response.json();
-    setGiftMessage(data.data.giftMessage)
+    const response = await fetchGiftAPI({ action: 'remove', key, ids: [value] })
+    const data = await response.data;
     return data;
   }
 

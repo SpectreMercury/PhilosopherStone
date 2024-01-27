@@ -13,8 +13,6 @@ import { MaterialDesignContent, SnackbarProvider } from 'notistack';
 import { styled } from "@mui/material";
 import { GiftReceiveModalProvider } from "./context/GiftReceiveModalContext";
 
-
-
 const StyledMaterialDesignContent = styled(MaterialDesignContent)(() => ({
   '&.notistack-MuiContent-success': {
     backgroundColor: '#1CB562',
@@ -30,11 +28,6 @@ const config = {
   connectors: [new JoyIdConnector(), new MetaMaskConnector()],
 };
 
-// const refreshed = await refreshScriptConfig(
-//   predefined.AGGRON4.SCRIPTS,
-//   { resolve: createRpcResolver(rpc) }
-// );
-// initializeConfig({SCRIPTS: refreshed, PREFIX: 'ckt'});
 
 
 function RootLayout({

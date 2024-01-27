@@ -11,16 +11,16 @@ const Finished: React.FC = () => {
     return (
         <div className="flex-1 flex items-center justify-center flex-col gap-8 px-4">
             <Image 
-                width={340}
+                width={170}
                 height={170}
                 alt='gift demo'
-                src={'/svg/gift.svg'}
+                src={'/svg/process-bg.svg'}
             />
             <div className="px-4 text-white001 text-hd2mb font-Montserrat text-center">
-                🎉 Hooray! Your Blind Box has been sent successfully! 🎁
+                 Great! Your transaction is underway.
             </div>
             <div className="px-4 text-white001 text-center font-SourceSanPro">
-                You&lsquo;ve just shared a delightful surprise. You can keep track of your gift on <Link className=" text-primary005" target="_blank" href={`https://explorer.nervos.org/transaction/${txHash}`}>CKB Explorer</Link>. Thank you for spreading joy with Spore Gift! 🌟
+                Depending on network traffic, it might take a little time to complete. You can always check the status in your <Link className=" text-primary005" target="_blank" href={`/history`}>Gift History</Link>, or visit the <Link className=" text-primary005" target="_blank" href={`https://explorer.nervos.org/transaction/${txHash}`}>CKB Explorer</Link>. Thank you for spreading joy with Philosopher’s Stone! 🌟
             </div>
             <Link 
                 target="_blank" href={`https://explorer.nervos.org/transaction/${txHash}`}
@@ -33,3 +33,4 @@ const Finished: React.FC = () => {
 }
 
 export default Finished
+

@@ -23,14 +23,15 @@ import { GiftProps } from '@/types/Gifts';
 import { values } from 'lodash';
 
 const SendGift: React.FC = () => {
-  const { isVisible, showOverlay, hideOverlay, progressStatus, setProgressStatus } = useLoadingOverlay();  const texts = ["Unmatched Flexibility and Interopera­bility", "Supreme Security and Decentrali­zation", "Inventive Tokenomics"]; 
-  const [message, setMessage] = useState<string>('');
-  const [toWalletAddress, setToWalletAddress] = useState<string>('')
-  const [gift, setGift] = useState('');
-  const [hasGift, setHasGift] = useState<string>()
-  const [occupied, setOccupied] = useState<string>('')
   const router = useRouter();
-  const { signTransaction } = useConnect()
+  const { signTransaction } = useConnect();
+
+  const { isVisible, showOverlay, hideOverlay, progressStatus, setProgressStatus } = useLoadingOverlay();  
+  const texts = ["Unmatched Flexibility and Interopera­bility", "Supreme Security and Decentrali­zation", "Inventive Tokenomics"]; 
+  const [message, setMessage] = useState<string>('');
+  const [toWalletAddress, setToWalletAddress] = useState<string>('');
+  const [hasGift, setHasGift] = useState<string>();
+  const [occupied, setOccupied] = useState<string>('');
   const [activeTab, setActiveTab] = useState<'Gift' | 'Blind Box'>('Gift');
   const walletAddress = useSelector((state: RootState) => state.wallet.wallet?.address);
   const { refresh: refreshSporesByAddress } = useSporesByAddressQuery(walletAddress, false);
@@ -89,7 +90,6 @@ const SendGift: React.FC = () => {
       //@ts-ignore
       const signedTx = await signTransaction(txSkeleton);
       const txHash = await sendTransaction(signedTx);
-      await PutIntoProcessList(walletAddress!!, txHash)
       return {
         txHash,
         index: BI.from(outputIndex).toHexString(),
@@ -112,15 +112,16 @@ const SendGift: React.FC = () => {
     return response.data;
   }
   
-  async function PutIntoProcessList(key: string, id: string) {
+  async function PutIntoProcessList(key: string, id: string, to: string, giftId: string) {
     const response = await fetchHistoryAPI({
       action: 'setHistory',
       key,
       record: {
         actions: 'send',
         status: 'pending',
+        sporeId: giftId,
         from: walletAddress!!,
-        to: toWalletAddress,
+        to: to,
         id: id
       }
     })
@@ -145,6 +146,7 @@ const SendGift: React.FC = () => {
         config: latest,
         useCapacityMarginAsFee: true,
       });
+      await PutIntoProcessList(walletAddress!!, rlt.txHash, values.to, spore.id);
       await callSaveAction(values.to, spore.id, {
         'giftMessage': message
       })

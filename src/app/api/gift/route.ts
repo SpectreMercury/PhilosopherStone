@@ -47,23 +47,35 @@ async function updateGiftReadStatusAction(k: string, newValue: string) {
   await kv.set(k, JSON.stringify(result));
 }
 
-async function setInProcessGift(k: string, id: string) {
-  return await kv.lpush(`${k}-inProcessGift}`, id);
+export async function setUnavailableGifts(k: string, txHash: string, sporeId: string) {
+  return await kv.hset(`${k}-unavailable`, {[txHash]: sporeId});
+} 
+
+export async function getUnavailableGifts(k: string, id: string) {
+  return await kv.hgetall(`${k}-unavailable`);
+} 
+
+export async function removeUnavailableGifts(k: string, txHash: string) {
+  return await kv.hdel(`${k}-unavailable`, txHash)
 }
 
-async function getInProcessGifts(k: string) {
-  return await kv.lrange(`${k}-inProcessGift}`, 0, -1);
+export async function setInProcessGift(k: string, id: string) {
+  return await kv.lpush(`${k}-inProcessGift`, id);
 }
 
-async function removeInProcessGift(k: string, id: string) {
-  return await kv.lrem(k, 0, id)
+export async function getInProcessGifts(k: string) {
+  return await kv.lrange(`${k}-inProcessGift`, 0, -1);
+}
+
+export async function removeInProcessGift(k: string, id: string) {
+  return await kv.lrem(`${k}-inProcessGift`, 0, id)
 }
 
 async function getReceivedGifts(k: string, start: number, end: number) {
   return await kv.lrange(`${k}-received`, start, end);
 }
 
-async function getGiftMessage(k: string) {
+async function getGiftInfo(k: string) {
   return await kv.get(k)
 }
 
@@ -81,8 +93,8 @@ export async function POST(req: NextRequest, res: NextApiResponse) {
         case 'getReceivedGifts':
             actionResult = await withErrorHandling(getReceivedGifts, body.key, body.start | 0, body.end | 10);
             break;
-        case 'getGiftMessage':
-            actionResult = await withErrorHandling(getGiftMessage, body.key);
+        case 'getGiftInfo':
+            actionResult = await withErrorHandling(getGiftInfo, body.key);
             break;
         case 'getTransactionStatus':
             actionResult = await withErrorHandling(getTransactionStatus, body.key);
@@ -95,6 +107,15 @@ export async function POST(req: NextRequest, res: NextApiResponse) {
             break;
         case 'removeInProcessGift':
             actionResult = await withErrorHandling(removeInProcessGift, body.key, body.id);
+            break;
+        case 'removeInProcessGift':
+            actionResult = await withErrorHandling(removeInProcessGift, body.key, body.id);
+            break;
+        case 'getUnavailableGifts':
+            actionResult = await withErrorHandling(getUnavailableGifts, body.key, body.id);
+            break;
+        case 'removeUnavailableGifts':
+            actionResult = await withErrorHandling(removeUnavailableGifts, body.key, body.id);
             break;
         default:
             actionResult = handleError('Invalid action', 400);

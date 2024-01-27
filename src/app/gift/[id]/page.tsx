@@ -17,7 +17,8 @@ import LoadingOverlay from '@/app/_components/LoadingOverlay/LoadingOverlay';
 import { getLumosScript } from '@/utils/updateLumosConfig';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
-import { fetchHistoryAPI } from '@/utils/fetchAPI';
+import { fetchBlindBoxAPI, fetchGiftAPI, fetchHistoryAPI } from '@/utils/fetchAPI';
+import { formatNumberWithCommas } from '@/utils/common';
 
 
 const Gift: React.FC = () => {
@@ -36,13 +37,6 @@ const Gift: React.FC = () => {
 
   const { isVisible, showOverlay, hideOverlay, progressStatus, setProgressStatus } = useLoadingOverlay(); 
   const texts = ["Unmatched Flexibility and Interopera­bility", "Supreme Security and Decentrali­zation", "Inventive Tokenomics"]; 
-
-  function formatNumberWithCommas(num: number) {
-    const numStr = num.toString();
-    const reversedNumStr = numStr.split('').reverse().join('');
-    const commaInserted = reversedNumStr.replace(/(\d{3})(?=\d)/g, '$1,');
-    setOccupied(commaInserted.split('').reverse().join(''))
-  }
 
   const handleCopy = async (textToCopy: string) => {
     try {
@@ -75,6 +69,7 @@ const Gift: React.FC = () => {
       record: {
         actions: 'melt',
         status: 'pending',
+        sporeId: 'pathAddress',
         from: walletAddress!!,
         id: id
       }
@@ -112,29 +107,15 @@ const Gift: React.FC = () => {
   }
 
   async function callUpdateGiftReadStatusAction(key: string, value: string) {
-    const response = await fetch('/api/gift', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ action: 'remove', key, ids: [value] }),
-    });
+    const response = await fetchBlindBoxAPI({ action: 'remove', key, ids: [value] });
     const data = await response.json();
     return data;
   }
   
 
   const getGiftStatus = async () => {
-    const response = await fetch('/api/gift', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ action: 'checkStatus', key: pathAddress }),
-    });
-    const data = await response.json();
-    setGiftMessage(data.data.giftMessage)
-    return data;
+    const response = await fetchGiftAPI({ action: 'getGiftInfo', key: pathAddress });
+    setGiftMessage(response.data?.giftMessage || null);
   }
 
   useEffect(() => {
@@ -143,7 +124,8 @@ const Gift: React.FC = () => {
 
   useEffect(() => {
     if(!isSporeLoading) {
-      formatNumberWithCommas(BI.from(spore?.cell?.cellOutput.capacity).toNumber() / 10 ** 8)
+      let occupied = formatNumberWithCommas(BI.from(spore?.cell?.cellOutput.capacity).toNumber() / 10 ** 8)
+      setOccupied(occupied);
     }
   }, [isSporeLoading, spore?.cell?.cellOutput.capacity])
 

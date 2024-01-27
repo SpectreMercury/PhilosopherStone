@@ -16,22 +16,6 @@ export default function Home() {
   const { openGiftReceiveModal } = useGiftReceiveModal();
   const { isGiftReceiveModalOpen, closeGiftReceiveModal } = useGiftReceiveModal();
 
-
-  const getGiftStatus = async () => {
-    const response  = await fetchGiftAPI({ action: 'checkStatus', key: walletAddress!!})
-    if(response.data.length) {
-      dispatch(setNewGifts(response.data));
-      openGiftReceiveModal()
-    }
-    return response.data;
-  }
-
-  // useEffect(() => {
-  //   if (walletAddress) {
-  //     getGiftStatus()
-  //   }
-  // }, [walletAddress])
-
   return (
     <main className="universe-bg max-w-3xl flex-1 overflow-auto">
       <ReceiveGiftModal isReceiveGiftModalOpen={isGiftReceiveModalOpen} closeReceiveGiftModal={closeGiftReceiveModal} />

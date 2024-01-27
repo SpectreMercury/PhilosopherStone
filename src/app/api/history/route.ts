@@ -2,6 +2,7 @@ import { kv } from "@vercel/kv";
 import { NextApiResponse } from "next";
 import { NextRequest, NextResponse } from "next/server";
 import { HistoryRecord } from '@/types/History';
+import { setInProcessGift, setUnavailableGifts } from "../gift/route";
 
 function handleError(error: string, errno: number = 400) {
     return NextResponse.json({ error, errno }, { status: errno });
@@ -20,9 +21,10 @@ async function withErrorHandling<T extends any[]>(
 
 const setHistory = async (k: string, record: HistoryRecord) => {
     const now = new Date();
-    // const date = `${now.getDate().toString().padStart(2, '0')}/${(now.getMonth() + 1).toString().padStart(2, '0')}/${now.getFullYear()}`;
     const recordWithDate = { ...record, date: now };
     let rlt = await kv.lpush(`${k}-history`, recordWithDate);
+    console.log(record.sporeId)
+    await setUnavailableGifts(k, record.id, record.sporeId || 'created'); 
     return NextResponse.json({ data: rlt, errno: 200 }, { status: 200 });
 }
 
