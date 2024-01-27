@@ -1,4 +1,4 @@
-# Philosopher‘s Stone
+# Philosopher's Stone
 
 Philosopher's Stone pioneers a new paradigm for digital gifting built on the [Spore protocol](https://spore.pro/). It maximizes excitement and delight by crafting magical surprises - sending completely customizable NFT gifts for special occasions directly on-chain.
 
