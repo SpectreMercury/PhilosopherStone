@@ -1,6 +1,6 @@
 "use client"
 
-import { HashkeyObj } from '@/types/Hashkey';
+import { HashkeyObj, SporeItem } from '@/types/Hashkey';
 import { formatDate, formatString } from '@/utils/common';
 import { fetchGiftAPI, fetchHashkeyAPI } from '@/utils/fetchAPI';
 import { usePathname, useRouter } from 'next/navigation';
@@ -13,16 +13,12 @@ import { config, helpers } from '@ckb-lumos/lumos';
 import { router } from '@/server/trpc';
 import { getLumosScript } from '@/utils/updateLumosConfig';
 
-interface sporeInfo extends HashkeyObj {
-    date: string;
-}
-
 const Hashkey: React.FC = () => {
     const pathName = usePathname();
     const router = useRouter();
     const pathAddress = pathName.split("/")[pathName.split('/').length - 1]
     const [giftMessage, setGiftMessage] = useState<string>('');
-    const [sporeInfo, setSporeInfo] = useState<sporeInfo>();
+    const [sporeInfo, setSporeInfo] = useState<SporeItem>();
     const [receiveProcessing, setReceiveProcessing] = useState<boolean>(false);
     const walletAddress = useSelector((state: RootState) => state.wallet.wallet?.address);
 

@@ -21,7 +21,7 @@ import { useSporesByAddressQuery } from '@/hooks/useQuery/useSporesByAddress';
 import { getLumosScript } from '@/utils/updateLumosConfig';
 import { GiftProps } from '@/types/Gifts';
 import { values } from 'lodash';
-import { HashkeyObj } from '@/types/Hashkey';
+import { HashkeyObj, SporeItem } from '@/types/Hashkey';
 import { GenerateHashKey } from '@/utils/common';
 import { getAccounts } from '@/utils/transferSporeWithAgent';
 
@@ -115,7 +115,7 @@ const SendGift: React.FC = () => {
     return response.data;
   }
 
-  const saveHashKey = async (key: string, record: HashkeyObj) => {
+  const saveHashKey = async (key: string, record: SporeItem) => {
     const response = await fetchHashkeyAPI({action: 'saveHashkey', key, record})
   }
   
