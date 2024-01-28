@@ -42,6 +42,10 @@ export default abstract class CKBConnector {
     return state.wallet.wallet;
   };
 
+  protected setData(data: WalletInfo) {
+    this.store.dispatch(setWallet(data));
+  }
+
 
   protected getData(): WalletInfo | null {
     const walletData = this.getCurrentWalletAddress();
@@ -57,8 +61,10 @@ export default abstract class CKBConnector {
     });
   }
 
+  abstract connect(): Promise<void>;
   abstract getAnyoneCanPayLock(): Script;
   abstract isOwned(targetLock: Script): boolean;
+  abstract disconnect(): Promise<void> | void;
   abstract signTransaction(
     txSkeleton: helpers.TransactionSkeletonType,
   ): Promise<Transaction>;

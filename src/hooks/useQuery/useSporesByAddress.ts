@@ -51,9 +51,7 @@ export function useSporesByAddressQuery(address: string | undefined, enabled = t
   );
   const spores: QuerySpore[] = data?.spores ?? [];
   const isLoading = rest.isLoading || rest.isPending;
-  if (spores.length != 0) {
-    dispatch(setSpores(spores))
-  }
+  // dispatch(setSpores(spores))
   return {
     ...rest,
     data: spores,

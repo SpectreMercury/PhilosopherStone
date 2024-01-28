@@ -23,7 +23,7 @@ const ListItem: React.FC<ItemProps> = ({ gift, isSelected, onSelect, viewMode, i
 
   const listItemContent = (
     <div 
-      className={`relative ${isSelected ? 'border-success-function border-2' : 'border-white009'} bg-primary008 relative cursor-pointer
+      className={`relative ${isSelected ? 'border-success-function border-2 opacity-100' : 'border-white009 opacity-70'} bg-primary008 relative cursor-pointer
         ${viewMode === 'list' ? 'flex items-center px-4 border-t-[1px]' : 'border rounded'} `}
       onClick={interactionType && interactionType > 1 ? onSelect : undefined}
     >

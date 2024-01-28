@@ -13,13 +13,12 @@ import {
 } from '@ckb-lumos/lumos';
 import { InjectedConnector } from '@wagmi/core/connectors/injected';
 import { connect as MetamaskConnect } from '@wagmi/core';
-
-
-
+import { useConnect } from '@/hooks/useConnect';
 
 const WalletModal: React.FC<WalletModalProps> = ({ onClose }) => {
 
   const dispatch = useDispatch()
+  const { connect } = useConnect()
 
   const setAddress = (address: string) => {
     config.initializeConfig(config.predefined.AGGRON4)
@@ -66,12 +65,16 @@ const WalletModal: React.FC<WalletModalProps> = ({ onClose }) => {
 
   const connectWallet = async (name: string) => {
     if (name === 'JoyID') {
-      connectJoyID()
+      // connectJoyID()
+      let connectors = connect()
+      connectors!![0].connect()
+      onClose()
     }
 
     if (name === 'Metamask') {
-      const { account } = await MetamaskConnect({ connector: new InjectedConnector() });
-      setMeskAddress(account)
+      let connectors = connect()
+      connectors!![1].connect()
+      onClose()
     }
   }
 

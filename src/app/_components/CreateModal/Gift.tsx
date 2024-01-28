@@ -24,6 +24,7 @@ import SporeService from '@/spore';
 import useLumosScript from '@/hooks/useUpdateLumosConfig';
 import { getLumosScript } from '@/utils/updateLumosConfig';
 import { predefined } from '@ckb-lumos/lumos/config';
+import { fetchHistoryAPI } from '@/utils/fetchAPI';
 
 interface CreateGiftProps {
   onClose?: () => void; //
@@ -71,6 +72,22 @@ const CreateGift: React.FC<CreateGiftProps> = ({ onClose }) => {
   //     }
   //   });
   // }, []);
+
+    
+  async function PutIntoProcessList(key: string, id: string) {
+    const response = await fetchHistoryAPI({
+      action: 'setHistory',
+      key,
+      record: {
+        actions: 'create',
+        status: 'pending',
+        from: walletAddress!!,
+        id: id
+      }
+    })
+    return response
+  }
+
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
     const newFile = acceptedFiles[0];
 
@@ -89,7 +106,8 @@ const CreateGift: React.FC<CreateGiftProps> = ({ onClose }) => {
     async (...args: Parameters<typeof createSpore>) => {
       let { txSkeleton, outputIndex } = await createSpore(...args);
       const signedTx = await signTransaction(txSkeleton);
-      await sendTransaction(signedTx);
+      const txHash = await sendTransaction(signedTx);
+      await PutIntoProcessList(walletAddress!!, txHash!!);
       const outputs = txSkeleton.get('outputs');
       const spore = outputs.get(outputIndex);
       return spore;
