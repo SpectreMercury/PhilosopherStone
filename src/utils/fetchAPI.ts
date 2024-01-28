@@ -2,7 +2,7 @@ import { boxData } from "@/types/BlindBox";
 import { enqueueSnackbar } from "notistack";
 import { HistoryRecord } from '../types/History';
 import { GiftProps } from "@/types/Gifts";
-import { HashkeyObj } from "@/types/Hashkey";
+import { HashkeyObj, SporeItem } from "@/types/Hashkey";
 
 // api.ts
 export interface BlindBoxAPIParams {
@@ -31,7 +31,7 @@ export interface HistoryParams {
 export interface HashkeyParams {
   action: string;
   key: string;
-  record?: HashkeyObj
+  record?: SporeItem
 }
 
 export const fetchBlindBoxAPI = async (

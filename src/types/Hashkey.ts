@@ -5,3 +5,10 @@ export interface HashkeyObj {
         txHash: string;
     }
 }
+
+export interface SporeItem {
+    sporeId: string;
+    senderWalletAddress: string;
+    txHash: string;
+    date?: string;
+}
