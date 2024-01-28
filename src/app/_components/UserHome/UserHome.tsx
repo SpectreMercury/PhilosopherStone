@@ -10,7 +10,7 @@ import { useSporesByAddressQuery } from '@/hooks/useQuery/useSporesByAddress';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { QuerySpore } from '@/hooks/useQuery/type';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 
 

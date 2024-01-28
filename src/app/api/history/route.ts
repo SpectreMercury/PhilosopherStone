@@ -23,7 +23,6 @@ const setHistory = async (k: string, record: HistoryRecord) => {
     const now = new Date();
     const recordWithDate = { ...record, date: now };
     let rlt = await kv.lpush(`${k}-history`, recordWithDate);
-    console.log(record.sporeId)
     await setUnavailableGifts(k, record.id, record.sporeId || 'created'); 
     return NextResponse.json({ data: rlt, errno: 200 }, { status: 200 });
 }

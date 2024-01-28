@@ -2,6 +2,7 @@ import { boxData } from "@/types/BlindBox";
 import { enqueueSnackbar } from "notistack";
 import { HistoryRecord } from '../types/History';
 import { GiftProps } from "@/types/Gifts";
+import { HashkeyObj } from "@/types/Hashkey";
 
 // api.ts
 export interface BlindBoxAPIParams {
@@ -27,6 +28,11 @@ export interface HistoryParams {
   record?: HistoryRecord
 }
 
+export interface HashkeyParams {
+  action: string;
+  key: string;
+  record?: HashkeyObj
+}
 
 export const fetchBlindBoxAPI = async (
   params: BlindBoxAPIParams
@@ -62,7 +68,26 @@ export const fetchGiftAPI = async (
     const data = await response.json();
     return data;
   } catch (error) {
-    enqueueSnackbar('Error fetching data from the blind box API', {variant: 'error'})
+    enqueueSnackbar('Error fetching data from the gift API', {variant: 'error'})
+  }
+};
+
+export const fetchHashkeyAPI = async (
+  params: HashkeyParams
+): Promise<any> => {
+  try {
+    const response = await fetch('/api/hash', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(params),
+    });
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    enqueueSnackbar('Error fetching data from the history box API', {variant: 'error'})
   }
 };
 

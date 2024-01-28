@@ -18,6 +18,7 @@ import { getLumosScript } from '@/utils/updateLumosConfig';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { fetchGiftAPI } from '@/utils/fetchAPI';
+import { formatDate } from '@/utils/common';
 
 
 const Receipt: React.FC = () => {
@@ -41,19 +42,6 @@ const Receipt: React.FC = () => {
   const { data: spore, isLoading: isSporeLoading } = useSporeQuery(
     sporeId as string,
   ); 
-
-  const formatDate = (dateStr: string): string => {
-    const dateObj = new Date(dateStr);
-
-    const suffixes = ["th", "st", "nd", "rd"];
-    const day = dateObj.getDate();
-    const daySuffix = suffixes[(day % 10) - 1] || suffixes[0];
-    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    const month = monthNames[dateObj.getMonth()]; // getMonth() is zero-indexed
-    const year = dateObj.getFullYear();
-
-    return `${day}${daySuffix}, ${month}, ${year}`;
-  }
 
   const formatNumberWithCommas = (num: number) => {
     const numStr = num.toString();
