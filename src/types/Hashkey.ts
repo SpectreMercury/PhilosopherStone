@@ -1,5 +1,7 @@
 export interface HashkeyObj {
-    sporeId: string;
-    senderWalletAddress: string;
-    txHash: string;
+    [key: string]:{
+        sporeId: string;
+        senderWalletAddress: string;
+        txHash: string;
+    }
 }

@@ -8,14 +8,16 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import HistoryList from '../_components/List/HistoryList';
 import { ReceivedGift } from '@/types/Gifts';
+import { HashkeyObj } from '@/types/Hashkey';
+import HashkeyList from '@/app/_components/List/HashkeyList';
 
 const History: React.FC = () => {
     const walletAddress = useSelector((state: RootState) => state.wallet.wallet?.address);
     const [activeTab, setActiveTab] = useState<'Action'| 'Received'|'Key'>('Action');
     const [receivedGiftList, setReceivedGiftList] = useState<ReceivedGift[]>([]);
     const [historyData, setHistoryData] = useState<HistoryRecord[]>([]);
-    const [currentList, setCurrentList] = useState<HistoryRecord[] | ReceivedGift[]>();
-     
+    const [currentList, setCurrentList] = useState<HistoryRecord[] | ReceivedGift[] | HashkeyObj[]>();
+    const [hashkeyList, setHashkeyList] = useState<HashkeyObj[]>([]) 
     const getHistoryList = async (address: string) => {
         let data = await fetchHistoryAPI({
                 action: 'getHistory',
@@ -37,7 +39,7 @@ const History: React.FC = () => {
             action: 'getHashKeyHistory',
             key: address,
         })
-        console.log(data);
+        setHashkeyList(data.data);
     }
 
     useEffect(() => {
@@ -45,6 +47,8 @@ const History: React.FC = () => {
             setCurrentList(historyData);
         } else if(activeTab === 'Received') {
             setCurrentList(receivedGiftList);
+        } else {
+            setCurrentList(hashkeyList);
         }
         
     }, [activeTab, historyData, receivedGiftList])
@@ -89,6 +93,7 @@ const History: React.FC = () => {
                 (<>
                     {activeTab === 'Action' && <HistoryList ListType={activeTab} HistoryList={historyData} />}
                     {activeTab === 'Received' && <HistoryList ListType={activeTab} ReceivedList={receivedGiftList} />}
+                    {activeTab === 'Key' && <HashkeyList HashkeyList={hashkeyList} />}
                 </>)
                     :
                 (
