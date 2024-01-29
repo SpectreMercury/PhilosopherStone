@@ -4,6 +4,9 @@ import List from './List';
 import { QuerySpore } from '@/hooks/useQuery/type';
 import useWindowDimensions from '@/hooks/getWindowDimension';
 import BlindBoxList from './_bList';
+import { fetchGiftAPI } from '@/utils/fetchAPI';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
 
 interface GiftListProps {
   onNewGiftClick?: () => void;
@@ -19,6 +22,9 @@ const GiftList: React.FC<GiftListProps> = ({ onNewGiftClick, list, type, blindbo
   const [viewMode, setViewMode] = useState<'list' | 'grid'>('grid');
   const [selectedGifts, setSelectedGifts] = useState<string[]>([]);
   const { width } = useWindowDimensions();
+  const [inProcessingList, setInProcessingList] = useState<string[]>([]);
+  const walletAddress = useSelector((state: RootState) => state.wallet.wallet?.address);
+  const unavailableList = useSelector((state: RootState) => state.unavailableList.list);
 
   const handleSelectGift = (id: string) => {
     setSelectedGifts(prev => 
@@ -26,30 +32,26 @@ const GiftList: React.FC<GiftListProps> = ({ onNewGiftClick, list, type, blindbo
     );
   };
 
+  const getInProcessingList = async (k: string) => {
+    // const inProcessingGifts = await fetchGiftAPI({
+    //   action: 'getUnavailableGifts',
+    //   key: k,
+    // })
+    // if (!inProcessingGifts.data) return 
+    // const filtered = Object.values(inProcessingGifts.data).filter(item => item !== 'create');
+    // setGifts(list.filter(item => !filtered.includes(item.id)));
+  }
+
   useEffect(() => {
-    setGifts(list)
-  }, [list])
+    if(walletAddress) {
+      setGifts(list.filter(item => !unavailableList?.includes(item.id)));
+    }
+  }, [list, walletAddress, unavailableList])
 
   const isGiftSelected = (id: string) => selectedGifts.includes(id);
 
   return (
     <div className='mb-8'>
-      {/* <div className={`mt-4 ${width >= 1280 && 'flex gap-8 justify-between items-center'}`}>
-        <input
-            type="text"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className={`px-4 py-3 rounded-full bg-primary008 ${width < 1280 && "w-full"}`}
-            placeholder="Search gifts..."
-        />
-        {width >= 1280 &&
-          <div 
-            className="text-primary003 font-SourceSanPro text-body1mb" 
-            onClick={onNewGiftClick}>
-              + New Gift
-          </div>
-        }
-      </div> */}
       <div className="flex justify-between items-center mt-4">
         <div>
           <span className='text-white001'>{type === 'Gift' ? gifts.length : blindboxList.length} {gifts.length === 1 ? "Gift" : "Gifts"}</span>
@@ -87,7 +89,7 @@ const GiftList: React.FC<GiftListProps> = ({ onNewGiftClick, list, type, blindbo
       {/* Floating add icon */}
       {width < 1280 &&
         <div 
-          style={{width: 44, height: 44, position:"absolute", bottom: 32, right: 16}} 
+          style={{width: 44, height: 44, position:"fixed", bottom: 32, right: 16}} 
           className="cursor-pointer flex items-center justify-center rounded-full bg-primary007 text-primary003 text-body1mb" 
           onClick={onNewGiftClick}>
             <Image 

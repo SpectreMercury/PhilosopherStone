@@ -37,6 +37,38 @@ export default class JoyIdConnector extends CKBConnector {
     return state.wallet.wallet;
   };
 
+  private setAddress(ethAddress: `0x${string}` | undefined) {
+    if (!ethAddress) {
+      return;
+    }
+    config.initializeConfig(config.predefined.AGGRON4);
+    const lock = commons.omnilock.createOmnilockScript({
+      auth: { flag: 'ETHEREUM', content: ethAddress ?? '0x' },
+    });
+    const address = helpers.encodeToAddress(lock, {
+      config: config.predefined.AGGRON4,
+    });
+    this.setData({
+      address,
+      walletType: 'JoyID',
+      ethAddress,
+    });
+  }
+
+  public async connect(): Promise<void> {
+    const walletData = this.getData();
+    if (walletData?.walletType === this.type.toLowerCase() && walletData?.address) {
+      return;
+    }
+    const ethAddress = await connect();
+    this.setAddress(ethAddress);
+    this.isConnected = true;
+  }
+
+  public async disconnect(): Promise<void> {
+    this.isConnected = false;
+  }
+
   public async signTransaction(
     txSkeleton: helpers.TransactionSkeletonType,
   ): Promise<Transaction> {

@@ -4,7 +4,7 @@ import { predefinedSporeConfigs } from '@spore-sdk/core';
 export async function sendTransaction(tx: Transaction) {
   const rpc = new RPC(predefinedSporeConfigs.Aggron4.ckbNodeUrl);
   const hash = await rpc.sendTransaction(tx, 'passthrough');
-  await waitForTranscation(hash);
+  // await waitForTranscation(hash);
   return hash;
 }
 

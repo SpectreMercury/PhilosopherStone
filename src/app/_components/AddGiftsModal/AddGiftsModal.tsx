@@ -44,7 +44,7 @@ const AddGiftsModal: React.FC<AddGiftsModalProps> = ({ onClose, onConfirm, listI
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+    <div className="fixed inset-0 bg-black bg-opacity-70 z-10 flex items-center justify-center">
       <div className="bg-primary011 rounded-lg px-4 py-6 max-w-lg w-full relative mx-4">
         <div className='flex items-center justify-between mb-6'>
           <h3 className='text-white001 text-hd3mb font-Montserrat'>Pick Gifts to Blind Box</h3>

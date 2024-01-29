@@ -8,17 +8,27 @@ import { enqueueSnackbar, useSnackbar } from 'notistack';
 import useWalletBalance from '@/hooks/useBalance';
 import WalletModal from '../WalletModal/WalletModal';
 import { kv } from '@vercel/kv';
+import { useConnect } from '@/hooks/useConnect';
+import { fetchGiftAPI } from '@/utils/fetchAPI';
+import { RPC } from '@ckb-lumos/rpc';
+import { predefinedSporeConfigs } from '@spore-sdk/core';
+import { Transaction } from '@ckb-lumos/lumos';
+import unavailableSlice, { setUnavailablelist } from '../../../store/unavailableListSlice';
 
 
 const Header:React.FC = () => {
+  const rpc = new RPC(predefinedSporeConfigs.Aggron4.ckbNodeUrl);
   const [isMenuOpen, setIsMenuOpen] = useState<Boolean>(false);
   const [activeRoute, setActiveRoute] = useState<string>('');
   const [showHeaderModal, setHeaderShowModal] = useState(false);
+  const { disconnect } = useConnect();
   const router = useRouter();
   const dispatch = useDispatch();
   const pathname = usePathname();
   const walletAddress = useSelector((state: RootState) => state.wallet.wallet?.address);
+  const walletType = useSelector((state: RootState) => state.wallet.wallet?.walletType);
   const balance = useWalletBalance(walletAddress!!);
+  
   const toggleMenu = () => {
     if (!isMenuOpen) {
       document.body.style.height = '100vh';
@@ -30,17 +40,31 @@ const Header:React.FC = () => {
     setIsMenuOpen(!isMenuOpen);
   }
 
-  useEffect(() => {
-    const storedWallet = localStorage.getItem('wallet');
-    if (storedWallet) {
-      const walletData = JSON.parse(storedWallet);
-      dispatch(setWallet(walletData));
-    }
-  }, [dispatch]);
-
-  useEffect(() => {
-    setActiveRoute(pathname);
-  }, [pathname]);
+  const checkAndRemoveProcessingGifts = async (k: string) => {
+    const inProcessingGifts = await fetchGiftAPI({
+      action: 'getUnavailableGifts',
+      key: k,
+    })
+    let unavailableSporeIdList:string[] = [];
+    if(!inProcessingGifts.data) return;
+    Object.keys(inProcessingGifts.data).map(async (txHash: string) => {
+      const transaction = await rpc.getTransaction(txHash);
+      const transactionStatus = transaction.txStatus.status;
+      console.log(transactionStatus);
+      if (transactionStatus === 'committed') {
+        await fetchGiftAPI({
+          action: 'removeUnavailableGifts',
+          key: k,
+          id: txHash
+        });
+      } else {
+        if(inProcessingGifts.data.txHash !== 'create') {
+          unavailableSporeIdList.push(inProcessingGifts.data.txHash);
+        }
+      }
+    })
+    dispatch(setUnavailablelist(unavailableSporeIdList));
+  }
 
   const isRouteActive = (route: string) => {
     return pathname === route;
@@ -58,6 +82,7 @@ const Header:React.FC = () => {
   const handleDisconnect = () => {
     dispatch(clearWallet());
     localStorage.removeItem('wallet');
+    disconnect();
   };
 
   const handleCopy = async (textToCopy: string) => {
@@ -68,6 +93,28 @@ const Header:React.FC = () => {
       enqueueSnackbar('Copied Fail', {variant: 'error'})
     }
   };
+
+  useEffect(() => {
+    const storedWallet = localStorage.getItem('wallet');
+    if (storedWallet) {
+      const walletData = JSON.parse(storedWallet);
+      dispatch(setWallet(walletData));
+    }
+  }, [dispatch]);
+
+  useEffect(() => {
+    setActiveRoute(pathname);
+  }, [pathname]);
+
+  useEffect(() => {
+    let intervalTask
+    if(walletAddress) {
+      intervalTask = setInterval(() => {
+        checkAndRemoveProcessingGifts(walletAddress)
+      }, 6000)
+    }
+    return clearInterval(intervalTask);
+  }, [walletAddress])
 
   return (
     <div className='flex flex-col'>
@@ -109,7 +156,7 @@ const Header:React.FC = () => {
           <div className='absoulte bg-primary010 w-full top-16 flex flex-col justify-between' style={{ height: `calc(100vh - 64px)`}}>
             <div className='px-4 mt-4'>              
               <MenuList text={"Home"} isActive={isRouteActive('/')} onClick={() => NaviTo('/')} />
-              <MenuList text={"Create"} isActive={isRouteActive('/my')} onClick={() => NaviTo('/my?type=Gift')} />
+              <MenuList text={"History"} isActive={isRouteActive('/history')} onClick={() => NaviTo('/history')} />
               <MenuList text={"FAQ"} isActive={isRouteActive('/FAQ')} onClick={() => NaviTo('/')} />
             </div>
             <div className='px-4 border-t border-white009'>
@@ -121,12 +168,20 @@ const Header:React.FC = () => {
                   </div>
                   <div className='flex justify-between'>
                     <div className='flex gap-2'>
-                      <Image 
-                        alt='wallet-icon'
-                        src='/svg/joyid-icon.svg'
-                        width={24}
-                        height={24}
-                      />
+                      {walletType === 'JoyID' ? 
+                        <Image 
+                          alt='wallet-icon'
+                          src='/svg/joyid-icon.svg'
+                          width={24}
+                          height={24}
+                        />:
+                        <Image 
+                          alt='wallet-icon'
+                          src='/svg/metamask-icon.svg'
+                          width={24}
+                          height={24}
+                        />
+                      }
                       <div className='text-white001 text-labelmb'>{walletAddress.slice(0, 10)}...{walletAddress.slice(walletAddress.length - 10, walletAddress.length)}</div>
                     </div>
                     <button onClick={() => {handleCopy(walletAddress)}}>
