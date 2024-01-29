@@ -11,9 +11,10 @@ interface HistoryListProps {
 }
 
 const HashkeyList: React.FC<HistoryListProps> = ({ HashkeyList }) => {
+
     const handleCopy = async (textToCopy: string) => {
         try {
-        await navigator.clipboard.writeText(textToCopy);
+        await navigator.clipboard.writeText(`${window.location.protocol}//${window.location.host}/collect/${textToCopy}`);
         enqueueSnackbar('Copied Successful', {variant: 'success'})
         } catch (err) {
         enqueueSnackbar('Copied Fail', {variant: 'error'})
