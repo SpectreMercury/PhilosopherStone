@@ -26,7 +26,7 @@ const BlindBoxPage = () => {
     const data = await fetchBlindBoxAPI({
       action: 'getBoxByName',
       key: walletAddress!!,
-      name: boxName
+      name: decodeURIComponent(boxName)
     })
     setBoxGifts(data.box.boxData)
   }

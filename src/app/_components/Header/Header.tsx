@@ -157,7 +157,7 @@ const Header:React.FC = () => {
             <div className='px-4 mt-4'>              
               <MenuList text={"Home"} isActive={isRouteActive('/')} onClick={() => NaviTo('/')} />
               <MenuList text={"History"} isActive={isRouteActive('/history')} onClick={() => NaviTo('/history')} />
-              <MenuList text={"FAQ"} isActive={isRouteActive('/FAQ')} onClick={() => NaviTo('/')} />
+              <MenuList text={"FAQ"} isActive={isRouteActive('/FAQ')} onClick={() => NaviTo('/FAQ')} />
             </div>
             <div className='px-4 border-t border-white009'>
               {
