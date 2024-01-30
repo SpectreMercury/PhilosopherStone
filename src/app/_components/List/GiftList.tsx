@@ -7,12 +7,13 @@ import BlindBoxList from './_bList';
 import { fetchGiftAPI } from '@/utils/fetchAPI';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
+import { BlindBoxItemType } from './_bList';
 
 interface GiftListProps {
   onNewGiftClick?: () => void;
   list: QuerySpore[];
   type: string;
-  blindboxList: [];
+  blindboxList: BlindBoxItemType[];
   interactionType?: number
 }
 
@@ -54,7 +55,10 @@ const GiftList: React.FC<GiftListProps> = ({ onNewGiftClick, list, type, blindbo
     <div className='mb-8'>
       <div className="flex justify-between items-center mt-4">
         <div>
-          <span className='text-white001'>{type === 'Gift' ? gifts.length : blindboxList.length} {gifts.length === 1 ? "Gift" : "Gifts"}</span>
+          <span className='text-white001 text-labelmb font-SourceSanPro'>
+            {type === 'Gift' ? gifts.length : blindboxList.length} 
+            {type === 'Gift' ? gifts.length === 1 ? " Gift" : " Gifts" : blindboxList.length === 1 ? " Blind Box" : " Blind Boxes"}
+          </span>
           {/* <button className="cursor-pointer ml-4 text-primary004">Select All</button> */}
         </div>
         <div onClick={() => setViewMode(viewMode === 'list' ? 'grid' : 'list')}>

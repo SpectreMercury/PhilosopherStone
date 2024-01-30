@@ -57,6 +57,7 @@ const AddGiftsModal: React.FC<AddGiftsModalProps> = ({ onClose, onConfirm, listI
               />
             </button>
         </div>
+        <p className='text-labelmb font-SourceSanPro text-white005'>You can only pick Gifts NOT included in any Blind Box:</p>
         <div style={{ maxHeight: '600px', overflow: 'auto' }}>
           <List
             gifts={spores}
@@ -70,7 +71,7 @@ const AddGiftsModal: React.FC<AddGiftsModalProps> = ({ onClose, onConfirm, listI
         </div>
         <button 
           onClick={handleConfirm} 
-          className="w-full text-center flex-1 border border-primary001 py-4 rounded-lg text-buttonmb font-SourceSansPro bg-white001 text-primary011"
+          className="w-full text-center flex-1 border border-primary001 py-4 rounded-lg text-buttonmb font-SourceSanPro bg-white001 text-primary011"
         >
           Add {selectedIds.length} {selectedIds.length === 1 ? " Gift" : " Gifts"}
         </button>

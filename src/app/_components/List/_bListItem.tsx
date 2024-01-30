@@ -29,11 +29,11 @@ const BlindBoxItem: React.FC<BlindBoxItemProps> = ({ blindBox, isSelected, onSel
         <Image alt={blindBox.id!} src={`/svg/blindbox-animation-1.svg`} className="rounded" layout='fill' objectFit='cover'/>
       </div>
       <div className="w-[115px] ml-4 h-[80px] flex-grow flex flex-col items-start justify-center">
-        <p className="font-semibold font-SourceSanPro text-body1mb text-white001 max-w-[300px] truncate">
+        <p className="font-SourceSanPro text-body1bdmb text-white001 max-w-[300px] truncate">
           {blindBox.id}
         </p>  
-        <p className=" text-white003 font-SourceSanPro text-labelmb text-white001 max-w-[300px] truncate">
-          {blindBox.boxData.length ? `${blindBox.boxData.length} Gifts`: 'Empty Box'}
+        <p className="text-white003 font-SourceSanPro text-labelmb text-white001 max-w-[300px] truncate">
+          {blindBox.boxData.length ? `${blindBox.boxData.length} ${blindBox.boxData.length === 1 ? "Gift" : "Gifts"}`: 'Empty Box'}
         </p>      
       </div>
       {isSelected && (

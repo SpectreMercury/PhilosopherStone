@@ -199,7 +199,7 @@ const CreateGift: React.FC<CreateGiftProps> = ({ onClose }) => {
   return (
     <div>
       <LoadingOverlay isVisible={isVisible} texts={texts} progressStatus={progressStatus}/>
-      {/* <p className='text-white001 font-SourceSanPro font-normal mb-2'>Assign to a blind box(optional)</p> */}
+      {/* <p className='text-white001 font-SourceSanPro font-normal mb-2'>Assign to a Blind Box(optional)</p> */}
       {/* <Select options={selectOptions} onSelect={handleSelectChange} /> */}
       <div 
         {...getRootProps()} 
@@ -253,12 +253,12 @@ const CreateGift: React.FC<CreateGiftProps> = ({ onClose }) => {
           </div>
         }
         <div className='flex justify-center'>
-          <div className='text-white001 font-SourceSanPro text-body1mb'>Estimate Total On-Chain Size: </div>
+          <div className='text-white001 font-SourceSanPro text-body1mb'>Estimated Total On-Chain Size: </div>
           <div className='text-white001 font-SourceSanPro text-body1bdmb'>{` ${onChainSize} CKB`}</div>
         </div>
       </div>
       <button 
-        className={`cursor-pointer w-full h-[48px] bg-white001 border border-primary009 text-buttonmb font-SourceSansPro text-primary011 py-2 px-4 rounded mt-4 ${!file && 'opacity-50 cursor-not-allowed'}`}
+        className={`cursor-pointer w-full h-[48px] bg-white001 border border-primary009 text-buttonmb font-SourceSanPro text-primary011 py-2 px-4 rounded mt-4 ${!file && 'opacity-50 cursor-not-allowed'}`}
         disabled={!file}
         onClick={async () => {
           await handleSubmit(file, undefined, true)

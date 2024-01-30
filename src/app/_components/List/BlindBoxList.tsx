@@ -48,7 +48,7 @@ const BlindBoxList: React.FC<BlindBoxListProps> = ({ onNewGiftClick, list, inter
     <div className='mb-8'>
       <div className="flex justify-between items-center mt-4">
         <div>
-          <span className='text-white001'>{list.length} {list.length === 1 ? "Gift" : "Gifts"}</span>
+          <span className='text-white001 text-labelmb font-SourceSanPro'>{list.length} {list.length === 1 ? "Gift" : "Gifts"}</span>
           {/* <button className="cursor-pointer ml-4 text-primary004">Select All</button> */}
         </div>
         <div onClick={() => setViewMode(viewMode === 'list' ? 'grid' : 'list')}>
