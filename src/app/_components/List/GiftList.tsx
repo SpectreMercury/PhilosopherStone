@@ -7,12 +7,13 @@ import BlindBoxList from './_bList';
 import { fetchGiftAPI } from '@/utils/fetchAPI';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
+import { BlindBoxItemType } from './_bList';
 
 interface GiftListProps {
   onNewGiftClick?: () => void;
   list: QuerySpore[];
   type: string;
-  blindboxList: [];
+  blindboxList: BlindBoxItemType[];
   interactionType?: number
 }
 
