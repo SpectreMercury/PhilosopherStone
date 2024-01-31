@@ -122,7 +122,7 @@ const Receipt: React.FC = () => {
 
   const getTransaction = async () => {
     const transaction = await rpc.getTransaction(pathAddress);
-    // setTransactionStatus(transaction.txStatus.status);
+    setTransactionStatus(transaction.txStatus.status);
     setSporeId(transaction.transaction.outputs[0].type?.args!!)
   }
 
