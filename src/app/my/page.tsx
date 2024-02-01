@@ -115,18 +115,18 @@ const My: React.FC = () => {
     <div className="container mx-auto p-4">
       <div className="flex rounded-md bg-primary011">
         <button
-          className={`flex-1 py-2 m-1 font-semibold text-white font-SourceSanPro ${activeTab === 'Gift' ? 'bg-primary010' : ''} rounded-md`}
+          className={`flex-1 py-2 m-1 text-white font-SourceSanPro ${activeTab === 'Gift' ? 'bg-primary010 text-labelbdmb' : 'text-labelmb text-white005'} rounded-md`}
           onClick={() => setActiveTab('Gift')}
         >
-          Gift
+          My Gifts
         </button>
         <button
-          className={`flex-1 py-1 m-1 font-semibold text-white font-SourceSanPro ${activeTab === 'Blind Box' ? 'text-blue-500 bg-primary010' : ''} rounded-md `}
+          className={`flex-1 py-1 m-1 text-white font-SourceSanPro ${activeTab === 'Blind Box' ? 'bg-primary010 text-labelbdmb' : 'text-labelmb text-white005'} rounded-md `}
           onClick={() => {
             setActiveTab('Blind Box')
           }}
         >
-          Blind Box
+          My Blind Boxes
         </button>
       </div>
       {isSporesLoading && activeTab === 'Gift' ? (
@@ -150,10 +150,10 @@ const My: React.FC = () => {
       )}
 
       <button 
-        className="w-full h-12 text-buttonmb font-SourceSansPro border border-white002 bg-white001 text-primary011 py-2 px-4 rounded"
+        className="w-full h-12 text-buttonmb font-SourceSanPro border border-white002 bg-white001 text-primary011 py-2 px-4 rounded"
         onClick={handleOpenModal}
       >
-        Design {activeTab}
+        Create {activeTab}
       </button>
       {isModalOpen && (
         <CreateModal title={`Create New ${activeTab}`} onClose={handleCloseModal}>

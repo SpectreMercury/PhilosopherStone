@@ -29,8 +29,8 @@ const MeltGiftModal: React.FC<MeltGiftModalProps> = ({ isOpen, onClose, onMelt, 
           After melting the gifts, you will be able to get ≈{amount} CKB back in your wallet. This action cannot be undone.
         </p>
         <div className="flex justify-between mt-4 gap-6">
-          <button onClick={onClose} className="text-center flex-1 border border-primary001 py-4 rounded-lg text-buttonmb font-SourceSansPro">Cancel</button>
-          <button onClick={onMelt} className="text-center flex-1 border border-primary001 py-4 rounded-lg text-buttonmb font-SourceSansPro bg-white001 text-primary011">Melt</button>
+          <button onClick={onClose} className="text-center flex-1 border border-primary001 py-4 rounded-lg text-buttonmb font-SourceSanPro">Cancel</button>
+          <button onClick={onMelt} className="text-center flex-1 border border-primary001 py-4 rounded-lg text-buttonmb font-SourceSanPro bg-white001 text-primary011">Melt</button>
         </div>
       </div>
     </div>

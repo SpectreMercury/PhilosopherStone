@@ -49,7 +49,7 @@ export const fetchBlindBoxAPI = async (
     const data = await response.json();
     return data;
   } catch (error) {
-    enqueueSnackbar('Error fetching data from the blind box API', {variant: 'error'})
+    enqueueSnackbar('Error fetching data from the Blind Box API', {variant: 'error'})
   }
 };
 

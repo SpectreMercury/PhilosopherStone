@@ -19,8 +19,8 @@ export default function Home() {
   return (
     <main className="universe-bg max-w-3xl flex-1 overflow-auto">
       <ReceiveGiftModal isReceiveGiftModalOpen={isGiftReceiveModalOpen} closeReceiveGiftModal={closeGiftReceiveModal} />
-      <div className="text-hd1mb font-Montserrat text-white001 text-center py-12">
-        Philosopher Stone
+      <div className="text-hd1mb font-Montserrat text-white001 text-center py-8">
+        Philosopher&apos;s Stone
       </div>
       {
         walletAddress ? (<UserHome />) : (<GuestHome />)

@@ -21,10 +21,10 @@ const GuestHome = () => {
         Unveil Joy, Share Wonder: Your Surprises, Your Stories, Your Blind Box Adventure!
       </p>
       <button 
-        className="w-[340px] h-[48px] bg-white001 border border-primary003 text-buttonmb font-SourceSansPro text-primary011 py-2 px-4 rounded" 
+        className="w-[340px] h-[48px] bg-white001 border border-primary003 text-buttonmb font-SourceSanPro text-primary011 py-2 px-4 rounded" 
         onClick={() => setShowModal(true)}
       >
-        Connect Wallet
+        Log in
       </button>
       {showModal && <WalletModal onClose={() => setShowModal(false)} />}
     </div>

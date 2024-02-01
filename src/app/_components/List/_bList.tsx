@@ -2,7 +2,7 @@ import React from 'react';
 import BlindBoxItem from './_bListItem';
 import { boxData } from '@/types/BlindBox';
 
-interface BlindBoxItemType {
+export interface BlindBoxItemType {
     id: string;
     boxData: boxData[];
 }

@@ -163,8 +163,8 @@ const Header:React.FC = () => {
               {
                 walletAddress ? (<>
                   <div className='flex justify-between py-4'>
-                    <div className='text-white001 font-semibold font-SourceSanPro text-hd3mb'>My Wallet</div>
-                    <div className='text-white001 font-semibold font-SourceSanPro'>{balance} CKB</div>
+                    <div className='text-white001 font-SourceSanPro text-subheadermb'>My Wallet</div>
+                    <div className='text-white001 font-SourceSanPro text-subheadermb'>{balance} CKB</div>
                   </div>
                   <div className='flex justify-between'>
                     <div className='flex gap-2'>
@@ -182,7 +182,7 @@ const Header:React.FC = () => {
                           height={24}
                         />
                       }
-                      <div className='text-white001 text-labelmb'>{walletAddress.slice(0, 10)}...{walletAddress.slice(walletAddress.length - 10, walletAddress.length)}</div>
+                      <div className='text-white001 font-SourceSanPro text-labelmb'>{walletAddress.slice(0, 10)}...{walletAddress.slice(walletAddress.length - 10, walletAddress.length)}</div>
                     </div>
                     <button onClick={() => {handleCopy(walletAddress)}}>
                       <Image
@@ -194,7 +194,7 @@ const Header:React.FC = () => {
                     </button>
                   </div>
                   <div 
-                    className='border justify-center h-12 my-8 flex items-center rounded-md cursor-pointer text-white001'
+                    className='border justify-center h-12 my-8 flex items-center rounded-md cursor-pointer text-white001 font-SourceSanPro'
                     onClick={handleDisconnect}
                   >
                     
@@ -202,7 +202,7 @@ const Header:React.FC = () => {
                   </div>
                 </>) : (<>
                   <div 
-                    className='border justify-center h-12 my-8 flex items-center rounded-md cursor-pointer text-white001'
+                    className='border justify-center h-12 my-8 flex items-center rounded-md cursor-pointer text-white001 font-SourceSanPro'
                     onClick={() => {setHeaderShowModal(true)}}
                   >
                     Log in

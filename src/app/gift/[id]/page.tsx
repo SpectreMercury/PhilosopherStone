@@ -130,7 +130,7 @@ const Gift: React.FC = () => {
   }, [isSporeLoading, spore?.cell?.cellOutput.capacity])
 
   return (
-    <div className="flex flex-col items-center p-4">
+    <div className="flex flex-col items-center px-4">
       <LoadingOverlay isVisible={isVisible} texts={texts} progressStatus={progressStatus}/>
       <MeltGiftModal onClose={handleMeltModal} amount={occupied} onMelt={handleMelt} isOpen={isMeltModal}/>
       <div className='w-full flex justify-between my-8'>
@@ -174,13 +174,13 @@ const Gift: React.FC = () => {
       </div>
       {giftMessage && <p className="pb-4 font-SourceSanPro text-white001 text-body1mb">“{giftMessage}”</p>}
       <Link 
-        className="w-full h-12 flex justify-center items-center text-buttonmb font-SourceSansPro border border-white002 bg-white001 text-primary011 py-2 px-4 rounded" 
+        className="w-full h-12 flex justify-center items-center text-buttonmb font-SourceSanPro border border-white002 bg-white001 text-primary011 py-2 px-4 rounded" 
         href={`/send?hasGift=${pathAddress}`}
       >
         Send as Gift
       </Link>
       <button 
-        className="w-full h-12 text-buttonmb font-SourceSansPro border border-white002 my-4 py-2 px-4 rounded text-white001" 
+        className="w-full h-12 text-buttonmb font-SourceSanPro border border-white002 my-4 py-2 px-4 rounded text-white001" 
         onClick={handleMeltModal}
       >
         Melt

@@ -14,7 +14,7 @@ const LoadingOverlay: React.FC<LoadingOverlayProps> = ({ isVisible, texts, progr
 
   // Typing and deleting animation for "Philosopher Stone"
   useEffect(() => {
-    let text = 'Philosopher Stone';
+    let text = 'Philosopher\'s Stone';
     let i = 0;
     let isDeleting = false;
 
@@ -59,7 +59,7 @@ const LoadingOverlay: React.FC<LoadingOverlayProps> = ({ isVisible, texts, progr
           width={48}
           height={48}
         />
-        <h1 className=" h-12 text-white001 font-Montserrat text-hd2mb">Philosopher Stone</h1>
+        <h1 className=" h-12 text-white001 font-Montserrat text-hd2mb">Philosopher&apos; Stone</h1>
         <ProgressBar status={progressStatus} />
         <p className="text-white001 font-SourceSanPro mt-4"> {texts[currentIndex]}</p>
       </div>

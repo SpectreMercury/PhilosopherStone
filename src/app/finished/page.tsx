@@ -20,7 +20,7 @@ const Finished: React.FC = () => {
                  Great! Your transaction is underway.
             </div>
             <div className="px-4 text-white001 text-center font-SourceSanPro">
-                Depending on network traffic, it might take a little time to complete. You can always check the status in your <Link className=" text-primary005" target="_blank" href={`/history`}>Gift History</Link>, or visit the <Link className=" text-primary005" target="_blank" href={`https://explorer.nervos.org/transaction/${txHash}`}>CKB Explorer</Link>. Thank you for spreading joy with Philosopher’s Stone! 🌟
+                You&lsquo;ve just shared a delightful surprise. You can keep track of your gift on <Link className=" text-primary005" target="_blank" href={`https://explorer.nervos.org/transaction/${txHash}`}>CKB Explorer</Link>. Thank you for spreading joy with Philosopher&apos;s Stone! 🌟
             </div>
             <Link 
                 target="_blank" href={`https://explorer.nervos.org/transaction/${txHash}`}
