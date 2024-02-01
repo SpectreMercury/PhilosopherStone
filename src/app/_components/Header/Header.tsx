@@ -153,13 +153,19 @@ const Header:React.FC = () => {
       </div>
       {
         isMenuOpen && (
-          <div className='absoulte bg-primary010 w-full top-16 flex flex-col justify-between' style={{ height: `calc(100vh - 64px)`}}>
+          <div 
+            className='absoulte bg-primary010 w-full top-16 flex flex-col justify-between'
+            style={{ 
+              minHeight: 'calc(100vh - 64px)', 
+              paddingBottom: 'env(safe-area-inset-bottom, 20px)'
+            }}
+          >
             <div className='px-4 mt-4'>              
               <MenuList text={"Home"} isActive={isRouteActive('/')} onClick={() => NaviTo('/')} />
               {walletAddress && <MenuList text={"History"} isActive={isRouteActive('/history')} onClick={() => NaviTo('/history')} />}
               <MenuList text={"FAQ"} isActive={isRouteActive('/FAQ')} onClick={() => NaviTo('/FAQ')} />
             </div>
-            <div className='px-4 border-t border-white009'>
+            <div className='px-4 border-t border-white009 sticky bottom-0'>
               {
                 walletAddress ? (<>
                   <div className='flex justify-between py-4'>

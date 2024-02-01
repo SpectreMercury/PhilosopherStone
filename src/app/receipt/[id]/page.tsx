@@ -150,7 +150,7 @@ const Receipt: React.FC = () => {
   }, [isSporeLoading, spore?.cell?.cellOutput.capacity, sporeId])
 
   return (
-    <div className="flex flex-col items-center p-4">
+    <div className="flex flex-col items-center p-4 pb-12">
       <LoadingOverlay isVisible={isVisible} texts={texts} progressStatus={progressStatus}/>
       <MeltGiftModal onClose={handleMeltModal} amount={occupied} onMelt={handleMelt} isOpen={isMeltModal}/>
       <div className='w-full flex justify-between my-8'>
