@@ -253,7 +253,7 @@ const SendGift: React.FC = () => {
           <button 
             onClick={() => {handleSubmit({to: toWalletAddress || GenerateHashKey(hasGift!!)})}}
             disabled={!toWalletAddress}
-            className={`w-full h-12 font-PlayfairDisplay border border-white002 bg-white001 text-primary011 py-2 px-4 rounded flex items-center justify-center
+            className={`w-full h-12 font-SourceSanPro border border-white002 bg-white001 text-primary011 py-2 px-4 rounded flex items-center justify-center
               ${activeTab === 'Wallet Address' && !toWalletAddress && 'opacity-50 cursor-not-allowed'} `}
           >
             {activeTab === 'Wallet Address' ? 'Send Now' : 'Pack Gift'}
