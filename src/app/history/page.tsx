@@ -62,9 +62,10 @@ const History: React.FC = () => {
     }, [walletAddress])
     return (
         <div className={`flex flex-col flex-1 px-4`}>
-            <div className="flex rounded-md bg-primary011 my-8">
+            <h3 className='font-Montserrat text-hd3mb text-white001 mt-8 mb-4'>Gift History</h3>
+            <div className="flex rounded-md bg-primary011">
                 <button
-                    className={`flex-1 py-2 m-1 text-white text-buttonmb font-SourceSanPro ${activeTab === 'Action' ? 'bg-primary010' : ''} rounded-md`}
+                    className={`flex-1 py-2 m-1 font-SourceSanPro ${activeTab === 'Action' ? 'bg-primary010 text-white001 text-labelbdmb' : 'text-labelmb text-white005'} rounded-md`}
                     onClick={() => {
                         setActiveTab('Action')
                     }}
@@ -72,7 +73,7 @@ const History: React.FC = () => {
                     Action
                 </button>
                 <button
-                className={`flex-1 py-1 m-1 text-white text-buttonmb font-SourceSanPro ${activeTab === 'Received' ? 'text-blue-500 bg-primary010' : ''} rounded-md `}
+                className={`flex-1 py-1 m-1 font-SourceSanPro ${activeTab === 'Received' ? 'bg-primary010 text-white001 text-labelbdmb' : 'text-labelmb text-white005'} rounded-md `}
                 onClick={() => {
                     setActiveTab('Received')
                 }}
@@ -80,7 +81,7 @@ const History: React.FC = () => {
                     Received
                 </button>
                 <button
-                className={`flex-1 py-1 m-1 text-white text-buttonmb font-SourceSanPro ${activeTab === 'Key' ? 'text-blue-500 bg-primary010' : ''} rounded-md `}
+                className={`flex-1 py-1 m-1 font-SourceSanPro ${activeTab === 'Key' ? 'bg-primary010 text-white001 text-labelbdmb ' : 'text-labelmb text-white005'} rounded-md `}
                 onClick={() => {
                     setActiveTab('Key')
                 }}
