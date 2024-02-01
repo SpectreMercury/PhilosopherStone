@@ -38,6 +38,11 @@ function RootLayout({
   initConfig(JoyIDConfig)  
   return (
     <html lang="en" className="min-h-full min-w-full">
+      <head>
+        <meta property="og:title" content="Philosopher's Stone" />
+        <meta property="og:description" content="On-Chain Gifting Platform" />
+        <meta property="og:image" content="/svg/ps-og.png" />
+      </head>
       <body className="bg-primary005 bg-no-repeat min-h-full min-w-full m-0">
         <TrpcProvider>
           <ConnectProvider value={config}>
@@ -51,7 +56,7 @@ function RootLayout({
                 <Provider store={store}>
                   <div className="container relative flex flex-col min-h-screen mx-auto sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl">
                     <Header />
-                      <div className="flex-1 flex flex-col w-full bg-gradient-conic">
+                      <div className="flex-1 flex flex-col w-full overflow-y-auto bg-gradient-conic">
                         {children}
                       </div>
                   </div>

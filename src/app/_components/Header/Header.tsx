@@ -117,7 +117,7 @@ const Header:React.FC = () => {
   }, [walletAddress])
 
   return (
-    <div className='flex flex-col'>
+    <div className='flex flex-col sticky top-0 z-50'>
       {showHeaderModal && <WalletModal onClose={() => setHeaderShowModal(false)} />}
       <div 
         className="flex justify-between items-center px-4 py-3 bg-primary010 text-white"
@@ -128,8 +128,8 @@ const Header:React.FC = () => {
         >
           <Image 
             alt={"logo"}
-            src={"/svg/ps-logo.svg"}
-            width={40}
+            src={"/svg/ps-logo-light.svg"}
+            width={174}
             height={40}
           />
         </div>
@@ -156,7 +156,7 @@ const Header:React.FC = () => {
           <div className='absoulte bg-primary010 w-full top-16 flex flex-col justify-between' style={{ height: `calc(100vh - 64px)`}}>
             <div className='px-4 mt-4'>              
               <MenuList text={"Home"} isActive={isRouteActive('/')} onClick={() => NaviTo('/')} />
-              <MenuList text={"History"} isActive={isRouteActive('/history')} onClick={() => NaviTo('/history')} />
+              {walletAddress && <MenuList text={"History"} isActive={isRouteActive('/history')} onClick={() => NaviTo('/history')} />}
               <MenuList text={"FAQ"} isActive={isRouteActive('/FAQ')} onClick={() => NaviTo('/FAQ')} />
             </div>
             <div className='px-4 border-t border-white009'>

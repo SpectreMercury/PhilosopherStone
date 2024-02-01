@@ -133,7 +133,7 @@ const Hashkey: React.FC = () => {
                     <div className='w-full h-full flex flex-col items-center justify-center'>
                         <div className='relativemt-12 flex flex-col items-center'>
                             <Image alt={'collect-pending'} src={`/svg/blindbox-animation-1.svg`} className="rounded mb-8" width={170} height={170}/>
-                            <p className=' text-hd2mb font-SourceSanPro text-white001'>Checking Gift Status On Chian ……</p>
+                            <p className=' text-hd2mb font-SourceSanPro text-white001'>Checking Gift Status On Chain...</p>
                         </div>
                     </div>
                 )
