@@ -112,7 +112,7 @@ const UserHome: React.FC = () => {
 
   
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto p-4 pb-12">
       <div className="flex rounded-md bg-primary011">
         <button
           className={`flex-1 py-2 m-1 text-white font-SourceSanPro ${activeTab === 'Gift' ? 'bg-primary010 text-labelbdmb' : 'text-labelmb text-white005'} rounded-md`}
