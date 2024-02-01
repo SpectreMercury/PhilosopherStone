@@ -166,7 +166,7 @@ const SendGift: React.FC = () => {
       setProgressStatus('done')
       enqueueSnackbar('Gift Send Successful', { variant: 'success' });
       refreshSporesByAddress()
-      router.push(`/finished?tx=${rlt.txHash}`);
+      router.push(`/finished?tx=${rlt.txHash}?type=URL&key=${GenerateHashKey(spore.id)}`);
     },
     [transferSporeMutation],
   );
@@ -239,24 +239,36 @@ const SendGift: React.FC = () => {
               </button>
             </div>
           </div>
-        <div className='flex flex-col px-4'>
-            <p className='text-white001 font-SourceSanPro text-body1bdmb mt-4'>Recipient’s wallet address*</p>
-            <input 
-                id="walletAddress"
-                placeholder='E.g. 0xAbCdEfGhIjKlMnOpQrStUvWxYz0123456789'
-                value={(activeTab === 'URL' && hasGift) ? GenerateHashKey(hasGift) : toWalletAddress}
-                onChange={(e) => setToWalletAddress(e.target.value)}
-                readOnly={activeTab === 'URL'}
-                className='w-full h-12 border rounded-lg bg-primary008 mt-2 px-4 text-white001' />
-        </div>
+        {
+          activeTab === 'URL' && (
+            <>
+              <p className='px-4 mt-4 text-white001 font-SourceSanPro text-labelmb'>For URL delivery, click &#39;Pack Gift&#39; below to get a shareable link.</p>
+            </>
+          )
+        }
+        {
+          activeTab === 'Wallet Address' && (
+            <>
+              <div className='flex flex-col px-4'>
+                  <p className='text-white001 font-SourceSanPro text-body1bdmb mt-4'>Recipient’s wallet address*</p>
+                  <input 
+                      id="walletAddress"
+                      placeholder='E.g. 0xAbCdEfGhIjKlMnOpQrStUvWxYz0123456789'
+                      value={toWalletAddress}
+                      onChange={(e) => setToWalletAddress(e.target.value)}
+                      className='w-full h-12 border rounded-lg bg-primary008 mt-2 px-4 text-white001' />
+              </div>
+            </>
+          )
+        }
         <div className='flex flex-col px-4 my-8'>
           <button 
             onClick={() => {handleSubmit({to: toWalletAddress || GenerateHashKey(hasGift!!)})}}
-            disabled={!toWalletAddress}
+            disabled={!toWalletAddress && activeTab !== 'URL'}
             className={`w-full h-12 font-PlayfairDisplay border border-white002 bg-white001 text-primary011 py-2 px-4 rounded flex items-center justify-center
               ${activeTab === 'Wallet Address' && !toWalletAddress && 'opacity-50 cursor-not-allowed'} `}
           >
-            Send Now
+            Pack Gift
           </button>
         </div>
         
