@@ -62,7 +62,7 @@ const History: React.FC = () => {
     }, [walletAddress])
     return (
         <div className={`flex flex-col flex-1 px-4`}>
-            <h3 className='font-Montserrat text-hd3mb text-white001 mt-8 mb-4'>Gift History</h3>
+            <h3 className='font-Montserrat text-hd3mb text-white001 mt-8 mb-4 text-center'>Gift History</h3>
             <div className="flex rounded-md bg-primary011">
                 <button
                     className={`flex-1 py-2 m-1 font-SourceSanPro ${activeTab === 'Action' ? 'bg-primary010 text-white001 text-labelbdmb' : 'text-labelmb text-white005'} rounded-md`}

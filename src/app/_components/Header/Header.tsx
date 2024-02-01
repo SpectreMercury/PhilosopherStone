@@ -120,7 +120,7 @@ const Header:React.FC = () => {
     <div className='flex flex-col sticky top-0 z-50'>
       {showHeaderModal && <WalletModal onClose={() => setHeaderShowModal(false)} />}
       <div 
-        className="flex justify-between items-center px-4 py-3 bg-primary010 text-white"
+        className="flex justify-between items-center px-4 py-3 bg-primary011 text-white001"
       >
         <div 
           className='cursor-pointer'
