@@ -5,7 +5,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { enqueueSnackbar } from "notistack";
-import { Button } from "@mantine/core";
 
 const Finished: React.FC = () => {
     const searchParams = useSearchParams();
@@ -22,7 +21,7 @@ const Finished: React.FC = () => {
         }
     };
     return (
-        <div className="flex-1 flex items-center justify-center flex-col gap-8 px-4">
+        <div className="universe-bg flex-1 flex items-center justify-center flex-col gap-8 px-4">
             {
                 type === 'URL' ? 
                 (<>
@@ -60,16 +59,22 @@ const Finished: React.FC = () => {
                         src={'/svg/process-bg.svg'}
                     />
                     <div className="px-4 text-white001 text-hd2mb font-Montserrat text-center">
-                        Great! Your transaction is underway.
+                        Great, you&apos;ve sent your Gift!
                     </div>
                     <div className="px-4 text-white001 text-center font-SourceSanPro">
-                        You&lsquo;ve just shared a delightful surprise. You can keep track of your gift on <Link className=" text-primary005" target="_blank" href={`https://explorer.nervos.org/transaction/${txHash}`}>CKB Explorer</Link>. Thank you for spreading joy with Philosopher&apos;s Stone! 🌟
+                        Depending on network traffic, it might take a little time to complete. You can always check the status in your <Link href={'/history'} className='text-linkColor'>Gift History</Link>, or visit the <Link className=" text-linkColor" target="_blank" href={`https://explorer.nervos.org/transaction/${txHash}`}>CKB Explorer</Link>. Thank you for spreading joy with Philosopher&apos;s Stone! 🌟
                     </div>
                     <Link 
-                        target="_blank" href={`https://explorer.nervos.org/transaction/${txHash}`}
-                        className="w-full h-12 font-PlayfairDisplay border border-white002 bg-white001 text-primary011 py-2 px-4 rounded flex items-center justify-center"
+                        href={'/'} 
+                        className='w-full flex items-center justify-center h-12 text-buttonmb font-SourceSansPro border border-white002 bg-white001 text-primary011 py-2 px-4 rounded mt-8'
                     >
-                        View on Explorer
+                        Back to Home
+                    </Link>
+                    <Link 
+                        href={'/history'}
+                        className="mt-6 w-full h-12 text-buttonmb font-SourceSansPro border border-white002 my-4 py-2 px-4 rounded text-white001" 
+                    >
+                        View Gift History
                     </Link>
                 </>)
             }

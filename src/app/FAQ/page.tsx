@@ -7,7 +7,7 @@ import FAQComponent from "@/app/_components/FAQCompent/FAQComponent";
 
 const FAQ:React.FC = () => {
     return (
-        <div className="universe-bg px-4 h-full flex-1 flex flex-col">
+        <div className="universe-bg px-4 h-full flex-1 flex flex-col pb-12">
             <FAQComponent items={FAQData} linkColor='text-primary007' />
             <div className="w-full h-[82px] rounded-md bg-primary010 flex justify-start items-center mt-8 px-4">
                 <div className="w-12 h-12 relative flex items-center mr-3">

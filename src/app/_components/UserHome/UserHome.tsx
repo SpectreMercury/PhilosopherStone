@@ -102,7 +102,7 @@ const UserHome: React.FC = () => {
             />
           </div>
           <p className="text-center my-8 text-white001 text-hd2mb font-Montserrat">
-            Create Your Gift and Let Smiles Bloom!
+            Create Your Gift & Spread Joy!
           </p>
         </div>
       );

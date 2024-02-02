@@ -154,7 +154,7 @@ const Header:React.FC = () => {
       {
         isMenuOpen && (
           <div 
-            className='absoulte bg-primary010 w-full top-16 flex flex-col justify-between'
+            className='absoulte bg-primary011 w-full top-16 flex flex-col justify-between'
             style={{ 
               minHeight: 'calc(100vh - 64px)', 
               paddingBottom: 'env(safe-area-inset-bottom, 20px)'
