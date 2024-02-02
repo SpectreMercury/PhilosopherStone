@@ -16,6 +16,7 @@ const config: Config = {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic':
           'linear-gradient(180deg, #252A48 0%, #0C0F1B 100%);',
+        'desktop-bg': 'linear-gradient(114deg, #414670 11.33%, #2B2C60 52.41%, #393F67 91.04%);'
       },
       colors: {
         'primary001': '#F5F6FF',
