@@ -26,7 +26,7 @@ const BlindBoxPage = () => {
     const data = await fetchBlindBoxAPI({
       action: 'getBoxByName',
       key: walletAddress!!,
-      name: boxName
+      name: decodeURIComponent(boxName)
     })
     setBoxGifts(data.box.boxData)
   }
@@ -161,16 +161,16 @@ const BlindBoxPage = () => {
           selectedGifts.length > 0 && (
             <>
               <button 
-                className="flex-1 h-12 mb-8 text-buttonmb font-SourceSanPro border border-white002 bg-white001 text-primary011 py-2 px-4 rounded"     
+                className="flex-1 h-12 mb-8 text-buttonmb font-SourceSanPro border border-white002 text-white001 py-2 px-4 rounded"     
                 onClick={onRemoveGifts}    
               >
                 Remove Gifts
               </button>
               <button 
-                className="flex-1 h-12 mb-8 text-buttonmb font-SourceSanPro border border-white002 bg-white001 text-primary011 py-2 px-4 rounded"     
+                className="flex-1 h-12 mb-8 text-buttonmb font-SourceSanPro border border-white002 text-white001 py-2 px-4 rounded"     
                 onClick={cancelRemove}    
               >
-                Back
+                Cancel
               </button>
             </>
             
@@ -178,10 +178,10 @@ const BlindBoxPage = () => {
         }
         {boxGifts && boxGifts.length > 0 && selectedGifts.length <= 0 && (
             <>
-              <button className="flex-1 h-12 mb-8 font-PlayfairDisplay border border-white002 bg-white001 text-primary011 py-2 px-4 rounded" onClick={handleOpenModal}>Add Gifts</button>
+              <button className="flex-1 h-12 mb-8 font-SourceSanPro border border-white002 text-white001 py-2 px-4 rounded" onClick={handleOpenModal}>Add Gifts</button>
               <Link 
                 href={`/send?type=BlindBox&name=${decodeURIComponent(boxName)}`}
-                className="flex-1 flex items-center justify-center h-12 mb-8 font-PlayfairDisplay border border-white002 bg-white001 text-primary011 py-2 px-4 rounded"         
+                className="flex-1 flex items-center justify-center h-12 mb-8 font-SourceSanPro border border-white002 bg-white001 text-primary011 py-2 px-4 rounded"         
               >
                 Send Blind Box
               </Link>

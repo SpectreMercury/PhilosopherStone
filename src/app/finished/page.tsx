@@ -24,7 +24,7 @@ const Finished: React.FC = () => {
             </div>
             <Link 
                 target="_blank" href={`https://explorer.nervos.org/transaction/${txHash}`}
-                className="w-full h-12 font-PlayfairDisplay border border-white002 bg-white001 text-primary011 py-2 px-4 rounded flex items-center justify-center"
+                className="w-full h-12 font-SourceSanPro border border-white002 bg-white001 text-primary011 py-2 px-4 rounded flex items-center justify-center"
             >
                 View on Explorer
             </Link>

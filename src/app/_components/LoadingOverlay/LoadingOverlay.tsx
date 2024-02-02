@@ -53,13 +53,13 @@ const LoadingOverlay: React.FC<LoadingOverlayProps> = ({ isVisible, texts, progr
   return (
     <div className="fixed inset-0 bg-primary011 bg-opacity-90 flex items-center justify-center">
       <div className='w-full px-4 flex flex-col items-center justify-center'>
-        <Image 
+        <Image
+          className='mb-8'
           alt={"logo"}
-          src={"/svg/ps-logo.svg"}
-          width={48}
-          height={48}
+          src={"/svg/ps-logo-light.svg"}
+          width={174}
+          height={40}
         />
-        <h1 className=" h-12 text-white001 font-Montserrat text-hd2mb">Philosopher&apos; Stone</h1>
         <ProgressBar status={progressStatus} />
         <p className="text-white001 font-SourceSanPro mt-4"> {texts[currentIndex]}</p>
       </div>

@@ -89,22 +89,6 @@ const GiftList: React.FC<GiftListProps> = ({ onNewGiftClick, list, type, blindbo
         onGiftClick={handleSelectGift}
         isGiftSelected={isGiftSelected}
         viewMode={viewMode} />)}
-
-      {/* Floating add icon */}
-      {width < 1280 &&
-        <div 
-          style={{width: 44, height: 44, position:"fixed", bottom: 32, right: 16}} 
-          className="cursor-pointer flex items-center justify-center rounded-full bg-primary007 text-primary003 text-body1mb" 
-          onClick={onNewGiftClick}>
-            <Image 
-              className="cursor-pointer"
-              alt='add icon'
-              src='/svg/icon-plus.svg'
-              width={24}
-              height={24}
-            />
-        </div>
-      }
     </div>
   );
 };

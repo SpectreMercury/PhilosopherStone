@@ -213,50 +213,50 @@ const SendGift: React.FC = () => {
            {type === 'BlindBox' ? `************` : `${hasGift?.slice(0,10)}......${hasGift?.slice(hasGift.length - 10, hasGift.length)}` }</p>
         </div>
         <div className='flex flex-col px-4'>
-          <p className='text-white001 font-SourceSanPro text-body1bdmb mt-4'>Gift Message</p>
+          <p className='text-white001 font-SourceSanPro text-labelbdmb mt-4'>Gift Message</p>
           <textarea 
             id="message"
             value={message}
-            className='w-full h-24 border rounded-lg bg-primary008 mt-2 px-4 py-2 text-white001' 
+            className='w-full h-24 border border-white009 rounded-lg bg-primary008 mt-2 px-4 py-2 text-white001' 
             onChange={(e) => setMessage(e.target.value)}/>
         </div>
-        <div className='flex flex-col px-4'>
-            <p className='text-white001 font-SourceSanPro text-body1bdmb mt-4'>Delivery method</p>
-            <div className="flex rounded-md bg-primary011 p-1">
+        <div className='flex flex-col px-4 mt-6'>
+            <p className='text-white001 font-SourceSanPro text-labelbdmb'>Delivery method</p>
+            <div className="flex rounded-md bg-primary011 p-1 mt-2">
               <button
-                className={`flex-1 py-3 text-white text-buttonmb font-SourceSanPro ${activeTab === 'Wallet Address' ? 'bg-primary010' : ''} rounded-md`}
-                onClick={() => setActiveTab('Wallet Address')}
-              >
-                Wallet Address
-              </button>
-              <button
-                className={`flex-1 py-3 text-white text-buttonmb font-SourceSanPro ${activeTab === 'URL' ? 'text-blue-500 bg-primary010' : ''} rounded-md `}
+                className={`flex-1 py-3 font-SourceSanPro ${activeTab === 'URL' ? 'bg-primary010 text-labelbdmb text-white001' : 'text-labelmb text-white005'} rounded-md `}
                 onClick={() => {
                   setActiveTab('URL')
                 }}
               >
                 URL
               </button>
+              <button
+                className={`flex-1 py-3 font-SourceSanPro ${activeTab === 'Wallet Address' ? 'bg-primary010 text-labelbdmb text-white001' : 'text-labelmb text-white005'} rounded-md`}
+                onClick={() => setActiveTab('Wallet Address')}
+              >
+                Wallet Address
+              </button>
             </div>
           </div>
-        <div className='flex flex-col px-4'>
-            <p className='text-white001 font-SourceSanPro text-body1bdmb mt-4'>Recipient’s wallet address*</p>
+        <div className='flex flex-col px-4 mt-2'>
+            <p className='text-white001 font-SourceSanPro text-labelmb'>Recipient’s wallet address*</p>
             <input 
                 id="walletAddress"
                 placeholder='E.g. 0xAbCdEfGhIjKlMnOpQrStUvWxYz0123456789'
                 value={(activeTab === 'URL' && hasGift) ? GenerateHashKey(hasGift) : toWalletAddress}
                 onChange={(e) => setToWalletAddress(e.target.value)}
                 readOnly={activeTab === 'URL'}
-                className='w-full h-12 border rounded-lg bg-primary008 mt-2 px-4 text-white001' />
+                className='w-full h-12 border border-white009 rounded-lg bg-primary008 mt-2 px-4 text-white001' />
         </div>
         <div className='flex flex-col px-4 my-8'>
           <button 
             onClick={() => {handleSubmit({to: toWalletAddress || GenerateHashKey(hasGift!!)})}}
             disabled={!toWalletAddress}
-            className={`w-full h-12 font-PlayfairDisplay border border-white002 bg-white001 text-primary011 py-2 px-4 rounded flex items-center justify-center
+            className={`w-full h-12 font-SourceSanPro border border-white002 bg-white001 text-primary011 py-2 px-4 rounded flex items-center justify-center
               ${activeTab === 'Wallet Address' && !toWalletAddress && 'opacity-50 cursor-not-allowed'} `}
           >
-            Send Now
+            {activeTab === 'Wallet Address' ? 'Send Now' : 'Pack Gift'}
           </button>
         </div>
         

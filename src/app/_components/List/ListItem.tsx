@@ -32,7 +32,7 @@ const ListItem: React.FC<ItemProps> = ({ gift, isSelected, onSelect, viewMode, i
         <div className="z-10 absolute inset-0 bg-gray-500 opacity-50 flex justify-center items-center cursor-not-allowed"></div>
       )}
       <div className={`${listView ? 'w-12 h-12 mr-4' : 'h-[120px]'} relative`}>
-        <img alt={gift.id!} src={`/api/media/${gift.id}`} className="rounded max-h-[120px] object-cover w-full"/>
+        <img alt={gift.id!} src={`/api/media/${gift.id}`} className="rounded max-h-[120px] object-cover h-full w-full"/>
       </div>
       <div className="w-[115px] ml-4 h-[80px] flex-grow flex flex-col items-start justify-center">
         <p className="font-SourceSanPro text-body1bdmb text-white001">{gift.id.slice(0,6)}...{gift.id.slice(gift.id.length - 6,gift.id.length)}</p>

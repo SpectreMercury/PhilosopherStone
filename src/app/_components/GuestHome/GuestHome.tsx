@@ -3,12 +3,14 @@
 import React, { useState } from 'react';
 import WalletModal from '../WalletModal/WalletModal';
 import Image from 'next/image';
+import Link from 'next/link';
 
 const GuestHome = () => {
   const [showModal, setShowModal] = useState(false);
 
   return (
     <div className="flex flex-col items-center justify-center">
+      <div className='text-hd1mb font-Montserrat text-white001 align-center my-12'>Philosopher&apos;s Stone</div>
       <div className="w-[340px] h-[170px] bg-cover bg-center">
         <Image 
             width={340}
@@ -26,6 +28,9 @@ const GuestHome = () => {
       >
         Log in
       </button>
+      <Link href={'/FAQ'} className='block mx-auto text-linkColor font-SourceSanPro text-body1mb text-center mt-6'>
+        Learn More
+      </Link>
       {showModal && <WalletModal onClose={() => setShowModal(false)} />}
     </div>
   );
