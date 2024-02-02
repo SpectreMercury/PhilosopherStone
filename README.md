@@ -1,7 +1,8 @@
 
 # Philosopher's Stone
 
-=======
+======= 
+
 <br/>
 <img src="./public/svg/ps-og.png" alt="Philosopher's Stone">
 <br/>
