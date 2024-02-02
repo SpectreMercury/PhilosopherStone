@@ -26,7 +26,6 @@ const Hashkey: React.FC = () => {
     const walletAddress = useSelector((state: RootState) => state.wallet.wallet?.address);
     const [showHeaderModal, setHeaderShowModal] = useState(false);
     const [giftStatus, setGiftStatus] = useState<'pending'|'success'|'notfound'>('pending');
-
     const getHashkeyGift = async(key: string) => {
         let rlt = await fetchHashkeyAPI({
             action: 'getHashKeyGift',
@@ -101,7 +100,7 @@ const Hashkey: React.FC = () => {
 
 
     return (
-        <div className='px-4 flex-1 flex flex-col justify-center'>
+        <div className='px-4 flex-1 flex flex-col'>
             {giftStatus === 'success' && (
                 <>
                     {showHeaderModal && <WalletModal onClose={() => setHeaderShowModal(false)}/>}
@@ -122,28 +121,32 @@ const Hashkey: React.FC = () => {
                                 receiveGift(sporeInfo.sporeId);
                             }
                         }}
-                        className="w-full h-12 mt-2 text-buttonmb font-SourceSansPro border border-white002 bg-white001 text-primary011 py-2 px-4 rounded"
+                        className="w-full h-12 mt-2 font-SourceSansPro border border-white002 bg-white001 text-primary011 text-labelbdmb py-2 px-4 rounded"
                     >
-                        {receiveProcessing ? 'Receiving...' :'Receive it'}
+                        {receiveProcessing ? 'Claiming...' :'Claim Now'}
                     </button>
                 </>)
             }
             {
                 giftStatus === 'pending' && (
                     <div className='w-full h-full flex flex-col items-center justify-center'>
-                        <div className='relativemt-12 flex flex-col items-center'>
-                            <Image alt={'collect-pending'} src={`/svg/blindbox-animation-1.svg`} className="rounded mb-8" width={170} height={170}/>
-                            <p className=' text-hd2mb font-SourceSanPro text-white001'>Checking Gift Status On Chain...</p>
+                        <div className='relativemt-12 flex flex-col items-center mt-12'>
+                            <Image alt={'collect-pending'} src={`/svg/collect-gift-processing.svg`} className="rounded mb-8" width={170} height={170}/>
+                            <p className=' text-hd2mb font-SourceSanPro text-white001 text-center'>A Magical Surprise Awaits – Will It Be Yours?</p>
+                            <p className=' text-labelmb font-SourceSanPro text-white003 text-center mt-8'>🌟 Lucky you! This magical surprise is up for grabs – first come, first served! Are you the fortunate one to claim it? Let’s find out!</p>
                         </div>
                     </div>
                 )
             }
             {
                 giftStatus === 'notfound' && (
-                    <div className='w-full h-full flex flex-col items-center justify-center'>
+                    <div className='w-full h-full flex flex-col items-center justify-center mt-12'>
                         <div className='relativemt-12 flex flex-col items-center'>
-                            <Image alt={'collect-pending'} src={`/svg/melt-404.svg`} className="rounded mb-8" width={170} height={170}/>
-                            <p className=' text-hd2mb font-SourceSanPro text-white001'>Gift is disappearing</p>
+                            <Image alt={'collect-pending'} src={`/svg/fail-collect.svg`} className="rounded mb-8" width={170} height={170}/>
+                            <p className=' text-hd2mb font-SourceSanPro text-white001 text-center'>🎈 Oops! Looks like you just missed a surprise!</p>
+                            <p className=' text-labelmb font-SourceSanPro text-white003 text-center mt-8'>
+                                This gift has already found a new home. But don’t worry, there are plenty more surprises. Keep an eye out for the next magical Gift crafted with Philosopher&#39;s Stone! 🌟
+                            </p>
                         </div>
                         <Link href={'/'} className='w-full flex items-center justify-center h-12 text-buttonmb font-SourceSansPro border border-white002 bg-white001 text-primary011 py-2 px-4 rounded mt-8'>
                             Back to Home
