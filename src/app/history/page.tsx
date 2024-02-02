@@ -62,9 +62,10 @@ const History: React.FC = () => {
     }, [walletAddress])
     return (
         <div className={`flex flex-col flex-1 px-4`}>
-            <div className="flex rounded-md bg-primary011 my-8">
+            <h3 className='font-Montserrat text-hd3mb text-white001 mt-8 mb-4 text-center'>Gift History</h3>
+            <div className="flex rounded-md bg-primary011">
                 <button
-                    className={`flex-1 py-2 m-1 text-white text-buttonmb font-SourceSanPro ${activeTab === 'Action' ? 'bg-primary010' : ''} rounded-md`}
+                    className={`flex-1 py-2 m-1 font-SourceSanPro ${activeTab === 'Action' ? 'bg-primary010 text-white001 text-labelbdmb' : 'text-labelmb text-white005'} rounded-md`}
                     onClick={() => {
                         setActiveTab('Action')
                     }}
@@ -72,7 +73,7 @@ const History: React.FC = () => {
                     Action
                 </button>
                 <button
-                className={`flex-1 py-1 m-1 text-white text-buttonmb font-SourceSanPro ${activeTab === 'Received' ? 'text-blue-500 bg-primary010' : ''} rounded-md `}
+                className={`flex-1 py-1 m-1 font-SourceSanPro ${activeTab === 'Received' ? 'bg-primary010 text-white001 text-labelbdmb' : 'text-labelmb text-white005'} rounded-md `}
                 onClick={() => {
                     setActiveTab('Received')
                 }}
@@ -80,7 +81,7 @@ const History: React.FC = () => {
                     Received
                 </button>
                 <button
-                className={`flex-1 py-1 m-1 text-white text-buttonmb font-SourceSanPro ${activeTab === 'Key' ? 'text-blue-500 bg-primary010' : ''} rounded-md `}
+                className={`flex-1 py-1 m-1 font-SourceSanPro ${activeTab === 'Key' ? 'bg-primary010 text-white001 text-labelbdmb ' : 'text-labelmb text-white005'} rounded-md `}
                 onClick={() => {
                     setActiveTab('Key')
                 }}
@@ -99,8 +100,8 @@ const History: React.FC = () => {
                 (
                     <div className="flex-1 flex justify-center items-center">
                         <div className='px-4 items-center'>
-                            <p className='text-white font-Montserrat text-hd2mb mb-8'>No action history Now</p>
-                            <Link className="flex-1 flex items-center justify-center h-12 mb-8 font-PlayfairDisplay border border-white002 bg-white001 text-primary011 py-2 px-4 rounded" href={'/'}>Create a Gift</Link>
+                            <p className='text-white font-Montserrat text-hd2mb mb-8'>No history now</p>
+                            <Link className="flex-1 flex items-center justify-center h-12 mb-8 font-SourceSanPro border border-white002 bg-white001 text-primary011 py-2 px-4 rounded" href={'/'}>Create Gift</Link>
                         </div>
                     </div>
                 )

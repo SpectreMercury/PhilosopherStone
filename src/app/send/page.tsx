@@ -213,29 +213,29 @@ const SendGift: React.FC = () => {
            {type === 'BlindBox' ? `************` : `${hasGift?.slice(0,10)}......${hasGift?.slice(hasGift.length - 10, hasGift.length)}` }</p>
         </div>
         <div className='flex flex-col px-4'>
-          <p className='text-white001 font-SourceSanPro text-body1bdmb mt-4'>Gift Message</p>
+          <p className='text-white001 font-SourceSanPro text-labelbdmb mt-4'>Gift Message</p>
           <textarea 
             id="message"
             value={message}
-            className='w-full h-24 border rounded-lg bg-primary008 mt-2 px-4 py-2 text-white001' 
+            className='w-full h-24 border border-white009 rounded-lg bg-primary008 mt-2 px-4 py-2 text-white001' 
             onChange={(e) => setMessage(e.target.value)}/>
         </div>
-        <div className='flex flex-col px-4'>
-            <p className='text-white001 font-SourceSanPro text-body1bdmb mt-4'>Delivery method</p>
-            <div className="flex rounded-md bg-primary011 p-1">
+        <div className='flex flex-col px-4 mt-6'>
+            <p className='text-white001 font-SourceSanPro text-labelbdmb'>Delivery method</p>
+            <div className="flex rounded-md bg-primary011 p-1 mt-2">
               <button
-                className={`flex-1 py-3 text-white text-buttonmb font-SourceSanPro ${activeTab === 'Wallet Address' ? 'bg-primary010' : ''} rounded-md`}
-                onClick={() => setActiveTab('Wallet Address')}
-              >
-                Wallet Address
-              </button>
-              <button
-                className={`flex-1 py-3 text-white text-buttonmb font-SourceSanPro ${activeTab === 'URL' ? 'text-blue-500 bg-primary010' : ''} rounded-md `}
+                className={`flex-1 py-3 font-SourceSanPro ${activeTab === 'URL' ? 'bg-primary010 text-labelbdmb text-white001' : 'text-labelmb text-white005'} rounded-md `}
                 onClick={() => {
                   setActiveTab('URL')
                 }}
               >
                 URL
+              </button>
+              <button
+                className={`flex-1 py-3 font-SourceSanPro ${activeTab === 'Wallet Address' ? 'bg-primary010 text-labelbdmb text-white001' : 'text-labelmb text-white005'} rounded-md`}
+                onClick={() => setActiveTab('Wallet Address')}
+              >
+                Wallet Address
               </button>
             </div>
           </div>

@@ -25,8 +25,7 @@ const Hashkey: React.FC = () => {
     const [receiveProcessing, setReceiveProcessing] = useState<boolean>(false);
     const walletAddress = useSelector((state: RootState) => state.wallet.wallet?.address);
     const [showHeaderModal, setHeaderShowModal] = useState(false);
-    const [giftStatus, setGiftStatus] = useState<'pending'|'success'|'notfound'>('notfound');
-
+    const [giftStatus, setGiftStatus] = useState<'pending'|'success'|'notfound'>('pending');
     const getHashkeyGift = async(key: string) => {
         let rlt = await fetchHashkeyAPI({
             action: 'getHashKeyGift',
@@ -35,9 +34,9 @@ const Hashkey: React.FC = () => {
         if(rlt.data) {
             setSporeInfo(rlt.data);
             getGiftInfo(rlt.data.sporeId)
-            // setGiftStatus('success')
+            setGiftStatus('success')
         } else {
-            // setGiftStatus('notfound');
+            setGiftStatus('notfound');
         }
     }
 
