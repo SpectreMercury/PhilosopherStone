@@ -116,6 +116,19 @@ const Header:React.FC = () => {
     return clearInterval(intervalTask);
   }, [walletAddress])
 
+  // Prevent users from scrolling the page when menu is opened
+  useEffect(() => {
+    const handleTouchMove = (e: TouchEvent) => {
+      if (isMenuOpen) {
+        e.preventDefault();
+      }
+    };
+    document.addEventListener('touchmove', handleTouchMove, { passive: false });
+    return () => {
+      document.removeEventListener('touchmove', handleTouchMove);
+    };
+  }, [isMenuOpen]);
+
   return (
     <div className='flex flex-col sticky top-0 z-50'>
       {showHeaderModal && <WalletModal onClose={() => setHeaderShowModal(false)} />}
@@ -154,7 +167,7 @@ const Header:React.FC = () => {
       {
         isMenuOpen && (
           <div 
-            className='absoulte bg-primary010 w-full top-16 flex flex-col justify-between'
+            className='absoulte bg-primary011 w-full top-16 flex flex-col justify-between'
             style={{ 
               minHeight: 'calc(100vh - 64px)', 
               paddingBottom: 'env(safe-area-inset-bottom, 20px)'

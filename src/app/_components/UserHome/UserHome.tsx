@@ -94,16 +94,16 @@ const UserHome: React.FC = () => {
     } else {
       return (
         <div>
-          <div className="relative my-8 h-[180px] bg-gray-200">
+          <div className="relative my-8 min-h-[170px]">
             <Image
               alt='gift'
-              src='/svg/BlindBox.svg'
+              src={`${activeTab === 'Gift' ? '/svg/ps-gift-empty.svg' : '/svg/ps-blindbox-empty.svg'}`}
               layout='fill'
-              objectFit='cover'
+              objectFit='contain'
             />
           </div>
           <p className="text-center my-8 text-white001 text-hd2mb font-Montserrat">
-            Create Your Gift and Let Smiles Bloom!
+            Create Your Gift & Spread Joy!
           </p>
         </div>
       );
@@ -113,8 +113,8 @@ const UserHome: React.FC = () => {
 
   
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="flex rounded-md bg-primary011">
+    <div className="container mx-auto px-4 pb-12">
+      <div className="flex rounded-md bg-primary011 mt-8">
         <button
           className={`flex-1 py-2 m-1 text-white font-SourceSanPro ${activeTab === 'Gift' ? 'bg-primary010 text-labelbdmb' : 'text-labelmb text-white005'} rounded-md`}
           onClick={() => setActiveTab('Gift')}

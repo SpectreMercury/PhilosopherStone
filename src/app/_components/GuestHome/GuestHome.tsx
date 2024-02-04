@@ -10,13 +10,13 @@ const GuestHome = () => {
 
   return (
     <div className="flex flex-col items-center justify-center">
-      <div className='text-hd1mb font-Montserrat text-white001 align-center my-12'>Philosopher&apos;s Stone</div>
-      <div className="w-[340px] h-[170px] bg-cover bg-center">
+      <div className='text-hd1mb font-Montserrat text-white001 text-center my-12'>Philosopher&apos;s Stone</div>
+      <div className="w-full h-auto bg-cover bg-center flex items-center justify-center">
         <Image 
-            width={340}
+            width={343}
             height={170}
             alt='gift demo'
-            src={'/svg/gift.svg'}
+            src={'/svg/ps-welcome.svg'}
         />
       </div>
       <p className="text-center my-12 max-w-[340px] font-SourceSanpro text-body1mb text-white001">

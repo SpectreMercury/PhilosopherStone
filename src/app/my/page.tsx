@@ -97,7 +97,7 @@ const My: React.FC = () => {
           <div className="relative my-8 h-[180px] bg-gray-200">
             <Image
               alt='gift'
-              src='/svg/BlindBox.svg'
+              src='/svg/ps-blindbox-empty.svg'
               layout='fill'
               objectFit='cover'
             />
@@ -138,7 +138,7 @@ const My: React.FC = () => {
           <div className="relative my-8 h-[180px] bg-gray-200">
             <Image
               alt='gift'
-              src='/svg/BlindBox.svg'
+              src='/svg/ps-blindbox-ps.svg'
               layout='fill'
               objectFit='cover'
             />

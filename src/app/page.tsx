@@ -17,7 +17,7 @@ export default function Home() {
   const { isGiftReceiveModalOpen, closeGiftReceiveModal } = useGiftReceiveModal();
 
   return (
-    <main className="universe-bg max-w-3xl flex-1 overflow-auto">
+    <main className="universe-bg max-w-3xl flex-1 rounded-3xl">
       <ReceiveGiftModal isReceiveGiftModalOpen={isGiftReceiveModalOpen} closeReceiveGiftModal={closeGiftReceiveModal} />
       {
         walletAddress ? (<UserHome />) : (<GuestHome />)

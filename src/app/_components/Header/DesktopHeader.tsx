@@ -125,84 +125,82 @@ const DesktopHeader:React.FC = () => {
   }, [walletAddress])
 
   return (
-    <div className='flex flex-col'>
-        {showHeaderModal && <WalletModal onClose={() => setHeaderShowModal(false)} />}
-        <div className="flex justify-between items-center px-4 py-3 bg-primary011 text-white001 font-SourceSanPro">
-            <div 
-                className='cursor-pointer'
-                onClick={backToHome}
-            >
-                <Image 
-                    alt={"logo"}
-                    src={"/svg/ps-logo-light.svg"}
-                    width={174}
-                    height={40}
-                />
-            </div>
+    <>
+      {showHeaderModal && <WalletModal onClose={() => setHeaderShowModal(false)} />}
+      <div className="flex justify-between items-center px-4 py-3 bg-primary011 text-white001 font-SourceSanPro">
+        <div 
+          className='cursor-pointer'
+          onClick={backToHome}
+        >
+          <Image 
+            alt={"logo"}
+            src={"/svg/ps-logo-light.svg"}
+            width={174}
+            height={40}
+          />
+        </div>
         <div className='flex items-center gap-10'>
-            <div className='flex items-center gap-10'>
-                <TabList text='Home' isActive={isRouteActive('/')} onClick={() => NaviTo('/')} />
-                {walletAddress && <TabList text='History' isActive={isRouteActive('/history')} onClick={() => NaviTo('/history')} />}
-                <TabList text='FAQ' isActive={isRouteActive('/FAQ')} onClick={() => NaviTo('/FAQ')} />
-            </div>
-            <div 
-                className='cursor-pointer relative px-4 py-2 bg-primary010 flex items-center text-white001 rounded'
-                onClick={toggleDropdown}
-            >
-                {walletAddress ?
-                    <>
-                        {walletType === 'JoyID' ? 
-                            <Image 
-                                alt='wallet-icon'
-                                src='/svg/joyid-icon.svg'
-                                width={24}
-                                height={24}
-                            />:
-                            <Image 
-                                alt='wallet-icon'
-                                src='/svg/metamask-icon.svg'
-                                width={24}
-                                height={24}
-                            />
-                        }
-                        <p className='ml-4'>{balance} CKB</p>
-                    </>
-                : 
-                    <div 
-                        className='font-SourceSanPro text-buttonmb'
-                        onClick={() => {setHeaderShowModal(true)}}
-                    >
-                        Log in
-                    </div>
+          <TabList text='Home' isActive={isRouteActive('/')} onClick={() => NaviTo('/')} />
+          {walletAddress && <TabList text='History' isActive={isRouteActive('/history')} onClick={() => NaviTo('/history')} />}
+          <TabList text='FAQ' isActive={isRouteActive('/FAQ')} onClick={() => NaviTo('/FAQ')} />
+          <div 
+            className='cursor-pointer relative px-4 py-2 bg-primary010 flex items-center text-white001 rounded'
+            onClick={toggleDropdown}
+          >
+            {walletAddress ?
+              <>
+                {walletType === 'JoyID' ? 
+                  <Image 
+                    alt='wallet-icon'
+                    src='/svg/joyid-icon.svg'
+                    width={24}
+                    height={24}
+                  />:
+                  <Image 
+                    alt='wallet-icon'
+                    src='/svg/metamask-icon.svg'
+                    width={24}
+                    height={24}
+                  />
                 }
-                {isDropdownVisible && walletAddress && (
-                    <div 
-                        ref={dropdownRef} 
-                        className='absolute top-full right-0 rounded bg-primary008 min-w-[280px] py-2 z-50 text-shadow'
-                        style={{boxShadow: '0px -2px 6px 0px rgba(0, 0, 0, 0.16)'}}
-                    >
-                        <div className='px-4 flex justify-between items-center py-3 border-b border-white009'>
-                            <div className='cursor-default font-SourceSanPro text-body1mb'>
-                                {walletAddress.slice(0, 10)}...{walletAddress.slice(walletAddress.length - 10, walletAddress.length)}
-                            </div>
-                            <div className='flex justify-center items-center w-6 h-6 hover:bg-selected' onClick={() => {handleCopy(walletAddress)}}>
-                                <Image
-                                    src='/svg/icon-copy.svg'
-                                    width={18}
-                                    height={18}
-                                    alt='Copy address'
-                                />
-                            </div>
-                        </div>
-                        <button className='px-4 py-3 w-full hover:bg-selected text-left' onClick={handleDisconnect}>
-                            Log out
-                        </button>
-                    </div>
-                )}
-            </div>
+                <p className='ml-4'>{balance} CKB</p>
+              </>
+            : 
+              <div 
+                className='font-SourceSanPro text-buttonmb'
+                onClick={() => {setHeaderShowModal(true)}}
+              >
+                Log in
+              </div>
+            }
+            {isDropdownVisible && walletAddress && (
+              <div 
+                ref={dropdownRef} 
+                className='absolute top-full right-0 rounded bg-primary008 min-w-[280px] py-2 z-50 text-shadow'
+                style={{boxShadow: '0px -2px 6px 0px rgba(0, 0, 0, 0.16)'}}
+              >
+                <div className='px-4 flex justify-between items-center py-3 border-b border-white009'>
+                  <div className='cursor-default font-SourceSanPro text-body1mb'>
+                      {walletAddress.slice(0, 10)}...{walletAddress.slice(walletAddress.length - 10, walletAddress.length)}
+                  </div>
+                  <div className='flex justify-center items-center w-6 h-6 hover:bg-selected' onClick={() => {handleCopy(walletAddress)}}>
+                    <Image
+                        src='/svg/icon-copy.svg'
+                        width={18}
+                        height={18}
+                        alt='Copy address'
+                    />
+                  </div>
+                </div>
+                <button className='px-4 py-3 w-full hover:bg-selected text-left' onClick={handleDisconnect}>
+                    Log out
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
@@ -217,7 +215,7 @@ interface TabListProps {
 const TabList: React.FC<TabListProps> = ({ text, onClick, isActive }) => { 
   return (
     <div 
-      className={`py-1 cursor-pointer ${isActive? 'text-white001 font-body1bdmb': 'text-white005 font-body1mb'}`} 
+      className={`py-1 ${isActive? 'text-white001 text-body1bdmb cursor-default': 'text-white005 text-body1mb cursor-pointer hover:underline'}`} 
       onClick={onClick}
     >
       {text}

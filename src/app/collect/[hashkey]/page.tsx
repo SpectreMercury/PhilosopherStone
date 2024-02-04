@@ -95,20 +95,39 @@ const Hashkey: React.FC = () => {
 
 
     return (
-        <div className='px-4 flex-1 flex flex-col'>
+        <div className='universe-bg px-4 flex-1 flex flex-col rounded-3xl'>
             {giftStatus === 'success' && (
                 <>
                     {showHeaderModal && <WalletModal onClose={() => setHeaderShowModal(false)}/>}
-                    <div className='w-full flex justify-center mt-12'>
-                        <img src={`/api/media/${sporeInfo?.sporeId}`} width={300} height={200} className="px-4" alt="Gift" /> 
+                    <div className='relative mt-10 w-full flex flex-col items-center py-8 px-4 bg-primary008 rounded-md font-SourceSanPro text-white001'>
+                        <Image 
+                            className='absolute top-[6px] left-[6px]'
+                            src='/svg/bg-fireworks.svg'
+                            width={111}
+                            height={108}
+                            alt='decor'
+                        />
+                        <Image 
+                            className='absolute top-0 left-1/2 transform -translate-y-1/2 -translate-x-1/2'
+                            src='/svg/avatar-sender.svg'
+                            width={48}
+                            height={48}
+                            alt='sender&apos;s avatar'
+                        />
+                        <div className='w-full flex justify-center text-body1mb'>
+                           From: {sporeInfo ? formatString(sporeInfo?.senderWalletAddress!!): '*****'}
+                        </div>
+                        <div className='w-full flex justify-center mt-4 text-labelmb text-white003'>
+                            { sporeInfo ? new Date(sporeInfo?.date!!).toLocaleDateString() : '*****'}
+                        </div>
+                        <div className='w-full flex justify-center mt-4'>
+                            <Image src={`/api/media/${sporeInfo?.sporeId}`} width={220} height={170} className="px-4" alt="Gift" /> 
+                        </div>
+                        <div className='w-full flex justify-center mt-4 items-center'>
+                            {giftMessage && <p className="text-body1mb">{giftMessage}</p>}
+                        </div>
+                        
                     </div>
-                    <div className='w-full h-12 bg-primary006 rounded-md flex justify-center mt-8 items-center'>
-                        {giftMessage && <p className="font-SourceSanPro text-white001 text-body1mb">“{giftMessage}”</p>}
-                    </div>
-                    <div className='w-full flex justify-center mt-2'>
-                        <p className="font-SourceSanPro text-white001 text-body1mb">From: [{sporeInfo ? formatString(sporeInfo?.senderWalletAddress!!): '*****'}]</p>
-                    </div>
-                    <div className='w-full flex justify-center mt-2 font-SourceSanPro text-body1mb text-white005'>{ sporeInfo ? formatDate(sporeInfo?.date!!): '----:--:--' }</div>
                     <button 
                         disabled={receiveProcessing}
                         onClick={() => {
@@ -116,7 +135,7 @@ const Hashkey: React.FC = () => {
                                 receiveGift(sporeInfo.sporeId);
                             }
                         }}
-                        className="w-full h-12 mt-2 font-SourceSansPro border border-white002 bg-white001 text-primary011 text-labelbdmb py-2 px-4 rounded"
+                        className="w-full h-12 mt-8 font-SourceSanPro border border-white002 bg-white001 text-primary011 text-buttonmb py-2 px-4 rounded"
                     >
                         {receiveProcessing ? 'Claiming...' :'Claim Now'}
                     </button>
@@ -127,8 +146,8 @@ const Hashkey: React.FC = () => {
                     <div className='w-full h-full flex flex-col items-center justify-center'>
                         <div className='relativemt-12 flex flex-col items-center mt-12'>
                             <Image alt={'collect-pending'} src={`/svg/collect-gift-processing.svg`} className="rounded mb-8" width={170} height={170}/>
-                            <p className=' text-hd2mb font-SourceSanPro text-white001 text-center'>A Magical Surprise Awaits – Will It Be Yours?</p>
-                            <p className=' text-labelmb font-SourceSanPro text-white003 text-center mt-8'>🌟 Lucky you! This magical surprise is up for grabs – first come, first served! Are you the fortunate one to claim it? Let’s find out!</p>
+                            <p className=' text-hd2mb font-Montserrat text-white001 text-center'>A Magical Surprise Awaits &ndash; Will It Be Yours?</p>
+                            <p className=' text-labelmb font-SourceSanPro text-white003 text-center mt-8'>This magical surprise is up for grabs &ndash; first come, first served! Are you the lucky one to claim it? Let&apos;s find out!</p>
                         </div>
                     </div>
                 )
@@ -138,13 +157,13 @@ const Hashkey: React.FC = () => {
                     <div className='w-full h-full flex flex-col items-center justify-center mt-12'>
                         <div className='relativemt-12 flex flex-col items-center'>
                             <Image alt={'collect-pending'} src={`/svg/fail-collect.svg`} className="rounded mb-8" width={170} height={170}/>
-                            <p className=' text-hd2mb font-SourceSanPro text-white001 text-center'>🎈 Oops! Looks like you just missed a surprise!</p>
+                            <p className=' text-hd2mb font-SourceSanPro text-white001 text-center'>🎈 Uh-oh! Looks like you just missed the surprise.</p>
                             <p className=' text-labelmb font-SourceSanPro text-white003 text-center mt-8'>
-                                This gift has already found a new home. But don’t worry, there are plenty more surprises. Keep an eye out for the next magical Gift crafted with Philosopher&#39;s Stone! 🌟
+                                This gift was claimed by someone else. But don&apos;t worry, there are plenty more surprises. Keep an eye out for the next magical Gift crafted with Philosopher&apos;s Stone! 🌟
                             </p>
                         </div>
-                        <Link href={'/'} className='w-full flex items-center justify-center h-12 text-buttonmb font-SourceSansPro border border-white002 bg-white001 text-primary011 py-2 px-4 rounded mt-8'>
-                            Back to Home
+                        <Link href={'/'} className='w-full flex items-center justify-center h-12 text-buttonmb font-SourceSanPro border border-white002 bg-white001 text-primary011 py-2 px-4 rounded mt-8'>
+                            Come Back Later
                         </Link>
                     </div>
                 )

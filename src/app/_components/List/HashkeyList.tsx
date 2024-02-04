@@ -25,7 +25,7 @@ const HashkeyList: React.FC<HistoryListProps> = ({ HashkeyList }) => {
             <div className='flex flex-1 flex-col'>
                 <div className="flex text-white001 border-b border-white009 text-white003 py-2">
                     <div className="flex-1 font-SourceSanPro text-labelmb px-2 py-1">Transaction #</div>
-                    <div className="w-32 font-SourceSanPro text-labelmb px-1 py-1">Key</div>
+                    <div className="w-32 font-SourceSanPro text-labelmb px-1 py-1">Sent URL</div>
                     <div className="w-12 font-SourceSanPro text-labelmb px-1 py-1"></div>
                 </div>
                 {

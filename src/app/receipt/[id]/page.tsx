@@ -135,7 +135,7 @@ const Receipt: React.FC = () => {
   useEffect(() => {
     let type = searchParams.get('type');
     let date = searchParams.get('date');
-    setHistoryType(type || 'create');
+    setHistoryType(type || 'melt');
     date ? setHistoryDate(formatDate(date)): '';
   }, [searchParams])
 
@@ -199,16 +199,16 @@ const Receipt: React.FC = () => {
           />
           {showPopup && (
             <div className="absolute top-full right-0 mt-2 w-80 p-4 bg-primary008 text-white001 shadow-lg rounded-md z-10">
-              <p className='font-SourceSanPro text-labelbdmb'>Hang Tight! Here is Why It Might Take a Bit:</p>
-              <p className='font-SourceSanPro text-labelbd'>Sometimes, the blockchain gets really busy, kind of like traffic during rush hour. This can make things a bit slower. We’re keeping an eye on it to get your transaction through as soon as possible. Thanks for sticking with us!</p>
+              <p className='font-SourceSanPro text-labelbdmb'>Hang Tight! Here’s Why It&apos;s Taking Awhile:</p>
+              <p className='font-SourceSanPro text-labelbd'>Sometimes, the blockchain gets really busy, kind of like traffic during rush hour. This can make things a bit slower. We&apos;re keeping an eye on it to get your transaction through as soon as possible. Thanks for sticking with us!</p>
             </div>
           )}
         </div>
       }
       {
-        transactionStatus === 'commited' && 
+        transactionStatus === 'committed' && 
         <div className='w-full relative flex items-center justify-between bg-success-bg rounded-md text-success-function px-4 border border-success-function font-SourceSanPro text-labelmb py-2'>
-          <p>Pending: This Gift is currently being processed.</p>
+          <p>{`Success: This Gift was ${historyType === 'melt' ? 'melt' : historyType === 'create' ? 'created' : 'sent' } successfully.`}</p>
         </div>
       }
       <div className="py-4 relative">
@@ -223,7 +223,7 @@ const Receipt: React.FC = () => {
         </>)
           :
         (<>{sporeId ? 
-          <img src={`/api/media/${sporeId}`} width={300} height={200} className="px-4" alt="Gift" /> 
+          <Image src={`/api/media/${sporeId}`} width={300} height={200} className="px-4" alt="Gift" /> 
             :
           <Image alt={'unkown-sporeId'} src={`/svg/blindbox-animation-1.svg`} className="rounded" width={164} height={120}/>
         }</>)}
@@ -234,16 +234,16 @@ const Receipt: React.FC = () => {
       <div className='font-SourceSanPro text-body1mb py-4 text-white005'>{ historyDate }</div>
       {giftMessage && <p className="pb-4 font-SourceSanPro text-white001 text-body1m">“{giftMessage}”</p>}
       {
-        transactionStatus === 'commited' && 
+        transactionStatus === 'committed' && historyType === 'created' && 
         <>
           <Link 
-            className="w-full h-12 flex justify-center items-center text-buttonmb font-SourceSansPro border border-white002 bg-white001 text-primary011 py-2 px-4 rounded" 
+            className="w-full h-12 flex justify-center items-center text-buttonmb font-SourceSanPro border border-white002 bg-white001 text-primary011 py-2 px-4 rounded" 
             href={`/send?hasGift=${sporeId}`}
           >
             Send as Gift
           </Link>
           <button 
-            className="w-full h-12 text-buttonmb font-SourceSansPro border border-white002 my-4 py-2 px-4 rounded text-white001" 
+            className="w-full h-12 text-buttonmb font-SourceSanPro border border-white002 my-4 py-2 px-4 rounded text-white001" 
             onClick={handleMeltModal}
           >
             Melt

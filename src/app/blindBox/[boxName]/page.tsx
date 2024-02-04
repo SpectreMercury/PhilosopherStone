@@ -102,7 +102,7 @@ const BlindBoxPage = () => {
   }
 
   return (
-    <div className='flex flex-col flex-1 px-4'>
+    <div className='flex flex-col flex-1 px-4 pb-12'>
       {isModalOpen && 
         <AddGiftsModal 
           onConfirm={onConfirm} 
@@ -160,13 +160,13 @@ const BlindBoxPage = () => {
           selectedGifts.length > 0 && (
             <>
               <button 
-                className="flex-1 h-12 mb-8 text-buttonmb font-SourceSanPro border border-white002 text-white001 py-2 px-4 rounded"     
+                className="flex-1 h-12 text-buttonmb font-SourceSanPro border border-white002 text-white001 py-2 px-4 rounded"     
                 onClick={onRemoveGifts}    
               >
                 Remove Gifts
               </button>
               <button 
-                className="flex-1 h-12 mb-8 text-buttonmb font-SourceSanPro border border-white002 text-white001 py-2 px-4 rounded"     
+                className="flex-1 h-12 text-buttonmb font-SourceSanPro border border-white002 text-white001 py-2 px-4 rounded"     
                 onClick={cancelRemove}    
               >
                 Cancel
@@ -177,10 +177,10 @@ const BlindBoxPage = () => {
         }
         {boxGifts && boxGifts.length > 0 && selectedGifts.length <= 0 && (
             <>
-              <button className="flex-1 h-12 mb-8 font-SourceSanPro border border-white002 text-white001 py-2 px-4 rounded" onClick={handleOpenModal}>Add Gifts</button>
+              <button className="flex-1 h-12 font-SourceSanPro border border-white002 text-white001 py-2 px-4 rounded" onClick={handleOpenModal}>Add Gifts</button>
               <Link 
                 href={`/send?type=BlindBox&name=${decodeURIComponent(boxName)}`}
-                className="flex-1 flex items-center justify-center h-12 mb-8 font-SourceSanPro border border-white002 bg-white001 text-primary011 py-2 px-4 rounded"         
+                className="flex-1 flex items-center justify-center h-12 font-SourceSanPro border border-white002 bg-white001 text-primary011 py-2 px-4 rounded"         
               >
                 Send Blind Box
               </Link>

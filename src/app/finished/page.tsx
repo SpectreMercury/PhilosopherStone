@@ -5,13 +5,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { enqueueSnackbar } from "notistack";
-import { Button } from "@mantine/core";
 
 const Finished: React.FC = () => {
     const searchParams = useSearchParams();
     const txHash = searchParams.get('tx');
     const type = searchParams.get('type');
     const key = searchParams.get('key');
+    const tweetText = encodeURIComponent(`🌠 I just created a box of gifts with #PhilosopherStone! Don’t miss out on this one-of-a-kind surprise. Claim it here: ${window.location.protocol}//${window.location.host}/collect/${key} 🎁 Feel free to melt it into #CKB if it's not your cup of tea. ✨ \n\n #NFT #Gift #SporeProtocol #Web3`);
 
     const handleCopy = async () => {
         try {
@@ -22,7 +22,7 @@ const Finished: React.FC = () => {
         }
     };
     return (
-        <div className="flex-1 flex items-center justify-center flex-col gap-8 px-4">
+        <div className="universe-bg flex-1 flex items-center justify-center flex-col gap-8 px-4 pb-12 rounded-3xl">
             {
                 type === 'URL' ? 
                 (<>
@@ -41,13 +41,13 @@ const Finished: React.FC = () => {
                         value={`${window.location.protocol}//${window.location.host}/collect/${key}`}/>
                     <button 
                         onClick={handleCopy}
-                        className="w-full h-12 font-PlayfairDisplay border border-white002 bg-white001 text-primary011 py-2 px-4 rounded flex items-center justify-center"
+                        className="w-full h-12 font-SourceSanPro text-buttonmb border border-white002 bg-white001 text-primary011 py-2 px-4 rounded flex items-center justify-center"
                     >
                         Copy Link
                     </button>
                     <Link 
-                        target="_blank" href={`https://twitter.com/intent/tweet?text=🌠 I just used #PhilosopherStone to create a unique gift just for you! Don’t miss out on this one-of-a-kind surprise. Claim it here: ${`${window.location.protocol}//${window.location.host}/collect/${key}`} 🎁 Feel free to melt it into #CKB if it's not your cup of tea. ✨ #NFT #Gift  #SporeProtocol #Web3`}
-                        className="w-full h-12 font-PlayfairDisplay border border-white002 text-white001 py-2 px-4 rounded flex items-center justify-center"
+                        target="_blank" href={`https://twitter.com/intent/tweet?text=${tweetText}`}
+                        className="w-full h-12 font-SourceSanPro text-buttonmb border border-white002 text-white001 py-2 px-4 rounded flex items-center justify-center"
                     >
                         Share on Twitter
                     </Link>
@@ -59,17 +59,23 @@ const Finished: React.FC = () => {
                         alt='gift demo'
                         src={'/svg/process-bg.svg'}
                     />
-                    <div className="px-4 text-white001 text-hd2mb font-Montserrat text-center">
-                        Great! Your transaction is underway.
+                    <div className="text-white001 text-hd2mb font-Montserrat text-center">
+                        Great, you&apos;ve sent your Gift!
                     </div>
-                    <div className="px-4 text-white001 text-center font-SourceSanPro">
-                        You&lsquo;ve just shared a delightful surprise. You can keep track of your gift on <Link className=" text-primary005" target="_blank" href={`https://explorer.nervos.org/transaction/${txHash}`}>CKB Explorer</Link>. Thank you for spreading joy with Philosopher&apos;s Stone! 🌟
+                    <div className="text-white001 text-center font-SourceSanPro">
+                        Depending on network traffic, it might take a little time to complete. You can always check the status in your <Link href={'/history'} className='text-linkColor'>Gift History</Link>, or visit the <Link className=" text-linkColor" target="_blank" href={`https://explorer.nervos.org/transaction/${txHash}`}>CKB Explorer</Link>. Thank you for spreading joy with Philosopher&apos;s Stone! 🌟
                     </div>
                     <Link 
-                        target="_blank" href={`https://explorer.nervos.org/transaction/${txHash}`}
-                        className="w-full h-12 font-PlayfairDisplay border border-white002 bg-white001 text-primary011 py-2 px-4 rounded flex items-center justify-center"
+                        href={'/'} 
+                        className='w-full flex items-center justify-center h-12 text-buttonmb font-SourceSanPro border border-white002 bg-white001 text-primary011 py-2 px-4 rounded mt-6'
                     >
-                        View on Explorer
+                        Back to Home
+                    </Link>
+                    <Link 
+                        href={'/history'}
+                        className="w-full flex items-center justify-center h-12 text-buttonmb font-SourceSanPro border border-white002 py-2 px-4 rounded text-white001" 
+                    >
+                        View Gift History
                     </Link>
                 </>)
             }
