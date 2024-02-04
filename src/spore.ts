@@ -9,8 +9,7 @@ import {
 import pick from 'lodash-es/pick';
 import { isSupportedMIMEType } from './utils/mime';
 import { uniqBy } from 'lodash-es';
-import { sporeConfig } from './utils/config';
-// import { Cluster } from './cluster';
+import { sporeConfig } from '@/utils/config';
 
 export interface Spore {
   id: string;
@@ -39,7 +38,7 @@ export default class SporeService {
     this.rpc = new RPC(this.config.ckbNodeUrl);
   }
 
-  public static shared = new SporeService(sporeConfig.lumos);
+  public static shared = new SporeService(sporeConfig);
 
   private static getSporeFromCell(cell: Cell, includeContent?: boolean): Spore {
     const unpacked = SporeData.unpack(cell.data);

@@ -46,10 +46,12 @@ export default function useEstimatedOnChainSize(
               type.hashType === sporeScript.hashType
             );
           });
+        console.log('est try: ', address)
 
         const capacity = BI.from(cell?.cellOutput.capacity ?? 0);
         return Math.ceil(capacity.toNumber() / 10 ** 8);
       } catch (error) {
+        console.log('est catch: ', address)
         return Math.ceil(content.size);
       }
     };

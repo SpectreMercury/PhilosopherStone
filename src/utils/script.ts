@@ -1,6 +1,6 @@
 import { predefinedSporeConfigs } from '@spore-sdk/core';
 import { BI, Script } from '@ckb-lumos/lumos';
-import { sporeConfig } from './config';
+import { sporeConfig } from '@/utils/config';
 
 type ScriptName =
   keyof (typeof sporeConfig)['lumos']['SCRIPTS'];

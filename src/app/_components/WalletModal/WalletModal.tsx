@@ -11,7 +11,7 @@ const WalletModal: React.FC<WalletModalProps> = ({ onClose }) => {
     if (name === 'JoyID') {
       // connectJoyID()
       let connectors = connect()
-      // connectors!![0].connect()
+      connectors!![0].connect()
       onClose()
     }
 

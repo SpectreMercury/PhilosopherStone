@@ -131,7 +131,7 @@ const CreateGift: React.FC<CreateGiftProps> = ({ onClose }) => {
       return;
     }
     showOverlay();
-    console.log(walletAddress);
+    console.log('create spore address: ', walletAddress);
     try {
       const contentBuffer = await content.arrayBuffer();
       const contentType = content.type || getMIMETypeByName(content.name);

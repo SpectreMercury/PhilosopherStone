@@ -1,6 +1,6 @@
 import { RPC, Transaction } from '@ckb-lumos/lumos';
 import { predefinedSporeConfigs } from '@spore-sdk/core';
-import { sporeConfig } from './config';
+import { sporeConfig } from '@/utils/config';
 
 export async function sendTransaction(tx: Transaction) {
   const rpc = new RPC(sporeConfig.ckbNodeUrl);
