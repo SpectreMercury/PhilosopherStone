@@ -23,7 +23,6 @@ async function withErrorHandling<T extends any[]>(
 
 async function getAddress() {
   const privateKey = process.env.PRIVATE_WALLET_KEY;
-  console.log(privateKey);
   if (!privateKey) {
     throw new Error("Key Error");
   }
