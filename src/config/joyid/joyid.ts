@@ -7,7 +7,8 @@ interface JoyIDConfigProps {
 
 export const JoyIDConfig:JoyIDConfigProps = {
     name: 'philosopherstone',
-    logo:'',
-    joyidAppURL:"https://testnet.joyid.dev",
+    logo: '',
+    // joyidAppURL:"https://testnet.joyid.dev",
+    joyidAppURL:"https://app.joy.id/",
     network: "testnet"
 }

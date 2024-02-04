@@ -18,7 +18,7 @@ export default class JoyIdConnector extends CKBConnector {
 
     initConfig({
       name: 'Philosopherstone',
-      joyidAppURL: 'https://testnet.joyid.dev',
+      joyidAppURL: "https://app.joy.id/",
     });
   }
 

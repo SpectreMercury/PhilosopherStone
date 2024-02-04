@@ -15,6 +15,8 @@ import { GiftReceiveModalProvider } from "./context/GiftReceiveModalContext";
 import DesktopHeader from "./_components/Header/DesktopHeader";
 import useWindowDimensions from '@/hooks/getWindowDimension';
 import Image from "next/image";
+import { predefinedSporeConfigs, setSporeConfig } from "@spore-sdk/core";
+import { predefined } from "@ckb-lumos/config-manager";
 
 const StyledMaterialDesignContent = styled(MaterialDesignContent)(() => ({
   '&.notistack-MuiContent-success': {
@@ -39,7 +41,8 @@ function RootLayout({
   children: React.ReactNode;
 }) {
   const { width } = useWindowDimensions();
-  initConfig(JoyIDConfig)  
+  setSporeConfig(predefinedSporeConfigs.Mainnet);
+  // initConfig(JoyIDConfig)  
   return (
     <html lang="en" className="min-h-full min-w-full">
       <head>
