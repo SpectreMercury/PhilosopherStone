@@ -40,7 +40,7 @@ export default function useEstimatedOnChainSize(
           .filter((output) => isSameScript(output.cellOutput.lock, lock))
           .find((output) => {
             const { type } = output.cellOutput;
-            const { script: sporeScript } = getSporeScript(predefinedSporeConfigs.Aggron4, 'Spore');
+            const { script: sporeScript } = getSporeScript(sporeConfig, 'Spore');
             return (
               type?.codeHash === sporeScript.codeHash &&
               type.hashType === sporeScript.hashType

@@ -127,10 +127,11 @@ const CreateGift: React.FC<CreateGiftProps> = ({ onClose }) => {
     clusterId: string | undefined,
     useCapacityMargin?: boolean,
   ) => {
-    if (!content || !walletAddress || !lock) {
+    if (!content || !address || !lock) {
       return;
     }
     showOverlay();
+    console.log(walletAddress);
     try {
       const contentBuffer = await content.arrayBuffer();
       const contentType = content.type || getMIMETypeByName(content.name);
@@ -140,7 +141,7 @@ const CreateGift: React.FC<CreateGiftProps> = ({ onClose }) => {
           content: new Uint8Array(contentBuffer),
           clusterId,
         },
-        fromInfos: [walletAddress],
+        fromInfos: [address],
         toLock: lock,
         config: sporeConfig,
         // @ts-ignore
