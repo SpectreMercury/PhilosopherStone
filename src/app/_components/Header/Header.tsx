@@ -116,6 +116,19 @@ const Header:React.FC = () => {
     return clearInterval(intervalTask);
   }, [walletAddress])
 
+  // Prevent users from scrolling the page when menu is opened
+  useEffect(() => {
+    const handleTouchMove = (e: TouchEvent) => {
+      if (isMenuOpen) {
+        e.preventDefault();
+      }
+    };
+    document.addEventListener('touchmove', handleTouchMove, { passive: false });
+    return () => {
+      document.removeEventListener('touchmove', handleTouchMove);
+    };
+  }, [isMenuOpen]);
+
   return (
     <div className='flex flex-col sticky top-0 z-50'>
       {showHeaderModal && <WalletModal onClose={() => setHeaderShowModal(false)} />}

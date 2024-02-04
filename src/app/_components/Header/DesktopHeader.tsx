@@ -215,7 +215,7 @@ interface TabListProps {
 const TabList: React.FC<TabListProps> = ({ text, onClick, isActive }) => { 
   return (
     <div 
-      className={`py-1 cursor-pointer ${isActive? 'text-white001 font-body1bdmb': 'text-white005 font-body1mb'}`} 
+      className={`py-1 ${isActive? 'text-white001 text-body1bdmb cursor-default': 'text-white005 text-body1mb cursor-pointer hover:underline'}`} 
       onClick={onClick}
     >
       {text}

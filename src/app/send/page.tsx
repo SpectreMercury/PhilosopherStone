@@ -179,7 +179,7 @@ const SendGift: React.FC = () => {
   }, [isSporeLoading, spore?.cell?.cellOutput.capacity])
 
   return (
-    <div className="container universe-bg mx-auto">
+    <div className="container universe-bg mx-auto rounded-3xl">
       <LoadingOverlay isVisible={isVisible} texts={texts} progressStatus={progressStatus}/>
       <div>
         <div className='flex justify-center mt-8 flex-col items-center text-white001'>
@@ -266,7 +266,7 @@ const SendGift: React.FC = () => {
           <button 
             onClick={() => {handleSubmit({to: toWalletAddress || GenerateHashKey(hasGift!!)})}}
             disabled={!toWalletAddress && activeTab !== 'URL'}
-            className={`w-full h-12 font-PlayfairDisplay border border-white002 bg-white001 text-primary011 py-2 px-4 rounded flex items-center justify-center
+            className={`w-full h-12 font-SourceSanPro border border-white002 bg-white001 text-primary011 py-2 px-4 rounded flex items-center justify-center
               ${activeTab === 'Wallet Address' && !toWalletAddress && 'opacity-50 cursor-not-allowed'} `}
           >
             Pack Gift

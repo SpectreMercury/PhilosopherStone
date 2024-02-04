@@ -92,12 +92,12 @@ function RootLayout({
                   error: StyledMaterialDesignContent
                 }}>
                 <Provider store={store}>
-                  {width >= 640 && <div className="w-full mb-8"><DesktopHeader /></div>}
+                  {width >= 640 && <div className="sticky top-0 left-0 w-full mb-8 z-50"><DesktopHeader /></div>}
                   <div className="container relative flex flex-col min-h-screen mx-auto sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl">
                     {width < 640 && <Header />}
                     <div 
-                      className={`flex-1 flex flex-col w-full overflow-y-auto overscroll-y-contain bg-gradient-conic ${width < 640 ? 'rounded-none' : 'rounded-3xl'}`}
-                      style={{boxShadow: '0px -2px 4px 0px rgba(0, 0, 0, 0.25)', maxHeight: 'calc(var(--vh, 1vh) * 100 - 64px)'}}
+                      className={`flex-1 flex flex-col w-full overscroll-y-contain bg-gradient-conic ${width < 640 ? 'rounded-none' : 'rounded-3xl'}`}
+                      style={{boxShadow: '0px -2px 4px 0px rgba(0, 0, 0, 0.25)', minHeight: 'calc(var(--vh, 1vh) * 100 - 64px)'}}
                     >
                       {children}
                     </div>

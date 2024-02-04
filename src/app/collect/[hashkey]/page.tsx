@@ -100,7 +100,7 @@ const Hashkey: React.FC = () => {
 
 
     return (
-        <div className='universe-bg px-4 flex-1 flex flex-col'>
+        <div className='universe-bg px-4 flex-1 flex flex-col rounded-3xl'>
             {giftStatus === 'success' && (
                 <>
                     {showHeaderModal && <WalletModal onClose={() => setHeaderShowModal(false)}/>}
@@ -140,7 +140,7 @@ const Hashkey: React.FC = () => {
                                 receiveGift(sporeInfo.sporeId);
                             }
                         }}
-                        className="w-full h-12 mt-8 font-SourceSansPro border border-white002 bg-white001 text-primary011 text-buttonmb py-2 px-4 rounded"
+                        className="w-full h-12 mt-8 font-SourceSanPro border border-white002 bg-white001 text-primary011 text-buttonmb py-2 px-4 rounded"
                     >
                         {receiveProcessing ? 'Claiming...' :'Claim Now'}
                     </button>
@@ -167,7 +167,7 @@ const Hashkey: React.FC = () => {
                                 This gift was claimed by someone else. But don&apos;t worry, there are plenty more surprises. Keep an eye out for the next magical Gift crafted with Philosopher&apos;s Stone! 🌟
                             </p>
                         </div>
-                        <Link href={'/'} className='w-full flex items-center justify-center h-12 text-buttonmb font-SourceSansPro border border-white002 bg-white001 text-primary011 py-2 px-4 rounded mt-8'>
+                        <Link href={'/'} className='w-full flex items-center justify-center h-12 text-buttonmb font-SourceSanPro border border-white002 bg-white001 text-primary011 py-2 px-4 rounded mt-8'>
                             Come Back Later
                         </Link>
                     </div>

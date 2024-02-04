@@ -22,7 +22,7 @@ const Finished: React.FC = () => {
         }
     };
     return (
-        <div className="universe-bg flex-1 flex items-center justify-center flex-col gap-8 px-4">
+        <div className="universe-bg flex-1 flex items-center justify-center flex-col gap-8 px-4 pb-12 rounded-3xl">
             {
                 type === 'URL' ? 
                 (<>
@@ -41,13 +41,13 @@ const Finished: React.FC = () => {
                         value={`${window.location.protocol}//${window.location.host}/collect/${key}`}/>
                     <button 
                         onClick={handleCopy}
-                        className="w-full h-12 font-PlayfairDisplay border border-white002 bg-white001 text-primary011 py-2 px-4 rounded flex items-center justify-center"
+                        className="w-full h-12 font-SourceSanPro text-buttonmb border border-white002 bg-white001 text-primary011 py-2 px-4 rounded flex items-center justify-center"
                     >
                         Copy Link
                     </button>
                     <Link 
                         target="_blank" href={`https://twitter.com/intent/tweet?text=${tweetText}`}
-                        className="w-full h-12 font-PlayfairDisplay border border-white002 text-white001 py-2 px-4 rounded flex items-center justify-center"
+                        className="w-full h-12 font-SourceSanPro text-buttonmb border border-white002 text-white001 py-2 px-4 rounded flex items-center justify-center"
                     >
                         Share on Twitter
                     </Link>
@@ -67,13 +67,13 @@ const Finished: React.FC = () => {
                     </div>
                     <Link 
                         href={'/'} 
-                        className='w-full flex items-center justify-center h-12 text-buttonmb font-SourceSansPro border border-white002 bg-white001 text-primary011 py-2 px-4 rounded mt-6'
+                        className='w-full flex items-center justify-center h-12 text-buttonmb font-SourceSanPro border border-white002 bg-white001 text-primary011 py-2 px-4 rounded mt-6'
                     >
                         Back to Home
                     </Link>
                     <Link 
                         href={'/history'}
-                        className="w-full flex items-center justify-center h-12 text-buttonmb font-SourceSansPro border border-white002 py-2 px-4 rounded text-white001" 
+                        className="w-full flex items-center justify-center h-12 text-buttonmb font-SourceSanPro border border-white002 py-2 px-4 rounded text-white001" 
                     >
                         View Gift History
                     </Link>

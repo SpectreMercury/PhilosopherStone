@@ -130,7 +130,7 @@ const Gift: React.FC = () => {
   }, [isSporeLoading, spore?.cell?.cellOutput.capacity])
 
   return (
-    <div className="universe-bg flex flex-col items-center px-4">
+    <div className="universe-bg flex flex-col items-center px-4 pb-12 rounded-3xl">
       <LoadingOverlay isVisible={isVisible} texts={texts} progressStatus={progressStatus}/>
       <MeltGiftModal onClose={handleMeltModal} amount={occupied} onMelt={handleMelt} isOpen={isMeltModal}/>
       <div className='w-full flex justify-between my-8'>
@@ -166,21 +166,21 @@ const Gift: React.FC = () => {
           </Link>
         </div>
       </div>
-      <div className="py-4">
-        <img src={`/api/media/${pathAddress}`} width={300} height={200} className="px-4" alt="Gift" />
+      <div className="mb-6">
+        <Image src={`/api/media/${pathAddress}`} width={300} height={200} alt="Gift" />
       </div>
-      <div className='text-white001 font-Montserrat text-hd2mb pb-4'>
+      <div className='text-white001 font-Montserrat text-hd2mb mb-6'>
         {occupied} CKB 
       </div>
       {giftMessage && <p className="pb-4 font-SourceSanPro text-white001 text-body1mb">“{giftMessage}”</p>}
       <Link 
-        className="w-full h-12 flex justify-center items-center text-buttonmb font-SourceSanPro border border-white002 bg-white001 text-primary011 py-2 px-4 rounded" 
+        className="w-full h-12 flex justify-center items-center text-buttonmb font-SourceSanPro border border-white002 bg-white001 text-primary011 mb-4 rounded" 
         href={`/send?hasGift=${pathAddress}`}
       >
         Send as Gift
       </Link>
       <button 
-        className="w-full h-12 text-buttonmb font-SourceSanPro border border-white002 my-4 py-2 px-4 rounded text-white001" 
+        className="w-full h-12 text-buttonmb font-SourceSanPro border border-white002 rounded text-white001" 
         onClick={handleMeltModal}
       >
         Melt
