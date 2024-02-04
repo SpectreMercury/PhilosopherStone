@@ -25,6 +25,7 @@ import useLumosScript from '@/hooks/useUpdateLumosConfig';
 import { getLumosScript } from '@/utils/updateLumosConfig';
 import { predefined } from '@ckb-lumos/lumos/config';
 import { fetchHistoryAPI } from '@/utils/fetchAPI';
+import { sporeConfig } from '@/utils/config';
 
 interface CreateGiftProps {
   onClose?: () => void; //
@@ -126,13 +127,10 @@ const CreateGift: React.FC<CreateGiftProps> = ({ onClose }) => {
     clusterId: string | undefined,
     useCapacityMargin?: boolean,
   ) => {
-    if (!content || !walletAddress || !lock) {
+    if (!content || !address || !lock) {
       return;
     }
     showOverlay();
-    const latestLumosScript = await getLumosScript();
-    let latest = JSON.parse(JSON.stringify(predefinedSporeConfigs.Aggron4))
-    latest['lumos'] = latestLumosScript
     try {
       const contentBuffer = await content.arrayBuffer();
       const contentType = content.type || getMIMETypeByName(content.name);
@@ -142,9 +140,9 @@ const CreateGift: React.FC<CreateGiftProps> = ({ onClose }) => {
           content: new Uint8Array(contentBuffer),
           clusterId,
         },
-        fromInfos: [walletAddress],
+        fromInfos: [address],
         toLock: lock,
-        config: latest,
+        config: sporeConfig,
         // @ts-ignore
         capacityMargin: useCapacityMargin ? BI.from(100_000_000) : BI.from(0),
       });
@@ -276,7 +274,7 @@ const CreateGift: React.FC<CreateGiftProps> = ({ onClose }) => {
               <img src={image.preview} alt={`uploaded ${index}`} className="w-16 h-16 object-cover" />
               <div>
                 <p className='w-32 text-white001 text-body1mb font-SourceSanPro overflow-hidden overflow-ellipsis whitespace-nowrap'>{image.file.name}</p>
-                <p className='text-white003 text-labelmb font-SourceSanPro'> ~ {onChainSize} CKB</p>
+                <p className='text-white003 text-labelmb font-SourceSanPro'> ~ {onChainSize + 111} CKB</p>
               </div>
             </div>
             <div className='cursor-pointer' onClick={() => handleRemoveImage(index)}>
@@ -299,12 +297,12 @@ const CreateGift: React.FC<CreateGiftProps> = ({ onClose }) => {
           <div className='flex flex-col items-center mt-6'>
             <div className='flex items-center mb-2'>
               <div className='text-white003 font-SourceSanPro text-labelmb mr-2'>Total On-Chain Cost: </div>
-              <div className='text-white001 font-SourceSanPro text-labelbdmb'>{` ~${onChainSize} CKB`}</div>
+              <div className='text-white001 font-SourceSanPro text-labelbdmb'>{` ~${onChainSize + 111} CKB`}</div>
             </div>
-            {balance - onChainSize >= 1 ?
+            {balance - onChainSize - 111 >= 1 ?
               <div className='flex items-center'>
                 <div className='text-white003 font-SourceSanPro text-labelmb mr-2'>Remaining Balance: </div>
-                <div className='text-white001 font-SourceSanPro text-labelbdmb'>{` ~${balance - onChainSize} CKB`}</div>
+                <div className='text-white001 font-SourceSanPro text-labelbdmb'>{` ~${balance - onChainSize - 111} CKB`}</div>
               </div>
               :
               <div className='text-light-error-function font-SourceSanPro text-labelmb'>Not enough CKB in your wallet</div>

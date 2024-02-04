@@ -6,7 +6,7 @@ import { transferSpore as _transferSpore, predefinedSporeConfigs } from '@spore-
 import { QuerySpore } from '@/hooks/useQuery/type';
 import { useSporeQuery } from '@/hooks/useQuery/useQuerybySpore';
 import { BI, OutPoint, config, helpers } from '@ckb-lumos/lumos';
-import { fetchBlindBoxAPI, fetchGiftAPI, fetchHashkeyAPI, fetchHistoryAPI } from '@/utils/fetchAPI';
+import { fetchBlindBoxAPI, fetchGiftAPI, fetchHashkeyAPI, fetchHistoryAPI, fetchWalletAPI } from '@/utils/fetchAPI';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { boxData } from '@/types/BlindBox';
@@ -23,7 +23,7 @@ import { GiftProps } from '@/types/Gifts';
 import { values } from 'lodash';
 import { HashkeyObj, SporeItem } from '@/types/Hashkey';
 import { GenerateHashKey } from '@/utils/common';
-import { getAccounts } from '@/utils/transferSporeWithAgent';
+import { sporeConfig } from '@/utils/config';
 
 const SendGift: React.FC = () => {
   const router = useRouter();
@@ -91,7 +91,6 @@ const SendGift: React.FC = () => {
       const { txSkeleton, outputIndex } = await _transferSpore(...args);
       //@ts-ignore
       const signedTx = await signTransaction(txSkeleton);
-      console.log(signedTx);
       const txHash = await sendTransaction(signedTx);
       return {
         txHash,
@@ -138,23 +137,24 @@ const SendGift: React.FC = () => {
   const handleSubmit = useCallback(
     async (values: { to: string }) => {
       showOverlay(); 
-      const accounts = await getAccounts();
-      //update lumos setting 
-      const latestLumosScript = await getLumosScript();
-      let latest = JSON.parse(JSON.stringify(predefinedSporeConfigs.Aggron4))
-      latest['lumos'] = latestLumosScript
       if (!walletAddress || (!values.to && activeTab === 'Wallet Address') || !spore) {
         return;
       }
       //update wallet address by activeTab
-      let toAddress = activeTab === 'Wallet Address' ? values.to : accounts.AGENT.address;
+      let toAddress = values.to
+      if(activeTab === 'URL') {
+        let rlt = await fetchWalletAPI({
+          action: 'getAddress'
+        });
+        toAddress = rlt.address;
+      }
       let rlt = await transferSporeMutation.mutateAsync({
         outPoint: spore.cell?.outPoint!,
         fromInfos: [walletAddress!!],
         toLock: helpers.parseAddress(toAddress, {
-          config: config.predefined.AGGRON4,
+          config: sporeConfig.lumos,
         }),
-        config: latest,
+        config: sporeConfig,
         useCapacityMarginAsFee: true,
       });
       await saveHashKey(GenerateHashKey(spore.id), {sporeId: spore.id, senderWalletAddress: walletAddress!!, txHash: rlt.txHash })
@@ -166,11 +166,10 @@ const SendGift: React.FC = () => {
       setProgressStatus('done')
       enqueueSnackbar('Gift Send Successful', { variant: 'success' });
       refreshSporesByAddress()
-      router.push(`/finished?tx=${rlt.txHash}`);
+      router.push(`/finished?tx=${rlt.txHash}?type=URL&key=${GenerateHashKey(spore.id)}`);
     },
     [transferSporeMutation],
   );
-
 
   useEffect(() => {
     if(!isSporeLoading) {
@@ -213,50 +212,62 @@ const SendGift: React.FC = () => {
            {type === 'BlindBox' ? `************` : `${hasGift?.slice(0,10)}......${hasGift?.slice(hasGift.length - 10, hasGift.length)}` }</p>
         </div>
         <div className='flex flex-col px-4'>
-          <p className='text-white001 font-SourceSanPro text-body1bdmb mt-4'>Gift Message</p>
+          <p className='text-white001 font-SourceSanPro text-labelbdmb mt-4'>Gift Message</p>
           <textarea 
             id="message"
             value={message}
-            className='w-full h-24 border rounded-lg bg-primary008 mt-2 px-4 py-2 text-white001' 
+            className='w-full h-24 border border-white009 rounded-lg bg-primary008 mt-2 px-4 py-2 text-white001' 
             onChange={(e) => setMessage(e.target.value)}/>
         </div>
-        <div className='flex flex-col px-4'>
-            <p className='text-white001 font-SourceSanPro text-body1bdmb mt-4'>Delivery method</p>
-            <div className="flex rounded-md bg-primary011 p-1">
+        <div className='flex flex-col px-4 mt-6'>
+            <p className='text-white001 font-SourceSanPro text-labelbdmb'>Delivery method</p>
+            <div className="flex rounded-md bg-primary011 p-1 mt-2">
               <button
-                className={`flex-1 py-3 text-white text-buttonmb font-SourceSanPro ${activeTab === 'Wallet Address' ? 'bg-primary010' : ''} rounded-md`}
-                onClick={() => setActiveTab('Wallet Address')}
-              >
-                Wallet Address
-              </button>
-              <button
-                className={`flex-1 py-3 text-white text-buttonmb font-SourceSanPro ${activeTab === 'URL' ? 'text-blue-500 bg-primary010' : ''} rounded-md `}
+                className={`flex-1 py-3 font-SourceSanPro ${activeTab === 'URL' ? 'bg-primary010 text-labelbdmb text-white001' : 'text-labelmb text-white005'} rounded-md `}
                 onClick={() => {
                   setActiveTab('URL')
                 }}
               >
                 URL
               </button>
+              <button
+                className={`flex-1 py-3 font-SourceSanPro ${activeTab === 'Wallet Address' ? 'bg-primary010 text-labelbdmb text-white001' : 'text-labelmb text-white005'} rounded-md`}
+                onClick={() => setActiveTab('Wallet Address')}
+              >
+                Wallet Address
+              </button>
             </div>
           </div>
-        <div className='flex flex-col px-4'>
-            <p className='text-white001 font-SourceSanPro text-body1bdmb mt-4'>Recipient’s wallet address*</p>
-            <input 
-                id="walletAddress"
-                placeholder='E.g. 0xAbCdEfGhIjKlMnOpQrStUvWxYz0123456789'
-                value={(activeTab === 'URL' && hasGift) ? GenerateHashKey(hasGift) : toWalletAddress}
-                onChange={(e) => setToWalletAddress(e.target.value)}
-                readOnly={activeTab === 'URL'}
-                className='w-full h-12 border rounded-lg bg-primary008 mt-2 px-4 text-white001' />
-        </div>
+        {
+          activeTab === 'URL' && (
+            <>
+              <p className='px-4 mt-4 text-white001 font-SourceSanPro text-labelmb'>For URL delivery, click &#39;Pack Gift&#39; below to get a shareable link.</p>
+            </>
+          )
+        }
+        {
+          activeTab === 'Wallet Address' && (
+            <>
+              <div className='flex flex-col px-4'>
+                  <p className='text-white001 font-SourceSanPro text-body1bdmb mt-4'>Recipient’s wallet address*</p>
+                  <input 
+                      id="walletAddress"
+                      placeholder='E.g. 0xAbCdEfGhIjKlMnOpQrStUvWxYz0123456789'
+                      value={toWalletAddress}
+                      onChange={(e) => setToWalletAddress(e.target.value)}
+                      className='w-full h-12 border rounded-lg bg-primary008 mt-2 px-4 text-white001' />
+              </div>
+            </>
+          )
+        }
         <div className='flex flex-col px-4 my-8'>
           <button 
             onClick={() => {handleSubmit({to: toWalletAddress || GenerateHashKey(hasGift!!)})}}
-            disabled={!toWalletAddress}
+            disabled={!toWalletAddress && activeTab !== 'URL'}
             className={`w-full h-12 font-PlayfairDisplay border border-white002 bg-white001 text-primary011 py-2 px-4 rounded flex items-center justify-center
               ${activeTab === 'Wallet Address' && !toWalletAddress && 'opacity-50 cursor-not-allowed'} `}
           >
-            Send Now
+            Pack Gift
           </button>
         </div>
         

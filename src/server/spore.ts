@@ -1,6 +1,7 @@
 // import ClusterService from '@/cluster';
 import { publicProcedure, router } from '@/server/trpc';
 import SporeService from '@/spore';
+import { sporeConfig } from '@/utils/config';
 import { BI, config, helpers } from '@ckb-lumos/lumos';
 import z from 'zod';
 
@@ -36,7 +37,7 @@ export const sporeRouter = router({
       const getSpores = async () => {
         if (owner) {
           const lock = helpers.parseAddress(owner, {
-            config: config.predefined.AGGRON4,
+            config: sporeConfig.lumos,
           });
           return await SporeService.shared.listByLock(
             lock,
@@ -68,7 +69,7 @@ export const sporeRouter = router({
       const getSpores = async () => {
         if (owner) {
           const lock = helpers.parseAddress(owner, {
-            config: config.predefined.AGGRON4,
+            config: sporeConfig.lumos,
           });
           return await SporeService.shared.listByLock(lock, undefined, options);
         }

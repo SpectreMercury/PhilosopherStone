@@ -3,6 +3,7 @@ import { useConnect } from './useConnect';
 import { createSpore, getSporeScript, predefinedSporeConfigs } from '@spore-sdk/core';
 import { BI } from '@ckb-lumos/lumos';
 import { isSameScript } from '@/utils/script';
+import { sporeConfig } from '@/utils/config';
 
 export default function useEstimatedOnChainSize(
   clusterId: string | undefined,
@@ -29,7 +30,7 @@ export default function useEstimatedOnChainSize(
           },
           fromInfos: [address],
           toLock: lock,
-          config: predefinedSporeConfigs.Aggron4,
+          config: sporeConfig,
           // @ts-ignore
           capacityMargin: useCapacityMargin ? BI.from(100_000_000) : BI.from(0),
         });
@@ -39,13 +40,12 @@ export default function useEstimatedOnChainSize(
           .filter((output) => isSameScript(output.cellOutput.lock, lock))
           .find((output) => {
             const { type } = output.cellOutput;
-            const { script: sporeScript } = getSporeScript(predefinedSporeConfigs.Aggron4, 'Spore');
+            const { script: sporeScript } = getSporeScript(sporeConfig, 'Spore');
             return (
               type?.codeHash === sporeScript.codeHash &&
               type.hashType === sporeScript.hashType
             );
           });
-
         const capacity = BI.from(cell?.cellOutput.capacity ?? 0);
         return Math.ceil(capacity.toNumber() / 10 ** 8);
       } catch (error) {

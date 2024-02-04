@@ -1,4 +1,4 @@
-const RPC_URL = 'https://testnet.ckb.dev/';
+const RPC_URL = 'https://mainnet.ckb.dev/';
 
 const getTransaction = async (txHash: string) => {
   try {

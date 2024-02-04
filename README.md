@@ -1,4 +1,9 @@
+
 # Philosopher's Stone
+
+<br/>
+<img src="./public/svg/ps-og.png" alt="Philosopher's Stone">
+<br/>
 
 Philosopher's Stone pioneers a new paradigm for digital gifting built on the [Spore protocol](https://spore.pro/). It maximizes excitement and delight by crafting magical surprises - sending completely customizable NFT gifts for special occasions directly on-chain.
 
@@ -44,4 +49,4 @@ https://philosopher-stone-phi.vercel.app/
 To submit pull requests, make sure:
 
 - Please submit pull requests based on the `beta` branch
-- Please ensure your commit styling won't conflict with the [existing commits](https://github.com/sporeprotocol/spore-sdk/commits)
+- Please ensure your commit styling won't conflict with the [existing commits](https://github.com/lee920217/PhilosopherStone/commits)
