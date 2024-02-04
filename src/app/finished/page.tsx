@@ -58,21 +58,21 @@ const Finished: React.FC = () => {
                         alt='gift demo'
                         src={'/svg/process-bg.svg'}
                     />
-                    <div className="px-4 text-white001 text-hd2mb font-Montserrat text-center">
+                    <div className="text-white001 text-hd2mb font-Montserrat text-center">
                         Great, you&apos;ve sent your Gift!
                     </div>
-                    <div className="px-4 text-white001 text-center font-SourceSanPro">
+                    <div className="text-white001 text-center font-SourceSanPro">
                         Depending on network traffic, it might take a little time to complete. You can always check the status in your <Link href={'/history'} className='text-linkColor'>Gift History</Link>, or visit the <Link className=" text-linkColor" target="_blank" href={`https://explorer.nervos.org/transaction/${txHash}`}>CKB Explorer</Link>. Thank you for spreading joy with Philosopher&apos;s Stone! 🌟
                     </div>
                     <Link 
                         href={'/'} 
-                        className='w-full flex items-center justify-center h-12 text-buttonmb font-SourceSansPro border border-white002 bg-white001 text-primary011 py-2 px-4 rounded mt-8'
+                        className='w-full flex items-center justify-center h-12 text-buttonmb font-SourceSansPro border border-white002 bg-white001 text-primary011 py-2 px-4 rounded mt-6'
                     >
                         Back to Home
                     </Link>
                     <Link 
                         href={'/history'}
-                        className="mt-6 w-full h-12 text-buttonmb font-SourceSansPro border border-white002 my-4 py-2 px-4 rounded text-white001" 
+                        className="w-full flex items-center justify-center h-12 text-buttonmb font-SourceSansPro border border-white002 py-2 px-4 rounded text-white001" 
                     >
                         View Gift History
                     </Link>
