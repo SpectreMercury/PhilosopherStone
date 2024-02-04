@@ -49,8 +49,6 @@ const UserHome: React.FC = () => {
   }
 
   const getBlindBoxData = async () => {
-    const la = await getLumosScript();
-    console.log(la);
     const response = await fetch('/api/blindbox', {
       method: 'POST',
       headers: {

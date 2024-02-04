@@ -134,7 +134,6 @@ const CreateGift: React.FC<CreateGiftProps> = ({ onClose }) => {
     try {
       const contentBuffer = await content.arrayBuffer();
       const contentType = content.type || getMIMETypeByName(content.name);
-      console.log(address);
       const spore = await addSporeMutation.mutateAsync({
         data: {
           contentType,

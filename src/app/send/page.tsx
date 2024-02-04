@@ -91,7 +91,6 @@ const SendGift: React.FC = () => {
       const { txSkeleton, outputIndex } = await _transferSpore(...args);
       //@ts-ignore
       const signedTx = await signTransaction(txSkeleton);
-      console.log(signedTx);
       const txHash = await sendTransaction(signedTx);
       return {
         txHash,

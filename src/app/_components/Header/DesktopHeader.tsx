@@ -41,7 +41,6 @@ const DesktopHeader:React.FC = () => {
     Object.keys(inProcessingGifts.data).map(async (txHash: string) => {
       const transaction = await rpc.getTransaction(txHash);
       const transactionStatus = transaction.txStatus.status;
-      console.log(transactionStatus);
       if (transactionStatus === 'committed') {
         await fetchGiftAPI({
           action: 'removeUnavailableGifts',

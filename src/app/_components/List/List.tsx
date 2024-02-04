@@ -22,7 +22,6 @@ interface GiftListProps {
 }
 
 const List: React.FC<GiftListProps> = ({ gifts, onGiftClick, isGiftSelected, onNewGiftClick, viewMode, interactionType = 1, disableList }) => {
-  console.log('heihei')
   return (
     <div className='mb-8'>
       <div className={`${viewMode === 'list' ? 'flex flex-col' : 'grid grid-cols-2 gap-4'} mt-4`}>

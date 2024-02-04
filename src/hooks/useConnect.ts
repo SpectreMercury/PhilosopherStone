@@ -35,7 +35,6 @@ export const useConnect = () => {
 
   const getCells = async () => {
     let cells = await SporeService.shared.getNewOmnilock()
-    console.log(cells[0])
     return cells[0]
   }
 

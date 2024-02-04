@@ -8,6 +8,5 @@ export const getLumosScript = async () => {
     const MAINNET_CKB_RPC_URL = "https://mainnet.ckb.dev/rpc";
     const rpc = new RPC(process.env.NODE_ENV === 'development' ? MAINNET_CKB_RPC_URL: MAINNET_CKB_RPC_URL)
     const refreshed = await refreshScriptConfigs(predefined.LINA.SCRIPTS, {resolve: createRpcResolver(rpc)})
-    console.log(refreshed)
     return {SCRIPTS: refreshed, PREFIX: 'ckt'}
 }
