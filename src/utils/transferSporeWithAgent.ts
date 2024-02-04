@@ -1,8 +1,6 @@
 import { predefinedSporeConfigs } from '@spore-sdk/core';
 import { createSecp256k1Wallet } from './agentWallet';
 import { getLumosScript } from './updateLumosConfig';
-import { hd } from '@ckb-lumos/lumos';
-import { key } from '@ckb-lumos/hd/lib';
 
 /**
  * SporeConfig provides spore/cluster's detailed info like ScriptIds and CellDeps.

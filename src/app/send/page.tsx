@@ -6,7 +6,7 @@ import { transferSpore as _transferSpore, predefinedSporeConfigs } from '@spore-
 import { QuerySpore } from '@/hooks/useQuery/type';
 import { useSporeQuery } from '@/hooks/useQuery/useQuerybySpore';
 import { BI, OutPoint, config, helpers } from '@ckb-lumos/lumos';
-import { fetchBlindBoxAPI, fetchGiftAPI, fetchHashkeyAPI, fetchHistoryAPI } from '@/utils/fetchAPI';
+import { fetchBlindBoxAPI, fetchGiftAPI, fetchHashkeyAPI, fetchHistoryAPI, fetchWalletAPI } from '@/utils/fetchAPI';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { boxData } from '@/types/BlindBox';
@@ -138,7 +138,7 @@ const SendGift: React.FC = () => {
   const handleSubmit = useCallback(
     async (values: { to: string }) => {
       showOverlay(); 
-      const accounts = await getAccounts();
+      // const accounts = await getAccounts();
       //update lumos setting 
       const latestLumosScript = await getLumosScript();
       let latest = JSON.parse(JSON.stringify(predefinedSporeConfigs.Aggron4))
@@ -147,7 +147,13 @@ const SendGift: React.FC = () => {
         return;
       }
       //update wallet address by activeTab
-      let toAddress = activeTab === 'Wallet Address' ? values.to : accounts.AGENT.address;
+      let toAddress = values.to
+      if(activeTab === 'URL') {
+        let rlt = await fetchWalletAPI({
+          action: 'getAddress'
+        });
+        toAddress = rlt.address;
+      }
       let rlt = await transferSporeMutation.mutateAsync({
         outPoint: spore.cell?.outPoint!,
         fromInfos: [walletAddress!!],
@@ -170,7 +176,6 @@ const SendGift: React.FC = () => {
     },
     [transferSporeMutation],
   );
-
 
   useEffect(() => {
     if(!isSporeLoading) {
