@@ -41,7 +41,7 @@ function RootLayout({
   children: React.ReactNode;
 }) {
   const { width } = useWindowDimensions();
-  setSporeConfig(predefinedSporeConfigs.Mainnet);
+  // setSporeConfig(predefinedSporeConfigs.Mainnet);
   // initConfig(JoyIDConfig)  
   return (
     <html lang="en" className="min-h-full min-w-full">

@@ -10,5 +10,5 @@ export const JoyIDConfig:JoyIDConfigProps = {
     logo: '',
     // joyidAppURL:"https://testnet.joyid.dev",
     joyidAppURL:"https://app.joy.id/",
-    network: "testnet"
+    network: "mainnet"
 }

@@ -8,6 +8,7 @@ import * as omnilock from './lock/omnilock';
 import { isSameScript } from '@/utils/script';
 import { bytes } from '@ckb-lumos/codec';
 import store from '@/store/store';
+import { sporeConfig } from '@/utils/config';
 
 export default class JoyIdConnector extends CKBConnector {
   public type: string = 'JoyID';
@@ -41,12 +42,12 @@ export default class JoyIdConnector extends CKBConnector {
     if (!ethAddress) {
       return;
     }
-    config.initializeConfig(config.predefined.AGGRON4);
+    config.initializeConfig(sporeConfig.lumos);
     const lock = commons.omnilock.createOmnilockScript({
       auth: { flag: 'ETHEREUM', content: ethAddress ?? '0x' },
     });
     const address = helpers.encodeToAddress(lock, {
-      config: config.predefined.AGGRON4,
+      config: sporeConfig.lumos,
     });
     this.setData({
       address,

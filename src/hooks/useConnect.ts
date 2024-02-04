@@ -2,6 +2,7 @@ import CKBConnector from '@/connectors/base';
 import SporeService from '@/spore';
 import { RootState } from '@/store/store';
 import { WalletInfo } from '@/store/walletSlice';
+import { sporeConfig } from '@/utils/config';
 import { Script, Transaction, config, helpers } from '@ckb-lumos/lumos';
 import { enqueueSnackbar } from 'notistack';
 import {
@@ -40,7 +41,7 @@ export const useConnect = () => {
 
   const lock = useMemo(() => {
     if (!address) return undefined;
-    return helpers.parseAddress(address, { config: config.predefined.AGGRON4 });
+    return helpers.parseAddress(address, { config: sporeConfig.lumos });
   }, [address]);
 
   const connector = useMemo(

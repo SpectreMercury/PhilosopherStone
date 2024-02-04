@@ -24,6 +24,7 @@ import { values } from 'lodash';
 import { HashkeyObj, SporeItem } from '@/types/Hashkey';
 import { GenerateHashKey } from '@/utils/common';
 import { getAccounts } from '@/utils/transferSporeWithAgent';
+import { getLumosConfigs } from '@/utils/config';
 
 const SendGift: React.FC = () => {
   const router = useRouter();
@@ -138,11 +139,7 @@ const SendGift: React.FC = () => {
   const handleSubmit = useCallback(
     async (values: { to: string }) => {
       showOverlay(); 
-      // const accounts = await getAccounts();
-      //update lumos setting 
-      const latestLumosScript = await getLumosScript();
-      let latest = JSON.parse(JSON.stringify(predefinedSporeConfigs.Aggron4))
-      latest['lumos'] = latestLumosScript
+      const latest = await getLumosConfigs();
       if (!walletAddress || (!values.to && activeTab === 'Wallet Address') || !spore) {
         return;
       }
@@ -158,7 +155,7 @@ const SendGift: React.FC = () => {
         outPoint: spore.cell?.outPoint!,
         fromInfos: [walletAddress!!],
         toLock: helpers.parseAddress(toAddress, {
-          config: config.predefined.AGGRON4,
+          config: latest,
         }),
         config: latest,
         useCapacityMarginAsFee: true,
