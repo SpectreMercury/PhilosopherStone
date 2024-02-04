@@ -1,21 +1,18 @@
 // components/Faq.tsx
 import React, { useState } from 'react';
-import ReactMarkdown from 'react-markdown';
 import { useRouter } from 'next/navigation';
-import remarkGfm from 'remark-gfm';
 import Image from 'next/image';
 
 interface FaqItem {
   question: string;
-  answer: string;
+  answer: string | React.JSX.Element;
 }
 
 interface FaqProps {
   items: FaqItem[];
-  linkColor: string;
 }
 
-const FAQComponent: React.FC<FaqProps> = ({ items, linkColor }) => {
+const FAQComponent: React.FC<FaqProps> = ({ items }) => {
   const router = useRouter();
   const [openItemIndex, setOpenItemIndex] = useState<number | null>(null);
 
@@ -64,9 +61,9 @@ const FAQComponent: React.FC<FaqProps> = ({ items, linkColor }) => {
           </div>
           {openItemIndex === index && (
             <div className="pb-4 text-white001">
-              <ReactMarkdown className={`text-white003 font-SourceSanPro text-body1mb link-color-${linkColor}`} remarkPlugins={[remarkGfm]}>
+              <div className={`text-white003 font-SourceSanPro text-body1mb`}>
                 {item.answer}
-              </ReactMarkdown>
+              </div>
             </div>
           )}
         </div>
