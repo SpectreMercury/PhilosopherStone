@@ -23,8 +23,7 @@ import { GiftProps } from '@/types/Gifts';
 import { values } from 'lodash';
 import { HashkeyObj, SporeItem } from '@/types/Hashkey';
 import { GenerateHashKey } from '@/utils/common';
-import { getAccounts } from '@/utils/transferSporeWithAgent';
-import { getLumosConfigs } from '@/utils/config';
+import { sporeConfig } from '@/utils/config';
 
 const SendGift: React.FC = () => {
   const router = useRouter();
@@ -139,7 +138,6 @@ const SendGift: React.FC = () => {
   const handleSubmit = useCallback(
     async (values: { to: string }) => {
       showOverlay(); 
-      const latest = await getLumosConfigs();
       if (!walletAddress || (!values.to && activeTab === 'Wallet Address') || !spore) {
         return;
       }
@@ -155,9 +153,9 @@ const SendGift: React.FC = () => {
         outPoint: spore.cell?.outPoint!,
         fromInfos: [walletAddress!!],
         toLock: helpers.parseAddress(toAddress, {
-          config: latest,
+          config: sporeConfig.lumos,
         }),
-        config: latest,
+        config: sporeConfig,
         useCapacityMarginAsFee: true,
       });
       await saveHashKey(GenerateHashKey(spore.id), {sporeId: spore.id, senderWalletAddress: walletAddress!!, txHash: rlt.txHash })

@@ -25,6 +25,7 @@ import useLumosScript from '@/hooks/useUpdateLumosConfig';
 import { getLumosScript } from '@/utils/updateLumosConfig';
 import { predefined } from '@ckb-lumos/lumos/config';
 import { fetchHistoryAPI } from '@/utils/fetchAPI';
+import { sporeConfig } from '@/utils/config';
 
 interface CreateGiftProps {
   onClose?: () => void; //
@@ -130,12 +131,10 @@ const CreateGift: React.FC<CreateGiftProps> = ({ onClose }) => {
       return;
     }
     showOverlay();
-    const latestLumosScript = await getLumosScript();
-    let latest = JSON.parse(JSON.stringify(predefinedSporeConfigs.Aggron4))
-    latest['lumos'] = latestLumosScript
     try {
       const contentBuffer = await content.arrayBuffer();
       const contentType = content.type || getMIMETypeByName(content.name);
+      console.log(address);
       const spore = await addSporeMutation.mutateAsync({
         data: {
           contentType,
@@ -144,7 +143,7 @@ const CreateGift: React.FC<CreateGiftProps> = ({ onClose }) => {
         },
         fromInfos: [walletAddress],
         toLock: lock,
-        config: latest,
+        config: sporeConfig,
         // @ts-ignore
         capacityMargin: useCapacityMargin ? BI.from(100_000_000) : BI.from(0),
       });

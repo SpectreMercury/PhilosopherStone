@@ -1,4 +1,5 @@
 import { createSecp256k1Wallet } from "@/utils/agentWallet";
+import { sporeConfig } from "@/utils/config";
 import { getLumosScript } from "@/utils/updateLumosConfig";
 import { helpers } from "@ckb-lumos/lumos";
 import { predefinedSporeConfigs } from "@spore-sdk/core";
@@ -26,20 +27,15 @@ async function getAddress() {
   if (!privateKey) {
     throw new Error("Key Error");
   }
-  const latestLumosScript = await getLumosScript();
-  let latest = JSON.parse(JSON.stringify(predefinedSporeConfigs.Aggron4))
-  latest['lumos'] = latestLumosScript 
-  const wallet = await createSecp256k1Wallet(privateKey, latest);
+  const wallet = await createSecp256k1Wallet(privateKey, sporeConfig);
 
   return NextResponse.json({ wallet, address: wallet.address });
 }
 
 async function signAndSendTransaction(txSkeleton: helpers.TransactionSkeletonType) {
   const privateKey = process.env.PRIVATE_WALLET_KEY;
-  const latestLumosScript = await getLumosScript();
-  let latest = JSON.parse(JSON.stringify(predefinedSporeConfigs.Aggron4))
-  latest['lumos'] = latestLumosScript
-  const wallet = createSecp256k1Wallet(privateKey!!, latest);
+
+  const wallet = createSecp256k1Wallet(privateKey!!, sporeConfig);
   const transactionHash = await wallet.signAndSendTransaction(txSkeleton);
   return NextResponse.json({ txHash: transactionHash }, { status: 200 });
 }
