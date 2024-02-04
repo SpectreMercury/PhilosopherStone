@@ -62,6 +62,7 @@ export default class JoyIdConnector extends CKBConnector {
       return;
     }
     const ethAddress = await connect();
+    console.log(ethAddress)
     this.setAddress(ethAddress);
     this.isConnected = true;
   }
