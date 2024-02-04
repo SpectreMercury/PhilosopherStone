@@ -1,4 +1,5 @@
 import { getSporeById, unpackToRawSporeData, predefinedSporeConfigs } from '@spore-sdk/core';
+import { sporeConfig } from '@/utils/config';
 
 export async function GET(_: Request, { params }: { params: { id: string } }) {
   const { id } = params;
@@ -7,7 +8,7 @@ export async function GET(_: Request, { params }: { params: { id: string } }) {
   }
 
   try {
-    const cell = await getSporeById(id, predefinedSporeConfigs.Aggron4);
+    const cell = await getSporeById(id, sporeConfig);
     const spore = unpackToRawSporeData(cell.data);
     const buffer = Buffer.from(spore.content.toString().slice(2), 'hex');
     return new Response(buffer, {

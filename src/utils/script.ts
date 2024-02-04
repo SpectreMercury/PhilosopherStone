@@ -1,11 +1,12 @@
 import { predefinedSporeConfigs } from '@spore-sdk/core';
 import { BI, Script } from '@ckb-lumos/lumos';
+import { sporeConfig } from '@/utils/config';
 
 type ScriptName =
-  keyof (typeof predefinedSporeConfigs)['Aggron4']['lumos']['SCRIPTS'];
+  keyof (typeof sporeConfig)['lumos']['SCRIPTS'];
 
 export function getScriptConfig(name: ScriptName) {
-  const script = predefinedSporeConfigs.Aggron4.lumos.SCRIPTS[name];
+  const script = sporeConfig.lumos.SCRIPTS[name];
   if (!script) {
     throw new Error(`Script ${name} not found`);
   }

@@ -23,7 +23,7 @@ import { sporeConfig } from '@/utils/config';
 
 
 const Receipt: React.FC = () => {
-  const rpc = new RPC(predefinedSporeConfigs.Aggron4.ckbNodeUrl);
+  const rpc = new RPC(sporeConfig.ckbNodeUrl);
   const router = useRouter();
   const pathName = usePathname();
   const pathAddress = pathName.split("/")[pathName.split('/').length - 1]
