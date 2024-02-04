@@ -93,12 +93,12 @@ const UserHome: React.FC = () => {
     } else {
       return (
         <div>
-          <div className="relative my-8 h-[180px] bg-gray-200">
+          <div className="relative my-8 min-h-[170px]">
             <Image
               alt='gift'
-              src='/svg/BlindBox.svg'
+              src={`${activeTab === 'Gift' ? '/svg/ps-gift-empty.svg' : '/svg/ps-blindbox-empty.svg'}`}
               layout='fill'
-              objectFit='cover'
+              objectFit='contain'
             />
           </div>
           <p className="text-center my-8 text-white001 text-hd2mb font-Montserrat">
