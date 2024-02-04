@@ -61,7 +61,7 @@ const History: React.FC = () => {
         }
     }, [walletAddress])
     return (
-        <div className={`flex flex-col flex-1 px-4`}>
+        <div className={`universe-bg flex flex-col flex-1 px-4 pb-12`}>
             <h3 className='font-Montserrat text-hd3mb text-white001 mt-8 mb-4 text-center'>Gift History</h3>
             <div className="flex rounded-md bg-primary011">
                 <button

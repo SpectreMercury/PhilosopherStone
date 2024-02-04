@@ -201,8 +201,8 @@ const Receipt: React.FC = () => {
           />
           {showPopup && (
             <div className="absolute top-full right-0 mt-2 w-80 p-4 bg-primary008 text-white001 shadow-lg rounded-md z-10">
-              <p className='font-SourceSanPro text-labelbdmb'>Hang Tight! Here is Why It Might Take a Bit:</p>
-              <p className='font-SourceSanPro text-labelbd'>Sometimes, the blockchain gets really busy, kind of like traffic during rush hour. This can make things a bit slower. We’re keeping an eye on it to get your transaction through as soon as possible. Thanks for sticking with us!</p>
+              <p className='font-SourceSanPro text-labelbdmb'>Hang Tight! Here’s Why It&apos;s Taking Awhile:</p>
+              <p className='font-SourceSanPro text-labelbd'>Sometimes, the blockchain gets really busy, kind of like traffic during rush hour. This can make things a bit slower. We&apos;re keeping an eye on it to get your transaction through as soon as possible. Thanks for sticking with us!</p>
             </div>
           )}
         </div>

@@ -13,8 +13,8 @@ import { MaterialDesignContent, SnackbarProvider } from 'notistack';
 import { styled } from "@mui/material";
 import { GiftReceiveModalProvider } from "./context/GiftReceiveModalContext";
 import DesktopHeader from "./_components/Header/DesktopHeader";
-import useWindowDimensions from '@/hooks/getWindowDimension';
 import Image from "next/image";
+import { useState, useEffect } from "react";
 
 const StyledMaterialDesignContent = styled(MaterialDesignContent)(() => ({
   '&.notistack-MuiContent-success': {
@@ -38,8 +38,21 @@ function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { width } = useWindowDimensions();
-  initConfig(JoyIDConfig)  
+  initConfig(JoyIDConfig) 
+  const [width, setWidth] = useState<number>(0);
+  // Accounts for mobile browser's address bar
+  useEffect(() => {
+    const handleResize = () => {
+      document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
+      setWidth(window.innerWidth);
+    };
+  
+    window.addEventListener('resize', handleResize);
+    handleResize();
+  
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+ 
   return (
     <html lang="en" className="min-h-full min-w-full">
       <head>
@@ -83,8 +96,8 @@ function RootLayout({
                   <div className="container relative flex flex-col min-h-screen mx-auto sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl">
                     {width < 640 && <Header />}
                     <div 
-                      className={`flex-1 flex flex-col w-full overflow-y-auto bg-gradient-conic ${width < 640 ? 'rounded-none' : 'rounded-3xl'}`}
-                      style={{boxShadow: '0px -2px 4px 0px rgba(0, 0, 0, 0.25)'}}
+                      className={`flex-1 flex flex-col w-full overflow-y-auto overscroll-y-contain bg-gradient-conic ${width < 640 ? 'rounded-none' : 'rounded-3xl'}`}
+                      style={{boxShadow: '0px -2px 4px 0px rgba(0, 0, 0, 0.25)', maxHeight: 'calc(var(--vh, 1vh) * 100 - 64px)'}}
                     >
                       {children}
                     </div>

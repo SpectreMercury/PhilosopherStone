@@ -34,7 +34,7 @@ const SendGift: React.FC = () => {
   const [toWalletAddress, setToWalletAddress] = useState<string>('');
   const [hasGift, setHasGift] = useState<string>();
   const [occupied, setOccupied] = useState<string>('');
-  const [activeTab, setActiveTab] = useState<'Wallet Address' | 'URL'>('Wallet Address');
+  const [activeTab, setActiveTab] = useState<'Wallet Address' | 'URL'>('URL');
   const walletAddress = useSelector((state: RootState) => state.wallet.wallet?.address);
   const { refresh: refreshSporesByAddress } = useSporesByAddressQuery(walletAddress, false);
   const { data: spore, isLoading: isSporeLoading } = useSporeQuery(
@@ -179,10 +179,11 @@ const SendGift: React.FC = () => {
   }, [isSporeLoading, spore?.cell?.cellOutput.capacity])
 
   return (
-    <div className="container mx-auto">
+    <div className="container universe-bg mx-auto">
       <LoadingOverlay isVisible={isVisible} texts={texts} progressStatus={progressStatus}/>
       <div>
-        <div className='flex justify-center mt-4 flex-col items-center'>
+        <div className='flex justify-center mt-8 flex-col items-center text-white001'>
+          <h3 className='font-Montserrat text-hd3mb text-center mb-6'>Send {type === 'BlindBox' ? 'Blind Box' : 'Gift'}</h3>
           {
             type === 'BlindBox' ? (
             <>
@@ -208,8 +209,8 @@ const SendGift: React.FC = () => {
               <img src={`/api/media/${hasGift}`} width={300} height={200} className="px-4" alt="Gift" />
             </>)
           }
-          <p className='text-white001 font-SourceSanPro text-hd2mb mt-4'>{type === 'BlindBox' ?  `******`: `${occupied}` } CKBytes</p>
-          <p className='text-white001 font-SourceSanPro text-body1mb text-white005 mt-4'>
+          <p className='text-white001 font-SourceSanPro text-hd2mb mt-4'>{type === 'BlindBox' ?  `******`: `${occupied}` } CKB</p>
+          <p className='text-white001 font-SourceSanPro text-body1mb text-white005 mt-2'>
            {type === 'BlindBox' ? `************` : `${hasGift?.slice(0,10)}......${hasGift?.slice(hasGift.length - 10, hasGift.length)}` }</p>
         </div>
         <div className='flex flex-col px-4'>
@@ -256,7 +257,7 @@ const SendGift: React.FC = () => {
                       placeholder='E.g. 0xAbCdEfGhIjKlMnOpQrStUvWxYz0123456789'
                       value={toWalletAddress}
                       onChange={(e) => setToWalletAddress(e.target.value)}
-                      className='w-full h-12 border rounded-lg bg-primary008 mt-2 px-4 text-white001' />
+                      className='w-full h-12 border border-white009 rounded-lg bg-primary008 mt-2 px-4 text-white001' />
               </div>
             </>
           )
