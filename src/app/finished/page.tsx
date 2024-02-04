@@ -11,6 +11,7 @@ const Finished: React.FC = () => {
     const txHash = searchParams.get('tx');
     const type = searchParams.get('type');
     const key = searchParams.get('key');
+    const tweetText = encodeURIComponent(`🌠 I just created a box of gifts with #PhilosopherStone! Don’t miss out on this one-of-a-kind surprise. Claim it here: ${window.location.protocol}//${window.location.host}/collect/${key} 🎁 Feel free to melt it into #CKB if it's not your cup of tea. ✨ \n\n #NFT #Gift #SporeProtocol #Web3`);
 
     const handleCopy = async () => {
         try {
@@ -45,7 +46,7 @@ const Finished: React.FC = () => {
                         Copy Link
                     </button>
                     <Link 
-                        target="_blank" href={`https://twitter.com/intent/tweet?text=🌠 I just used #PhilosopherStone to create a unique gift just for you! Don’t miss out on this one-of-a-kind surprise. Claim it here: ${`${window.location.protocol}//${window.location.host}/collect/${key}`} 🎁 Feel free to melt it into #CKB if it's not your cup of tea. ✨ #NFT #Gift  #SporeProtocol #Web3`}
+                        target="_blank" href={`https://twitter.com/intent/tweet?text=${tweetText}`}
                         className="w-full h-12 font-PlayfairDisplay border border-white002 text-white001 py-2 px-4 rounded flex items-center justify-center"
                     >
                         Share on Twitter
