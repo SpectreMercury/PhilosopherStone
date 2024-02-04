@@ -15,6 +15,8 @@ import { GiftReceiveModalProvider } from "./context/GiftReceiveModalContext";
 import DesktopHeader from "./_components/Header/DesktopHeader";
 import Image from "next/image";
 import { useState, useEffect } from "react";
+import { predefinedSporeConfigs, setSporeConfig } from "@spore-sdk/core";
+import { predefined } from "@ckb-lumos/config-manager";
 
 const StyledMaterialDesignContent = styled(MaterialDesignContent)(() => ({
   '&.notistack-MuiContent-success': {
@@ -38,7 +40,6 @@ function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  initConfig(JoyIDConfig) 
   const [width, setWidth] = useState<number>(0);
   // Accounts for mobile browser's address bar
   useEffect(() => {
@@ -52,7 +53,8 @@ function RootLayout({
   
     return () => window.removeEventListener('resize', handleResize);
   }, []);
- 
+  // setSporeConfig(predefinedSporeConfigs.Mainnet);
+  // initConfig(JoyIDConfig)  
   return (
     <html lang="en" className="min-h-full min-w-full">
       <head>

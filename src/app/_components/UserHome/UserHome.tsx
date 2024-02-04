@@ -12,6 +12,7 @@ import { RootState } from '@/store/store';
 import { QuerySpore } from '@/hooks/useQuery/type';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
+import { getLumosScript } from '@/utils/updateLumosConfig';
 
 
 const LoadingSkeleton = () => {

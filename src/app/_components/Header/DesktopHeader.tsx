@@ -12,10 +12,11 @@ import { fetchGiftAPI } from '@/utils/fetchAPI';
 import { RPC } from '@ckb-lumos/rpc';
 import { predefinedSporeConfigs } from '@spore-sdk/core';
 import unavailableSlice, { setUnavailablelist } from '../../../store/unavailableListSlice';
+import { sporeConfig } from '@/utils/config';
 
 
 const DesktopHeader:React.FC = () => {
-  const rpc = new RPC(predefinedSporeConfigs.Aggron4.ckbNodeUrl);
+  const rpc = new RPC(sporeConfig.ckbNodeUrl);
   const [isMenuOpen, setIsMenuOpen] = useState<Boolean>(false);
   const [showHeaderModal, setHeaderShowModal] = useState(false);
   const [activeRoute, setActiveRoute] = useState<string>('');
@@ -41,7 +42,6 @@ const DesktopHeader:React.FC = () => {
     Object.keys(inProcessingGifts.data).map(async (txHash: string) => {
       const transaction = await rpc.getTransaction(txHash);
       const transactionStatus = transaction.txStatus.status;
-      console.log(transactionStatus);
       if (transactionStatus === 'committed') {
         await fetchGiftAPI({
           action: 'removeUnavailableGifts',

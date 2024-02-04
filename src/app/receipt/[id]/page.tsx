@@ -19,10 +19,11 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { fetchGiftAPI } from '@/utils/fetchAPI';
 import { formatDate } from '@/utils/common';
+import { sporeConfig } from '@/utils/config';
 
 
 const Receipt: React.FC = () => {
-  const rpc = new RPC(predefinedSporeConfigs.Aggron4.ckbNodeUrl);
+  const rpc = new RPC(sporeConfig.ckbNodeUrl);
   const router = useRouter();
   const pathName = usePathname();
   const pathAddress = pathName.split("/")[pathName.split('/').length - 1]
@@ -98,12 +99,9 @@ const Receipt: React.FC = () => {
     }
     handleMeltModal()
     showOverlay(); 
-    const latestLumosScript = await getLumosScript();
-    let latest = JSON.parse(JSON.stringify(predefinedSporeConfigs.Aggron4))
-    latest['lumos'] = latestLumosScript
     await meltSporeMutation.mutateAsync({
       outPoint: spore!.cell!.outPoint!,
-      config: latest,
+      config: sporeConfig,
     });
     await callUpdateGiftReadStatusAction(walletAddress!!, pathAddress)
     setProgressStatus('done')

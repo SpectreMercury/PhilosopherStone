@@ -19,6 +19,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { fetchBlindBoxAPI, fetchGiftAPI, fetchHistoryAPI } from '@/utils/fetchAPI';
 import { formatNumberWithCommas } from '@/utils/common';
+import { sporeConfig } from '@/utils/config';
 
 
 const Gift: React.FC = () => {
@@ -90,12 +91,9 @@ const Gift: React.FC = () => {
     }
     handleMeltModal()
     showOverlay(); 
-    const latestLumosScript = await getLumosScript();
-    let latest = JSON.parse(JSON.stringify(predefinedSporeConfigs.Aggron4))
-    latest['lumos'] = latestLumosScript
     await meltSporeMutation.mutateAsync({
       outPoint: spore!.cell!.outPoint!,
-      config: latest,
+      config: sporeConfig,
     });
     callUpdateGiftReadStatusAction(walletAddress!!, pathAddress)
     setProgressStatus('done')

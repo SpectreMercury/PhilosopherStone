@@ -1,6 +1,7 @@
 import { setWallet, clearWallet, WalletInfo } from '@/store/walletSlice';
 import { Script, Transaction, config, helpers } from '@ckb-lumos/lumos';
 import store from '@/store/store';
+import { sporeConfig } from '@/utils/config';
 
 export default abstract class CKBConnector {
   private _isConnected: boolean = false;
@@ -33,7 +34,7 @@ export default abstract class CKBConnector {
       return undefined;
     }
     return helpers.parseAddress(address, {
-      config: config.predefined.AGGRON4,
+      config: sporeConfig.lumos
     });
   }
 
@@ -57,7 +58,7 @@ export default abstract class CKBConnector {
     const walletData = this.getCurrentWalletAddress();
     const { address } = walletData!!;
     return helpers.parseAddress(address, {
-      config: config.predefined.AGGRON4,
+      config: sporeConfig.lumos,
     });
   }
 

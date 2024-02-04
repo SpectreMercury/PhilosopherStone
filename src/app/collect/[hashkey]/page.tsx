@@ -2,10 +2,9 @@
 
 import { HashkeyObj, SporeItem } from '@/types/Hashkey';
 import { formatDate, formatString } from '@/utils/common';
-import { fetchGiftAPI, fetchHashkeyAPI } from '@/utils/fetchAPI';
+import { fetchGiftAPI, fetchHashkeyAPI, fetchWalletAPI } from '@/utils/fetchAPI';
 import { usePathname, useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
-import { config as _config, getAccounts } from '@/utils/transferSporeWithAgent';
 import { getSporeById, transferSpore } from '@spore-sdk/core';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
@@ -15,6 +14,7 @@ import { getLumosScript } from '@/utils/updateLumosConfig';
 import WalletModal from '@/app/_components/WalletModal/WalletModal';
 import Image from 'next/image';
 import Link from 'next/link';
+import { sporeConfig } from '@/utils/config';
 
 const Hashkey: React.FC = () => {
     const pathName = usePathname();
@@ -63,28 +63,23 @@ const Hashkey: React.FC = () => {
             setHeaderShowModal(true);
         }
         setReceiveProcessing(true);
-        const sporeConfig = await _config();
-        const accounts = await getAccounts();
-        const latestLumosScript = await getLumosScript();
         const receiverAccounts = walletAddress!!;
         const sporeCell = await getSporeById(`${sporeId}`, sporeConfig);
-        console.log({
-            outPoint: sporeCell.outPoint!,
-            fromInfos: [accounts.AGENT.address],
-                toLock: helpers.parseAddress(receiverAccounts, {
-                config: latestLumosScript,
-            }),
-            config: sporeConfig,
+        const senderAddress = await fetchWalletAPI({
+            action: 'getAddress'
         })
         const { txSkeleton, outputIndex } = await transferSpore({
             outPoint: sporeCell.outPoint!,
-            fromInfos: [accounts.AGENT.address],
+            fromInfos: [senderAddress.address!!],
             toLock: helpers.parseAddress(receiverAccounts, {
-                config: latestLumosScript,
+                config: sporeConfig.lumos,
             }),
             config: sporeConfig,
         });
-        const txHash = await accounts.AGENT.signAndSendTransaction(txSkeleton);
+        const txHash = await fetchWalletAPI({
+            action: 'signAndSendTransaction',
+            txSkeleton
+        });
         setReceiveProcessing(false);
         deleteHashkey(pathAddress);
         router.push(`/receipt/${txHash}?date=${sporeInfo?.date}&type=receive`)

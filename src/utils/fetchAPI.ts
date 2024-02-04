@@ -2,7 +2,8 @@ import { boxData } from "@/types/BlindBox";
 import { enqueueSnackbar } from "notistack";
 import { HistoryRecord } from '../types/History';
 import { GiftProps } from "@/types/Gifts";
-import { HashkeyObj, SporeItem } from "@/types/Hashkey";
+import { SporeItem } from "@/types/Hashkey";
+import { helpers } from "@ckb-lumos/lumos";
 
 // api.ts
 export interface BlindBoxAPIParams {
@@ -32,6 +33,11 @@ export interface HashkeyParams {
   action: string;
   key: string;
   record?: SporeItem
+}
+
+export interface WalletParams {
+  action: string;
+  txSkeleton?: helpers.TransactionSkeletonType
 }
 
 export const fetchBlindBoxAPI = async (
@@ -107,5 +113,24 @@ export const fetchHistoryAPI = async (
     return data;
   } catch (error) {
     enqueueSnackbar('Error fetching data from the blind box API', {variant: 'error'})
+  }
+};
+
+
+export const fetchWalletAPI = async (
+  params: WalletParams
+): Promise<any> => {
+  try {
+    const response = await fetch('/api/wallet', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(params),
+    });
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    enqueueSnackbar('Error get Wallet', {variant: 'error'})
   }
 };

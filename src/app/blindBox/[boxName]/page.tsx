@@ -54,7 +54,6 @@ const BlindBoxPage = () => {
   }
 
   const removeGifts = async (ids: string[]) => {
-    console.log(ids)
     const data = await fetchBlindBoxAPI({ 
       action: 'remove', 
       key: walletAddress!!, 

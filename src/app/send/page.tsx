@@ -6,7 +6,7 @@ import { transferSpore as _transferSpore, predefinedSporeConfigs } from '@spore-
 import { QuerySpore } from '@/hooks/useQuery/type';
 import { useSporeQuery } from '@/hooks/useQuery/useQuerybySpore';
 import { BI, OutPoint, config, helpers } from '@ckb-lumos/lumos';
-import { fetchBlindBoxAPI, fetchGiftAPI, fetchHashkeyAPI, fetchHistoryAPI } from '@/utils/fetchAPI';
+import { fetchBlindBoxAPI, fetchGiftAPI, fetchHashkeyAPI, fetchHistoryAPI, fetchWalletAPI } from '@/utils/fetchAPI';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { boxData } from '@/types/BlindBox';
@@ -23,7 +23,7 @@ import { GiftProps } from '@/types/Gifts';
 import { values } from 'lodash';
 import { HashkeyObj, SporeItem } from '@/types/Hashkey';
 import { GenerateHashKey } from '@/utils/common';
-import { getAccounts } from '@/utils/transferSporeWithAgent';
+import { sporeConfig } from '@/utils/config';
 
 const SendGift: React.FC = () => {
   const router = useRouter();
@@ -91,7 +91,6 @@ const SendGift: React.FC = () => {
       const { txSkeleton, outputIndex } = await _transferSpore(...args);
       //@ts-ignore
       const signedTx = await signTransaction(txSkeleton);
-      console.log(signedTx);
       const txHash = await sendTransaction(signedTx);
       return {
         txHash,
@@ -138,23 +137,24 @@ const SendGift: React.FC = () => {
   const handleSubmit = useCallback(
     async (values: { to: string }) => {
       showOverlay(); 
-      const accounts = await getAccounts();
-      //update lumos setting 
-      const latestLumosScript = await getLumosScript();
-      let latest = JSON.parse(JSON.stringify(predefinedSporeConfigs.Aggron4))
-      latest['lumos'] = latestLumosScript
       if (!walletAddress || (!values.to && activeTab === 'Wallet Address') || !spore) {
         return;
       }
       //update wallet address by activeTab
-      let toAddress = activeTab === 'Wallet Address' ? values.to : accounts.AGENT.address;
+      let toAddress = values.to
+      if(activeTab === 'URL') {
+        let rlt = await fetchWalletAPI({
+          action: 'getAddress'
+        });
+        toAddress = rlt.address;
+      }
       let rlt = await transferSporeMutation.mutateAsync({
         outPoint: spore.cell?.outPoint!,
         fromInfos: [walletAddress!!],
         toLock: helpers.parseAddress(toAddress, {
-          config: config.predefined.AGGRON4,
+          config: sporeConfig.lumos,
         }),
-        config: latest,
+        config: sporeConfig,
         useCapacityMarginAsFee: true,
       });
       await saveHashKey(GenerateHashKey(spore.id), {sporeId: spore.id, senderWalletAddress: walletAddress!!, txHash: rlt.txHash })
@@ -170,7 +170,6 @@ const SendGift: React.FC = () => {
     },
     [transferSporeMutation],
   );
-
 
   useEffect(() => {
     if(!isSporeLoading) {
