@@ -63,6 +63,15 @@ function RootLayout({
         <meta property="og:description" content="On-Chain Gifting Platform" />
         <meta property="og:image" content="/svg/ps-og.png" />
       </head>
+      <!-- Google tag (gtag.js) -->
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-23YX4KSBQE"></script>
+      <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+      
+        gtag('config', 'G-23YX4KSBQE');
+      </script>
       <body className="bg-desktop-bg bg-no-repeat min-h-full min-w-full m-0">
         <Image 
           src='/svg/bg-line-top.svg'
