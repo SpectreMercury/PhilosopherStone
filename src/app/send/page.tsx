@@ -166,7 +166,7 @@ const SendGift: React.FC = () => {
       setProgressStatus('done')
       enqueueSnackbar('Gift Send Successful', { variant: 'success' });
       refreshSporesByAddress()
-      router.push(`/finished?tx=${rlt.txHash}?type=URL&key=${GenerateHashKey(spore.id)}`);
+      router.push(`/finished?tx=${rlt.txHash}&type=URL&key=${GenerateHashKey(spore.id)}`);
     },
     [transferSporeMutation],
   );
