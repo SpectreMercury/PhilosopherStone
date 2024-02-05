@@ -1,4 +1,5 @@
 import CKBConnector from '@/connectors/base';
+import MetaMaskConnector from '@/connectors/metamask';
 import SporeService from '@/spore';
 import { RootState } from '@/store/store';
 import { WalletInfo } from '@/store/walletSlice';
@@ -59,9 +60,11 @@ export const useConnect = () => {
 
     if (address && autoConnect && !connector?.isConnected) {
       setAuthConnected(true);
-      connector?.connect().catch((e) => {
-        enqueueSnackbar((e as Error).message, {variant: 'error'})
-      });
+      if(connector?.type === 'MetaMask') {
+        connector?.connect().catch((e) => {
+          enqueueSnackbar((e as Error).message, {variant: 'error'})
+        });
+      }
     }
   }, [autoConnected, autoConnect, connector, address]);
 
@@ -89,7 +92,7 @@ export const useConnect = () => {
     if (connectors.length === 1) {
       try {
         const [connector] = connectors;
-        connector.connect();
+        // connector.connect();
         return;
       } catch (e) {
         enqueueSnackbar((e as Error).message, {variant: 'error'})
