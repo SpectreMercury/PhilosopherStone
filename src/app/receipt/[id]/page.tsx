@@ -142,7 +142,7 @@ const Receipt: React.FC = () => {
 
 
   useEffect(() => {
-    if(!isSporeLoading && sporeId) {
+    if(!isSporeLoading && sporeId && spore?.cell?.cellOutput.capacity) {
       formatNumberWithCommas(BI.from(spore?.cell?.cellOutput.capacity).toNumber() / 10 ** 8)
     }
   }, [isSporeLoading, spore?.cell?.cellOutput.capacity, sporeId])
@@ -174,7 +174,7 @@ const Receipt: React.FC = () => {
               alt='Copy address'
             />
           </button>
-          <Link href={`https://pudge.explorer.nervos.org/transaction/${spore?.cell?.outPoint?.txHash}`} target='_blank'>
+          <Link href={`https://explorer.nervos.org/transaction/${spore?.cell?.outPoint?.txHash}`} target='_blank'>
             <Image
               src='/svg/icon-globe.svg'
               width={24}
@@ -223,7 +223,7 @@ const Receipt: React.FC = () => {
         </>)
           :
         (<>{sporeId ? 
-          <Image src={`/api/media/${sporeId}`} width={300} height={200} className="px-4" alt="Gift" /> 
+          <img src={`/api/media/${sporeId}`} className="px-4 w-[300px] h-[200px]" alt="Gift" /> 
             :
           <Image alt={'unkown-sporeId'} src={`/svg/blindbox-animation-1.svg`} className="rounded" width={164} height={120}/>
         }</>)}
