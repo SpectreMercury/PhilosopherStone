@@ -121,7 +121,7 @@ const Hashkey: React.FC = () => {
                             { sporeInfo ? new Date(sporeInfo?.date!!).toLocaleDateString() : '*****'}
                         </div>
                         <div className='w-full flex justify-center mt-4'>
-                            <Image src={`/api/media/${sporeInfo?.sporeId}`} width={220} height={170} className="px-4" alt="Gift" /> 
+                            <img src={`/api/media/${sporeInfo?.sporeId}`} width={220} height={170} className="px-4" alt="Gift" /> 
                         </div>
                         <div className='w-full flex justify-center mt-4 items-center'>
                             {giftMessage && <p className="text-body1mb">{giftMessage}</p>}
