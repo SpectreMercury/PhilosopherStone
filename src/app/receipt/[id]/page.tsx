@@ -20,6 +20,7 @@ import { RootState } from '@/store/store';
 import { fetchGiftAPI } from '@/utils/fetchAPI';
 import { formatDate } from '@/utils/common';
 import { sporeConfig } from '@/utils/config';
+import Button from '@/app/_components/Button/Button';
 
 
 const Receipt: React.FC = () => {
@@ -236,18 +237,8 @@ const Receipt: React.FC = () => {
       {
         transactionStatus === 'committed' && historyType === 'created' && 
         <>
-          <Link 
-            className="w-full h-12 flex justify-center items-center text-buttonmb font-SourceSanPro border border-white002 bg-white001 text-primary011 py-2 px-4 rounded" 
-            href={`/send?hasGift=${sporeId}`}
-          >
-            Send as Gift
-          </Link>
-          <button 
-            className="w-full h-12 text-buttonmb font-SourceSanPro border border-white002 my-4 py-2 px-4 rounded text-white001" 
-            onClick={handleMeltModal}
-          >
-            Melt
-          </button>
+          <Button type='solid' label='Send as Gift' href={`/send?hasGift=${sporeId}`} />
+          <Button className='my-6' type='outline' label='Melt into CKB' onClick={handleMeltModal} />
         </>
       }
     </div>

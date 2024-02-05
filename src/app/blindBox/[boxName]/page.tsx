@@ -10,6 +10,7 @@ import { fetchBlindBoxAPI } from '@/utils/fetchAPI';
 import { boxData } from '@/types/BlindBox';
 import Link from 'next/link';
 import Image from 'next/image';
+import Button from '@/app/_components/Button/Button';
 
 const BlindBoxPage = () => {
   const router = useRouter();
@@ -133,12 +134,7 @@ const BlindBoxPage = () => {
               />
            
             <p className="text-labelmb font-SourceSanPro text-center text-white005">No Gifts in this Blind Box</p>
-            <button 
-              className="w-full h-12 text-buttonmb font-SourceSanPro border border-white002 bg-white001 text-primary011 py-2 px-4 rounded" 
-              onClick={handleOpenModal}
-            >
-              Add Gifts
-            </button>
+            <Button type='solid' label='Add Gifts' onClick={handleOpenModal} />
           </div>
         )}
         {boxGifts.length > 0 ? (
@@ -159,31 +155,16 @@ const BlindBoxPage = () => {
         {
           selectedGifts.length > 0 && (
             <>
-              <button 
-                className="flex-1 h-12 text-buttonmb font-SourceSanPro border border-white002 text-white001 py-2 px-4 rounded"     
-                onClick={onRemoveGifts}    
-              >
-                Remove Gifts
-              </button>
-              <button 
-                className="flex-1 h-12 text-buttonmb font-SourceSanPro border border-white002 text-white001 py-2 px-4 rounded"     
-                onClick={cancelRemove}    
-              >
-                Cancel
-              </button>
+              <Button type='outline' label='Remove Gifts' onClick={onRemoveGifts} />
+              <Button type='outline' label='Cancel' onClick={cancelRemove} />
             </>
             
           )
         }
         {boxGifts && boxGifts.length > 0 && selectedGifts.length <= 0 && (
             <>
-              <button className="flex-1 h-12 font-SourceSanPro border border-white002 text-white001 py-2 px-4 rounded" onClick={handleOpenModal}>Add Gifts</button>
-              <Link 
-                href={`/send?type=BlindBox&name=${decodeURIComponent(boxName)}`}
-                className="flex-1 flex items-center justify-center h-12 font-SourceSanPro border border-white002 bg-white001 text-primary011 py-2 px-4 rounded"         
-              >
-                Send Blind Box
-              </Link>
+              <Button type='outline' label='Add Gifts' onClick={handleOpenModal} />
+              <Button type='solid' label='Send Blind Box' href={`/send?type=BlindBox&name=${decodeURIComponent(boxName)}`} />
             </>
             
         )}

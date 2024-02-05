@@ -24,6 +24,7 @@ import { values } from 'lodash';
 import { HashkeyObj, SporeItem } from '@/types/Hashkey';
 import { GenerateHashKey } from '@/utils/common';
 import { sporeConfig } from '@/utils/config';
+import Button from '@/app/_components/Button/Button';
 
 const SendGift: React.FC = () => {
   const router = useRouter();
@@ -216,6 +217,7 @@ const SendGift: React.FC = () => {
           <p className='text-white001 font-SourceSanPro text-labelbdmb mt-4'>Gift Message</p>
           <textarea 
             id="message"
+            autoFocus
             value={message}
             className='w-full h-24 border border-white009 rounded-lg bg-primary008 mt-2 px-4 py-2 text-white001' 
             onChange={(e) => setMessage(e.target.value)}/>
@@ -261,17 +263,13 @@ const SendGift: React.FC = () => {
             </>
           )
         }
-        <div className='flex flex-col px-4 my-8'>
-          <button 
-            onClick={() => {handleSubmit({to: toWalletAddress || GenerateHashKey(hasGift!!)})}}
-            disabled={!toWalletAddress && activeTab !== 'URL'}
-            className={`w-full h-12 font-SourceSanPro border border-white002 bg-white001 text-primary011 py-2 px-4 rounded flex items-center justify-center
-              ${activeTab === 'Wallet Address' && !toWalletAddress && 'opacity-50 cursor-not-allowed'} `}
-          >
-            Pack Gift
-          </button>
-        </div>
-        
+        <Button 
+          type='solid' 
+          label='Pack Gift' 
+          onClick={() => {handleSubmit({to: toWalletAddress || GenerateHashKey(hasGift!!)})}}
+          disabled={!toWalletAddress && activeTab !== 'URL'}
+          className='px-4 my-8'
+        />
       </div>
     </div>
   );

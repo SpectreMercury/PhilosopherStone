@@ -4,6 +4,7 @@ import { useSporesByAddressQuery } from '@/hooks/useQuery/useSporesByAddress';
 import List from '../List/List';
 import { boxData } from '@/types/BlindBox';
 import Image from 'next/image';
+import Button from '@/app/_components/Button/Button';
 
 interface AddGiftsModalProps {
   onClose: () => void;
@@ -69,12 +70,18 @@ const AddGiftsModal: React.FC<AddGiftsModalProps> = ({ onClose, onConfirm, listI
             disableList={disableList}
           />
         </div>
-        <button 
-          onClick={handleConfirm} 
-          className="w-full text-center flex-1 border border-primary001 py-4 rounded-lg text-buttonmb font-SourceSanPro bg-white001 text-primary011"
-        >
-          Add {selectedIds.length} {selectedIds.length === 1 ? " Gift" : " Gifts"}
-        </button>
+        {spores.length === 0 && 
+          <div className='flex flex-col gap-4 justify-center items-center mb-6'>
+            <Image 
+              src='/svg/no-gift-illus.svg'
+              width={170}
+              height={170}
+              alt='No Gifts found'
+            />
+            <p className='text-white005 font-SourceSanPro text-labelmb'>No Gifts found</p>
+          </div>
+        }
+        <Button type='solid' label={'Add ' + selectedIds.length + ' Gifts'} onClick={handleConfirm}/>
       </div>
     </div>
   );
