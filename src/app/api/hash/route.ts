@@ -38,7 +38,7 @@ const saveHashkey = async (k: string, record: HashkeyObj) => {
 }
 
 const deleteHash = async (k: string) => {
-    await kv.del(`${k}-hash`);
+    await kv.del(`${k}-hashKey`);
     return NextResponse.json({data: '', errno: 200}, {status: 200});
 }
 
