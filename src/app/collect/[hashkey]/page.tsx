@@ -64,18 +64,6 @@ const Hashkey: React.FC = () => {
         }
         setReceiveProcessing(true);
         const receiverAccounts = walletAddress!!;
-        // const sporeCell = await getSporeById(`${sporeId}`, sporeConfig);
-        // const senderAddress = await fetchWalletAPI({
-        //     action: 'getAddress'
-        // })
-        // const { txSkeleton, outputIndex } = await transferSpore({
-        //     outPoint: sporeCell.outPoint!,
-        //     fromInfos: [senderAddress.address!!],
-        //     toLock: helpers.parseAddress(receiverAccounts, {
-        //         config: sporeConfig.lumos,
-        //     }),
-        //     config: sporeConfig,
-        // });
         const txHash = await fetchWalletAPI({
             action: 'signAndSendTransaction',
             sporeId,

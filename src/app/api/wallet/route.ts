@@ -32,7 +32,6 @@ async function getAddress() {
 
 async function signAndSendTransaction(sporeId: string, receiverAccounts: string) {
   const privateKey = process.env.PRIVATE_WALLET_KEY;
-  console.log('sporeId', sporeId);
   const sporeCell = await getSporeById(`${sporeId}`, sporeConfig);
   const wallet = await createSecp256k1Wallet(privateKey!!, sporeConfig);
   const { txSkeleton, outputIndex } = await transferSpore({
@@ -43,7 +42,6 @@ async function signAndSendTransaction(sporeId: string, receiverAccounts: string)
     }),
     config: sporeConfig,
   });
-  console.log('--->', txSkeleton);
   const transactionHash = await wallet.signAndSendTransaction(txSkeleton);
   return NextResponse.json({ txHash: transactionHash }, { status: 200 });
 }
