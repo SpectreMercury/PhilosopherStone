@@ -58,6 +58,7 @@ function RootLayout({
   return (
     <html lang="en" className="min-h-full min-w-full">
       <head>
+        <link rel="icon" href="/svg/ps-favicon.svg" sizes="any" />
         <meta property="og:title" content="Philosopher's Stone" />
         <meta property="og:description" content="On-Chain Gifting Platform" />
         <meta property="og:image" content="/svg/ps-og.png" />

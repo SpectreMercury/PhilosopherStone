@@ -37,7 +37,9 @@ export interface HashkeyParams {
 
 export interface WalletParams {
   action: string;
-  txSkeleton?: helpers.TransactionSkeletonType
+  txSkeleton?: helpers.TransactionSkeletonType;
+  sporeId?: string;
+  receiverAccounts?: string;
 }
 
 export const fetchBlindBoxAPI = async (

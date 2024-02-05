@@ -2,6 +2,7 @@ import { SporeConfig, defaultEmptyWitnessArgs, updateWitnessArgs, isScriptValueE
 import { hd, helpers, HexString, RPC } from '@ckb-lumos/lumos';
 import { Address, Hash, Script } from '@ckb-lumos/base';
 import { common } from '@ckb-lumos/common-scripts';
+import { sporeConfig } from './config';
 
 export interface Secp256k1Wallet {
   lock: Script;
@@ -16,7 +17,7 @@ export interface Secp256k1Wallet {
  * providing lock/address, and functions sign message/transaction and send the transaction on-chain.
  */
 export function createSecp256k1Wallet(privateKey: HexString, config: SporeConfig): Secp256k1Wallet {
-  const Secp256k1Blake160 = config.lumos.SCRIPTS.SECP256K1_BLAKE160!;
+  const Secp256k1Blake160 = sporeConfig.lumos.SCRIPTS.SECP256K1_BLAKE160!;
 
   // Generate a lock script from the private key
   const lock: Script = {
@@ -27,7 +28,7 @@ export function createSecp256k1Wallet(privateKey: HexString, config: SporeConfig
 
   // Generate address from the lock script
   const address = helpers.encodeToAddress(lock, {
-    config: config.lumos,
+    config: sporeConfig.lumos,
   });
 
   // Sign for a message
@@ -67,10 +68,10 @@ export function createSecp256k1Wallet(privateKey: HexString, config: SporeConfig
   // Sign the transaction and send it via RPC
   async function signAndSendTransaction(txSkeleton: helpers.TransactionSkeletonType): Promise<Hash> {
     // Env
-    const rpc = new RPC(config.ckbNodeUrl);
+    const rpc = new RPC(sporeConfig.ckbNodeUrl);
 
     // Sign transaction
-    txSkeleton = common.prepareSigningEntries(txSkeleton, { config: config.lumos });
+    txSkeleton = common.prepareSigningEntries(txSkeleton, { config: sporeConfig.lumos });
     txSkeleton = signTransaction(txSkeleton);
     // Convert to Transaction
     const tx = helpers.createTransactionFromSkeleton(txSkeleton);

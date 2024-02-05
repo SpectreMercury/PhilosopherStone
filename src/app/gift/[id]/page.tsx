@@ -154,7 +154,7 @@ const Gift: React.FC = () => {
               alt='Copy address'
             />
           </button>
-          <Link href={`https://pudge.explorer.nervos.org/transaction/${spore?.cell?.outPoint?.txHash}`} target='_blank'>
+          <Link href={`https://explorer.nervos.org/transaction/${spore?.cell?.outPoint?.txHash}`} target='_blank'>
             <Image
               src='/svg/icon-globe.svg'
               width={24}
@@ -165,7 +165,7 @@ const Gift: React.FC = () => {
         </div>
       </div>
       <div className="mb-6">
-        <Image src={`/api/media/${pathAddress}`} width={300} height={200} alt="Gift" />
+        <img src={`/api/media/${pathAddress}`} className='w-[300px] h-[200px]' alt="Gift" />
       </div>
       <div className='text-white001 font-Montserrat text-hd2mb mb-6'>
         {occupied} CKB 

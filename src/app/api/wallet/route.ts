@@ -2,7 +2,7 @@ import { createSecp256k1Wallet } from "@/utils/agentWallet";
 import { sporeConfig } from "@/utils/config";
 import { getLumosScript } from "@/utils/updateLumosConfig";
 import { helpers } from "@ckb-lumos/lumos";
-import { predefinedSporeConfigs } from "@spore-sdk/core";
+import { getSporeById, predefinedSporeConfigs, transferSpore } from "@spore-sdk/core";
 import { NextApiResponse } from "next";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -27,25 +27,35 @@ async function getAddress() {
     throw new Error("Key Error");
   }
   const wallet = await createSecp256k1Wallet(privateKey, sporeConfig);
-
   return NextResponse.json({ wallet, address: wallet.address });
 }
 
-async function signAndSendTransaction(txSkeleton: helpers.TransactionSkeletonType) {
+async function signAndSendTransaction(sporeId: string, receiverAccounts: string) {
   const privateKey = process.env.PRIVATE_WALLET_KEY;
-
-  const wallet = createSecp256k1Wallet(privateKey!!, sporeConfig);
+  console.log('sporeId', sporeId);
+  const sporeCell = await getSporeById(`${sporeId}`, sporeConfig);
+  const wallet = await createSecp256k1Wallet(privateKey!!, sporeConfig);
+  const { txSkeleton, outputIndex } = await transferSpore({
+    outPoint: sporeCell.outPoint!,
+    fromInfos: [wallet.address!!],
+    toLock: helpers.parseAddress(receiverAccounts, {
+        config: sporeConfig.lumos,
+    }),
+    config: sporeConfig,
+  });
+  console.log('--->', txSkeleton);
   const transactionHash = await wallet.signAndSendTransaction(txSkeleton);
   return NextResponse.json({ txHash: transactionHash }, { status: 200 });
 }
 
 export async function POST(req: NextRequest, res: NextApiResponse) {
     const body = await req.json();
+    console.log(body);
     switch (body.action) {
         case 'getAddress':
             return await withErrorHandling(getAddress);
         case 'signAndSendTransaction':
-            return await withErrorHandling(signAndSendTransaction, body.txSkeleton);
+            return await withErrorHandling(signAndSendTransaction, body.sporeId, body.receiverAccounts);
         default:
             return handleError('Invalid action', 400);
     }
