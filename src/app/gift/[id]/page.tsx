@@ -154,7 +154,7 @@ const Gift: React.FC = () => {
               alt='Copy address'
             />
           </button>
-          <Link href={`https://pudge.explorer.nervos.org/transaction/${spore?.cell?.outPoint?.txHash}`} target='_blank'>
+          <Link href={`https://explorer.nervos.org/transaction/${spore?.cell?.outPoint?.txHash}`} target='_blank'>
             <Image
               src='/svg/icon-globe.svg'
               width={24}

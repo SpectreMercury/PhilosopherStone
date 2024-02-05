@@ -51,7 +51,7 @@ const Hashkey: React.FC = () => {
     }
 
     const deleteHashkey = async(key: string) => {
-        let rlt = await fetchGiftAPI({
+        let rlt = await fetchHashkeyAPI({
             action: 'deleteHash',
             key
         });
@@ -64,25 +64,14 @@ const Hashkey: React.FC = () => {
         }
         setReceiveProcessing(true);
         const receiverAccounts = walletAddress!!;
-        const sporeCell = await getSporeById(`${sporeId}`, sporeConfig);
-        const senderAddress = await fetchWalletAPI({
-            action: 'getAddress'
-        })
-        const { txSkeleton, outputIndex } = await transferSpore({
-            outPoint: sporeCell.outPoint!,
-            fromInfos: [senderAddress.address!!],
-            toLock: helpers.parseAddress(receiverAccounts, {
-                config: sporeConfig.lumos,
-            }),
-            config: sporeConfig,
-        });
         const txHash = await fetchWalletAPI({
             action: 'signAndSendTransaction',
-            txSkeleton
+            sporeId,
+            receiverAccounts
         });
         setReceiveProcessing(false);
         deleteHashkey(pathAddress);
-        router.push(`/receipt/${txHash}?date=${sporeInfo?.date}&type=receive`)
+        router.push(`/receipt/${txHash.txHash}?date=${sporeInfo?.date}&type=receive`)
     }
 
     useEffect(() => {
