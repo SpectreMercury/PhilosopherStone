@@ -54,7 +54,7 @@ function RootLayout({
     return () => window.removeEventListener('resize', handleResize);
   }, []);
   // setSporeConfig(predefinedSporeConfigs.Mainnet);
-  // initConfig(JoyIDConfig)  
+  console.log('--> fininshed init JoyID')
   return (
     <html lang="en" className="min-h-full min-w-full">
       <head>

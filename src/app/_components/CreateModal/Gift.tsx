@@ -207,8 +207,6 @@ const CreateGift: React.FC<CreateGiftProps> = ({ onClose }) => {
   return (
     <div>
       <LoadingOverlay isVisible={isVisible} texts={texts} progressStatus={progressStatus}/>
-      {/* <p className='text-white001 font-SourceSanPro font-normal mb-2'>Assign to a Blind Box(optional)</p> */}
-      {/* <Select options={selectOptions} onSelect={handleSelectChange} /> */}
       <div className='flex justify-between items-center'>
         <div className='flex items-center'>
           <p className='font-SourceSanPro text-labelmb text-white003 mr-2'>Address: </p>

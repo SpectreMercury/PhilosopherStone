@@ -1,14 +1,15 @@
+import { sporeConfig } from "@/utils/config";
+
 interface JoyIDConfigProps {
     name: string;
-    logo: string;
-    joyidAppURL: string;
-    network: "testnet" | "mainnet"
+    logo?: string;
+    rpcURL?: string;
+    redirectURL?: string;
+    network?: 'mainnet' | 'testnet';
 }
 
 export const JoyIDConfig:JoyIDConfigProps = {
     name: 'philosopherstone',
-    logo: '',
-    // joyidAppURL:"https://testnet.joyid.dev",
-    joyidAppURL:"https://app.joy.id/",
-    network: "mainnet"
+    rpcURL: sporeConfig.ckbNodeUrl,
+    network: 'mainnet'
 }

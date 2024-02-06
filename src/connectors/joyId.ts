@@ -1,7 +1,7 @@
 import { Script } from '@ckb-lumos/base';
 import { BI, Transaction, commons, config, helpers } from '@ckb-lumos/lumos';
 // @ts-ignore
-import { initConfig, connect, signMessage } from '@joyid/evm';
+import { connect, initConfig, signChallenge } from '@joyid/ckb';
 // @ts-ignore
 import CKBConnector from './base';
 import * as omnilock from './lock/omnilock';
@@ -16,11 +16,11 @@ export default class JoyIdConnector extends CKBConnector {
 
   constructor() {
     super();
-
     initConfig({
-      name: 'Philosopherstone',
-      joyidAppURL: "https://app.joy.id/",
-    });
+      name: "Philosopher's stone",
+      joyidAppURL: 'https://testnet.joyid.dev',
+      //joyidAppURL: 'https://app.joy.id'
+    })
   }
 
   public getAnyoneCanPayLock(minimalCkb = 0, minimalUdt = 0): Script {
@@ -61,8 +61,12 @@ export default class JoyIdConnector extends CKBConnector {
     if (walletData?.walletType === this.type.toLowerCase() && walletData?.address) {
       return;
     }
-    const ethAddress = await connect();
-    this.setAddress(ethAddress);
+    const authAddress = await connect();
+    this.setData({
+      address: authAddress.address,
+      walletType: 'JoyID',
+      ethAddress: authAddress.ethAddress,
+    });
     this.isConnected = true;
   }
 
@@ -97,7 +101,7 @@ export default class JoyIdConnector extends CKBConnector {
           const button = document.createElement('button');
           button.onclick = async () => {
             try {
-              const signature = await signMessage(bytes.bytify(message), ethAddress);
+              const { signature } = await signChallenge(bytes.bytify(message), ethAddress!!)
               resolve(signature);
             } catch (e) {
               reject(e);
