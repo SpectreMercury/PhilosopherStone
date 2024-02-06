@@ -140,6 +140,7 @@ const SendGift: React.FC = () => {
       if (!walletAddress || (!values.to && activeTab === 'Wallet Address') || !spore) {
         return;
       }
+      const hashKeyText = new Date().getTime().toString() + spore.id;
       //update wallet address by activeTab
       let toAddress = values.to
       if(activeTab === 'URL') {
@@ -157,7 +158,7 @@ const SendGift: React.FC = () => {
         config: sporeConfig,
         useCapacityMarginAsFee: true,
       });
-      await saveHashKey(GenerateHashKey(spore.id), {sporeId: spore.id, senderWalletAddress: walletAddress!!, txHash: rlt.txHash })
+      await saveHashKey(GenerateHashKey(hashKeyText), {sporeId: spore.id, senderWalletAddress: walletAddress!!, txHash: rlt.txHash })
       await PutIntoProcessList(walletAddress!!, rlt.txHash, toAddress, spore.id);
       await callSaveAction(toAddress, spore.id, {
         'giftMessage': message
@@ -166,7 +167,7 @@ const SendGift: React.FC = () => {
       setProgressStatus('done')
       enqueueSnackbar('Gift Send Successful', { variant: 'success' });
       refreshSporesByAddress()
-      router.push(`/finished?tx=${rlt.txHash}&type=URL&key=${GenerateHashKey(spore.id)}`);
+      router.push(`/finished?tx=${rlt.txHash}&type=URL&key=${GenerateHashKey(hashKeyText)}`);
     },
     [transferSporeMutation],
   );
