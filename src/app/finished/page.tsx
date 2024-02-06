@@ -16,8 +16,8 @@ const Finished: React.FC = () => {
 
     const handleCopy = async () => {
         try {
-        await navigator.clipboard.writeText(`${window.location.protocol}//${window.location.host}/collect/${key}`);
-        enqueueSnackbar('Copied Successful', {variant: 'success'})
+            await navigator.clipboard.writeText(`${window.location.protocol}//${window.location.host}/collect/${key}`);
+            enqueueSnackbar('Copied Successful', {variant: 'success'})
         } catch (err) {
         enqueueSnackbar('Copied Fail', {variant: 'error'})
         }
