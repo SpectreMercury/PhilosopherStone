@@ -13,8 +13,8 @@ import { router } from '@/server/trpc';
 import { getLumosScript } from '@/utils/updateLumosConfig';
 import WalletModal from '@/app/_components/WalletModal/WalletModal';
 import Image from 'next/image';
-import Link from 'next/link';
 import { sporeConfig } from '@/utils/config';
+import Button from '@/app/_components/Button/Button';
 
 const Hashkey: React.FC = () => {
     const pathName = usePathname();
@@ -117,17 +117,17 @@ const Hashkey: React.FC = () => {
                         </div>
                         
                     </div>
-                    <button 
-                        disabled={receiveProcessing}
+                    <Button
+                        type='solid'
+                        label={receiveProcessing ? 'Claiming...' : 'Claim Now'}
+                        className='mt-8'
                         onClick={() => {
                             if(sporeInfo) {
                                 receiveGift(sporeInfo.sporeId);
                             }
                         }}
-                        className="w-full h-12 mt-8 font-SourceSanPro border border-white002 bg-white001 text-primary011 text-buttonmb py-2 px-4 rounded"
-                    >
-                        {receiveProcessing ? 'Claiming...' :'Claim Now'}
-                    </button>
+                        disabled={receiveProcessing}
+                    />
                 </>)
             }
             {
@@ -151,9 +151,7 @@ const Hashkey: React.FC = () => {
                                 This gift was claimed by someone else. But don&apos;t worry, there are plenty more surprises. Keep an eye out for the next magical Gift crafted with Philosopher&apos;s Stone! 🌟
                             </p>
                         </div>
-                        <Link href={'/'} className='w-full flex items-center justify-center h-12 text-buttonmb font-SourceSanPro border border-white002 bg-white001 text-primary011 py-2 px-4 rounded mt-8'>
-                            Come Back Later
-                        </Link>
+                        <Button className='mt-8' type='solid' label='Come back later' href={'/'}/>
                     </div>
                 )
             }

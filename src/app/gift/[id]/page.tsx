@@ -20,6 +20,7 @@ import { RootState } from '@/store/store';
 import { fetchBlindBoxAPI, fetchGiftAPI, fetchHistoryAPI } from '@/utils/fetchAPI';
 import { formatNumberWithCommas } from '@/utils/common';
 import { sporeConfig } from '@/utils/config';
+import Button from '@/app/_components/Button/Button';
 
 
 const Gift: React.FC = () => {
@@ -171,18 +172,8 @@ const Gift: React.FC = () => {
         {occupied} CKB 
       </div>
       {giftMessage && <p className="pb-4 font-SourceSanPro text-white001 text-body1mb">“{giftMessage}”</p>}
-      <Link 
-        className="w-full h-12 flex justify-center items-center text-buttonmb font-SourceSanPro border border-white002 bg-white001 text-primary011 mb-4 rounded" 
-        href={`/send?hasGift=${pathAddress}`}
-      >
-        Send as Gift
-      </Link>
-      <button 
-        className="w-full h-12 text-buttonmb font-SourceSanPro border border-white002 rounded text-white001" 
-        onClick={handleMeltModal}
-      >
-        Melt
-      </button>
+      <Button type='solid' label='Send as Gift' className='mb-4' href={`/send?hasGift=${pathAddress}`} />
+      <Button type='outline' label='Melt into CKB' onClick={handleMeltModal} />
     </div>
   );
 };

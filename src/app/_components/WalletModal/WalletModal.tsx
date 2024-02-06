@@ -29,7 +29,7 @@ const WalletModal: React.FC<WalletModalProps> = ({ onClose }) => {
       <div className="fixed inset-0 flex items-center justify-center p-4">
         <div className="bg-primary010 p-6 rounded-lg z-10 shadow-md border border-white009">
           <div className='flex items-center justify-between mb-6'>
-            <h3 className='text-white001 text-hd3mb font-Montserrat'>Log in</h3>
+            <h3 className='text-white001 text-hd3mb font-Montserrat'>Log In</h3>
             <button onClick={onClose}>
               <Image 
                 src='/svg/icon-x.svg'
