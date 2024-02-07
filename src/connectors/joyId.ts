@@ -87,26 +87,26 @@ export default class JoyIdConnector extends CKBConnector {
           return outputs.set(index, output);
         });
       }
-    });
+      });
 
-    const transaction = await omnilock.signTransaction(
-      txSkeleton,
-      this.lock!,
-      async (message) => {
-        return new Promise((resolve, reject) => {
-          const button = document.createElement('button');
-          button.onclick = async () => {
-            try {
-              const signature = await signMessage(bytes.bytify(message), ethAddress);
-              resolve(signature);
-            } catch (e) {
-              reject(e);
-            }
-          };
-          button.click();
-        })
-      },
-    );
-    return transaction;
-  }
+      const transaction = await omnilock.signTransaction(
+        txSkeleton,
+        this.lock!,
+        async (message) => {
+          return new Promise((resolve, reject) => {
+            const button = document.createElement('button');
+            button.onclick = async () => {
+              try {
+                const signature = await signMessage(bytes.bytify(message), ethAddress);
+                resolve(signature);
+              } catch (e) {
+                reject(e);
+              }
+            };
+            button.click();
+          })
+        },
+      );
+      return transaction;
+    }
 }
