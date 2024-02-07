@@ -15,6 +15,7 @@ import { predefinedSporeConfigs } from '@spore-sdk/core';
 import { Transaction } from '@ckb-lumos/lumos';
 import unavailableSlice, { setUnavailablelist } from '../../../store/unavailableListSlice';
 import { sporeConfig } from '@/utils/config';
+import Button from '@/app/_components/Button/Button';
 
 
 const Header:React.FC = () => {
@@ -212,21 +213,11 @@ const Header:React.FC = () => {
                       />
                     </button>
                   </div>
-                  <div 
-                    className='border justify-center h-12 my-8 flex items-center rounded-md cursor-pointer text-white001 font-SourceSanPro'
-                    onClick={handleDisconnect}
-                  >
-                    
-                    Log out
-                  </div>
-                </>) : (<>
-                  <div 
-                    className='border justify-center h-12 my-8 flex items-center rounded-md cursor-pointer text-white001 font-SourceSanPro'
-                    onClick={() => {setHeaderShowModal(true)}}
-                  >
-                    Log in
-                  </div>
-                </>)
+                  <Button className='my-8' type='outline' label='Log out' onClick={handleDisconnect} />
+                </>
+                ) : (
+                  <Button className='my-8' type='outline' label='Log in' onClick={() => setHeaderShowModal(true)} />
+                )
               }
             </div>
           </div>

@@ -15,8 +15,7 @@ export function formatNumberWithCommas(num: number) {
 }
 
 export function GenerateHashKey(str: string): string {
-  const now = new Date().getTime().toString();
-  const hash = SHA256(str + now).toString();
+  const hash = SHA256(str).toString();
   return hash.substring(12, 24);
 }
 

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import List from '../List/List';
 import { QuerySpore } from '@/hooks/useQuery/type';
 import { enqueueSnackbar } from 'notistack';
+import Button from '@/app/_components/Button/Button';
 
 interface CreateBlindBoxProps {
   onClose: () => void;                
@@ -54,19 +55,14 @@ const CreateBlindBox: React.FC<CreateBlindBoxProps> = ({ onClose, onCreateGift, 
         <p className='text-white001 font-SourceSanPro text-labelmb mb-2'>Name your Blind Box*</p>
         <input 
           className='w-full px-4 py-3 bg-primary008 text-white001 text-body1mb font-SourceSanPro rounded-md'
-          type="text" 
+          type="text"
+          autoFocus
           value={title} 
           onChange={handleChange} 
           placeholder="e.g. Treasure Box" 
         />
         {error && <div className='mt-1 text-light-error-function text-labelmb font-SourceSanPro'>{error}</div>}
-        <button 
-          disabled={!!error || !title}
-          className={`w-full h-12 mt-6 text-buttonmb font-SourceSanPro border border-white002 bg-white001 text-primary011 py-2 px-4 rounded ${(!title || !!error) && 'opacity-50 cursor-not-allowed'}`}
-          onClick={createBlindBox}
-        >
-          Create Blind Box
-        </button>
+        <Button type='solid' label='Create Blind Box' disabled={!!error || !title} className='mt-6' onClick={createBlindBox} />
       </div>
   );
 };

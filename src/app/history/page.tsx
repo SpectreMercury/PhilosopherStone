@@ -10,6 +10,7 @@ import HistoryList from '../_components/List/HistoryList';
 import { ReceivedGift } from '@/types/Gifts';
 import { HashkeyObj } from '@/types/Hashkey';
 import HashkeyList from '@/app/_components/List/HashkeyList';
+import Button from '@/app/_components/Button/Button';
 
 const History: React.FC = () => {
     const walletAddress = useSelector((state: RootState) => state.wallet.wallet?.address);
@@ -101,7 +102,7 @@ const History: React.FC = () => {
                     <div className="flex-1 flex justify-center items-center">
                         <div className='px-4 items-center'>
                             <p className='text-white font-Montserrat text-hd2mb mb-8'>No history now</p>
-                            <Link className="flex-1 flex items-center justify-center h-12 mb-8 font-SourceSanPro border border-white002 bg-white001 text-primary011 py-2 px-4 rounded" href={'/'}>Create Gift</Link>
+                            <Button className='flex-1 flex justify-center items-center' type='solid' label='Create Gift' href={'/'} />
                         </div>
                     </div>
                 )

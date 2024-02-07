@@ -11,8 +11,9 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { QuerySpore } from '@/hooks/useQuery/type';
 import { useSearchParams } from 'next/navigation';
-import Link from 'next/link';
 import { getLumosScript } from '@/utils/updateLumosConfig';
+import Tip from '@/app/_components/Tip/Tip';
+import Button from '@/app/_components/Button/Button';
 
 
 const LoadingSkeleton = () => {
@@ -103,7 +104,7 @@ const UserHome: React.FC = () => {
             />
           </div>
           <p className="text-center my-8 text-white001 text-hd2mb font-Montserrat">
-            Create Your Gift & Spread Joy!
+            {`${activeTab === 'Gift' ? 'Start Creating Your First On-Chain Gift!' : 'Start Creating Your First Blind Box!'}`}
           </p>
         </div>
       );
@@ -131,15 +132,8 @@ const UserHome: React.FC = () => {
         </button>
       </div>
       { renderContent() }
-      <button 
-        className="w-full h-12 text-buttonmb font-SourceSanPro border border-white002 bg-white001 text-primary011 py-2 px-4 rounded"
-        onClick={handleOpenModal}
-      >
-        Create {activeTab}
-      </button>
-      <Link href={'/FAQ'} className='block mx-auto text-linkColor font-SourceSanPro text-body1mb text-center mt-6'>
-        { activeTab === 'Gift' ? 'Learn More': 'What is Blind Box?' }
-      </Link>
+      <Button type='solid' onClick={handleOpenModal} label={'Create ' + activeTab}/>
+      <Tip className='mt-6' type={activeTab}/>
       {isModalOpen && (
         <CreateModal title={`Create New ${activeTab}`} onClose={handleCloseModal}>
           {activeTab === 'Gift' ? <CreateGift onClose={handleCloseModal}/> : (
