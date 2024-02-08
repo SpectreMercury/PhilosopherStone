@@ -3,6 +3,7 @@ import { sporeConfig } from "@/utils/config";
 import { getLumosScript } from "@/utils/updateLumosConfig";
 import { helpers } from "@ckb-lumos/lumos";
 import { getSporeById, predefinedSporeConfigs, transferSpore } from "@spore-sdk/core";
+import { kv } from "@vercel/kv";
 import { NextApiResponse } from "next";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -43,6 +44,7 @@ async function signAndSendTransaction(sporeId: string, receiverAccounts: string)
     config: sporeConfig,
   });
   const transactionHash = await wallet.signAndSendTransaction(txSkeleton);
+  await kv.lpush(`${receiverAccounts}-received`, {id: sporeId, date: new Date()})
   return NextResponse.json({ txHash: transactionHash }, { status: 200 });
 }
 

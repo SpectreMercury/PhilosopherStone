@@ -275,7 +275,7 @@ const CreateGift: React.FC<CreateGiftProps> = ({ onClose }) => {
               <img src={image.preview} alt={`uploaded ${index}`} className="w-16 h-16 object-cover" />
               <div>
                 <p className='w-32 text-white001 text-body1mb font-SourceSanPro overflow-hidden overflow-ellipsis whitespace-nowrap'>{image.file.name}</p>
-                <p className='text-white003 text-labelmb font-SourceSanPro'> ~ {onChainSize + 111} CKB</p>
+                <p className='text-white003 text-labelmb font-SourceSanPro'> ~ { onChainSize } CKB</p>
               </div>
             </div>
             <div className='cursor-pointer' onClick={() => handleRemoveImage(index)}>
@@ -298,7 +298,7 @@ const CreateGift: React.FC<CreateGiftProps> = ({ onClose }) => {
           <div className='flex flex-col items-center mt-6'>
             <div className='flex items-center mb-2'>
               <div className='text-white003 font-SourceSanPro text-labelmb mr-2'>Total On-Chain Cost: </div>
-              <div className='text-white001 font-SourceSanPro text-labelbdmb'>{` ~${onChainSize + 111} CKB`}</div>
+              <div className='text-white001 font-SourceSanPro text-labelbdmb'>{` ~${onChainSize } CKB`}</div>
             </div>
             {balance - onChainSize - 111 >= 1 ?
               <div className='flex items-center'>
