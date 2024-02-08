@@ -26,6 +26,7 @@ import { getLumosScript } from '@/utils/updateLumosConfig';
 import { predefined } from '@ckb-lumos/lumos/config';
 import { fetchHistoryAPI } from '@/utils/fetchAPI';
 import { sporeConfig } from '@/utils/config';
+import Button from '@/app/_components/Button/Button';
 
 interface CreateGiftProps {
   onClose?: () => void; //
@@ -253,13 +254,13 @@ const CreateGift: React.FC<CreateGiftProps> = ({ onClose }) => {
         {
           <div className='h-full flex flex-col items-center justify-center'>
           <Image
-            src='/svg/image-uploader.svg'
+            src='/svg/upload-img.svg'
             width={88}
             height={88}
-            alt='uploader'/>
+            alt='Upload image to mint as Gift'/>
             {!isDragActive &&
               <>
-                <p className='mt-6 mb-2 text-white001 font-SourceSanPro underline text-body1bdmb'>Click to upload a file</p>
+                <p className='mt-6 mb-2 text-white001 font-SourceSanPro underline text-body1bdmb'>Upload an image as Gift</p>
                 <p className='text-white003 font-SourceSanPro text-labelmb'>Maximum file size: 300 KB</p>
               </>
             }
@@ -274,7 +275,7 @@ const CreateGift: React.FC<CreateGiftProps> = ({ onClose }) => {
               <img src={image.preview} alt={`uploaded ${index}`} className="w-16 h-16 object-cover" />
               <div>
                 <p className='w-32 text-white001 text-body1mb font-SourceSanPro overflow-hidden overflow-ellipsis whitespace-nowrap'>{image.file.name}</p>
-                <p className='text-white003 text-labelmb font-SourceSanPro'> ~ {onChainSize + 111} CKB</p>
+                <p className='text-white003 text-labelmb font-SourceSanPro'> ~ { onChainSize } CKB</p>
               </div>
             </div>
             <div className='cursor-pointer' onClick={() => handleRemoveImage(index)}>
@@ -297,7 +298,7 @@ const CreateGift: React.FC<CreateGiftProps> = ({ onClose }) => {
           <div className='flex flex-col items-center mt-6'>
             <div className='flex items-center mb-2'>
               <div className='text-white003 font-SourceSanPro text-labelmb mr-2'>Total On-Chain Cost: </div>
-              <div className='text-white001 font-SourceSanPro text-labelbdmb'>{` ~${onChainSize + 111} CKB`}</div>
+              <div className='text-white001 font-SourceSanPro text-labelbdmb'>{` ~${onChainSize } CKB`}</div>
             </div>
             {balance - onChainSize - 111 >= 1 ?
               <div className='flex items-center'>
@@ -310,16 +311,9 @@ const CreateGift: React.FC<CreateGiftProps> = ({ onClose }) => {
           </div>
         }
       </div>
-      <button 
-        className={`cursor-pointer w-full h-[48px] bg-white001 border border-primary009 text-buttonmb font-SourceSanPro text-primary011 py-2 px-4 rounded mt-6 
-          ${(!file || balance - onChainSize < 1 ) && 'opacity-50 cursor-not-allowed'}`}
-        disabled={!file || balance - onChainSize < 1}
-        onClick={async () => {
-          await handleSubmit(file, undefined, true)
-        }}
-      >
-        Create
-      </button>
+      <Button type='solid' label='Confirm & Create' disabled={!file || balance - onChainSize < 1} onClick={async () => {
+        await handleSubmit(file, undefined, true)}}
+      />
     </div>
   );
 };

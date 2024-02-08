@@ -19,7 +19,7 @@ export default class JoyIdConnector extends CKBConnector {
 
     initConfig({
       name: 'Philosopherstone',
-      joyidAppURL: "https://app.joy.id/",
+      joyidAppURL: process.env.NODE_ENV === 'development' ? 'https://testnet.joyid.dev' : "https://app.joy.id/",
     });
   }
 

@@ -20,6 +20,7 @@ import { RootState } from '@/store/store';
 import { fetchBlindBoxAPI, fetchGiftAPI, fetchHistoryAPI } from '@/utils/fetchAPI';
 import { formatNumberWithCommas } from '@/utils/common';
 import { sporeConfig } from '@/utils/config';
+import Button from '@/app/_components/Button/Button';
 
 
 const Gift: React.FC = () => {
@@ -154,7 +155,7 @@ const Gift: React.FC = () => {
               alt='Copy address'
             />
           </button>
-          <Link href={`https://pudge.explorer.nervos.org/transaction/${spore?.cell?.outPoint?.txHash}`} target='_blank'>
+          <Link href={`https://explorer.nervos.org/transaction/${spore?.cell?.outPoint?.txHash}`} target='_blank'>
             <Image
               src='/svg/icon-globe.svg'
               width={24}
@@ -165,24 +166,14 @@ const Gift: React.FC = () => {
         </div>
       </div>
       <div className="mb-6">
-        <Image src={`/api/media/${pathAddress}`} width={300} height={200} alt="Gift" />
+        <img src={`/api/media/${pathAddress}`} className='w-[300px] h-[200px]' alt="Gift" />
       </div>
       <div className='text-white001 font-Montserrat text-hd2mb mb-6'>
         {occupied} CKB 
       </div>
       {giftMessage && <p className="pb-4 font-SourceSanPro text-white001 text-body1mb">“{giftMessage}”</p>}
-      <Link 
-        className="w-full h-12 flex justify-center items-center text-buttonmb font-SourceSanPro border border-white002 bg-white001 text-primary011 mb-4 rounded" 
-        href={`/send?hasGift=${pathAddress}`}
-      >
-        Send as Gift
-      </Link>
-      <button 
-        className="w-full h-12 text-buttonmb font-SourceSanPro border border-white002 rounded text-white001" 
-        onClick={handleMeltModal}
-      >
-        Melt
-      </button>
+      <Button type='solid' label='Send as Gift' className='flex justify-center mb-4 items-center' href={`/send?hasGift=${pathAddress}`} />
+      <Button type='outline' label='Melt into CKB' onClick={handleMeltModal} />
     </div>
   );
 };

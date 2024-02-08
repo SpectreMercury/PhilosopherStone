@@ -31,3 +31,11 @@ export const formatDate = (dateStr: string): string => {
 
   return `${day}${daySuffix}, ${month}, ${year}`;
 }
+
+export const formatTypeDate = (isoString: string): string => {
+    const date = new Date(isoString);
+    const day = date.getUTCDate().toString().padStart(2, '0');
+    const month = (date.getUTCMonth() + 1).toString().padStart(2, '0'); // JavaScript中月份是从0开始的，所以+1
+    const year = date.getUTCFullYear();
+    return `${month}/${day}/${year}`;
+}

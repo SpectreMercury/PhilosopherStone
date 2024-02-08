@@ -18,8 +18,9 @@ import { getLumosScript } from '@/utils/updateLumosConfig';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { fetchGiftAPI } from '@/utils/fetchAPI';
-import { formatDate } from '@/utils/common';
+import { formatDate, formatTypeDate } from '@/utils/common';
 import { sporeConfig } from '@/utils/config';
+import Button from '@/app/_components/Button/Button';
 
 
 const Receipt: React.FC = () => {
@@ -125,10 +126,6 @@ const Receipt: React.FC = () => {
   }
 
   useEffect(() => {
-    // getGiftStatus()
-  }, [])
-
-  useEffect(() => {
     getTransaction()  
   }, [])
 
@@ -136,13 +133,13 @@ const Receipt: React.FC = () => {
     let type = searchParams.get('type');
     let date = searchParams.get('date');
     setHistoryType(type || 'melt');
-    date ? setHistoryDate(formatDate(date)): '';
+    date ? setHistoryDate(formatTypeDate(date)): '';
   }, [searchParams])
 
 
 
   useEffect(() => {
-    if(!isSporeLoading && sporeId) {
+    if(!isSporeLoading && sporeId && spore?.cell?.cellOutput.capacity) {
       formatNumberWithCommas(BI.from(spore?.cell?.cellOutput.capacity).toNumber() / 10 ** 8)
     }
   }, [isSporeLoading, spore?.cell?.cellOutput.capacity, sporeId])
@@ -174,7 +171,7 @@ const Receipt: React.FC = () => {
               alt='Copy address'
             />
           </button>
-          <Link href={`https://pudge.explorer.nervos.org/transaction/${spore?.cell?.outPoint?.txHash}`} target='_blank'>
+          <Link href={`https://explorer.nervos.org/transaction/${spore?.cell?.outPoint?.txHash}`} target='_blank'>
             <Image
               src='/svg/icon-globe.svg'
               width={24}
@@ -208,7 +205,7 @@ const Receipt: React.FC = () => {
       {
         transactionStatus === 'committed' && 
         <div className='w-full relative flex items-center justify-between bg-success-bg rounded-md text-success-function px-4 border border-success-function font-SourceSanPro text-labelmb py-2'>
-          <p>{`Success: This Gift was ${historyType === 'melt' ? 'melt' : historyType === 'create' ? 'created' : 'sent' } successfully.`}</p>
+          <p>{`Success: This Gift was ${historyType === 'melt' ? 'melt' : historyType === 'create' ? 'created' : historyType === 'receive' ? 'received': 'sent' } successfully.`}</p>
         </div>
       }
       <div className="py-4 relative">
@@ -223,7 +220,7 @@ const Receipt: React.FC = () => {
         </>)
           :
         (<>{sporeId ? 
-          <Image src={`/api/media/${sporeId}`} width={300} height={200} className="px-4" alt="Gift" /> 
+          <img src={`/api/media/${sporeId}`} className="px-4 w-[300px] h-[200px]" alt="Gift" /> 
             :
           <Image alt={'unkown-sporeId'} src={`/svg/blindbox-animation-1.svg`} className="rounded" width={164} height={120}/>
         }</>)}
@@ -236,18 +233,8 @@ const Receipt: React.FC = () => {
       {
         transactionStatus === 'committed' && historyType === 'created' && 
         <>
-          <Link 
-            className="w-full h-12 flex justify-center items-center text-buttonmb font-SourceSanPro border border-white002 bg-white001 text-primary011 py-2 px-4 rounded" 
-            href={`/send?hasGift=${sporeId}`}
-          >
-            Send as Gift
-          </Link>
-          <button 
-            className="w-full h-12 text-buttonmb font-SourceSanPro border border-white002 my-4 py-2 px-4 rounded text-white001" 
-            onClick={handleMeltModal}
-          >
-            Melt
-          </button>
+          <Button type='solid' label='Send as Gift' href={`/send?hasGift=${sporeId}`} />
+          <Button className='my-6' type='outline' label='Melt into CKB' onClick={handleMeltModal} />
         </>
       }
     </div>

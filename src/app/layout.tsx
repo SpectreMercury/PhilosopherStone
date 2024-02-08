@@ -17,6 +17,7 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import { predefinedSporeConfigs, setSporeConfig } from "@spore-sdk/core";
 import { predefined } from "@ckb-lumos/config-manager";
+import Script from "next/script";
 
 const StyledMaterialDesignContent = styled(MaterialDesignContent)(() => ({
   '&.notistack-MuiContent-success': {
@@ -58,9 +59,24 @@ function RootLayout({
   return (
     <html lang="en" className="min-h-full min-w-full">
       <head>
+        <link rel="icon" href="/svg/ps-favicon.svg" sizes="any" />
         <meta property="og:title" content="Philosopher's Stone" />
         <meta property="og:description" content="On-Chain Gifting Platform" />
         <meta property="og:image" content="/svg/ps-og.png" />
+        <Script async src="https://www.googletagmanager.com/gtag/js?id=G-23YX4KSBQE"></Script>
+        <Script id="23YX4KSBQE">
+          {
+            `
+            window.dataLayer = window.dataLayer || [];
+              {/** @ts-ignore */}
+              function gtag(){dataLayer.push(arguments)};
+              {/** @ts-ignore */}
+              gtag('js', new Date());
+
+              gtag('config', 'G-23YX4KSBQE');
+            `
+          }
+        </Script>
       </head>
       <body className="bg-desktop-bg bg-no-repeat min-h-full min-w-full m-0">
         <Image 

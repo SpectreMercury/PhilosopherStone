@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { enqueueSnackbar } from "notistack";
+import Button from '@/app/_components/Button/Button';
 
 const Finished: React.FC = () => {
     const searchParams = useSearchParams();
@@ -15,8 +16,8 @@ const Finished: React.FC = () => {
 
     const handleCopy = async () => {
         try {
-        await navigator.clipboard.writeText(`${window.location.protocol}//${window.location.host}/collect/${key}`);
-        enqueueSnackbar('Copied Successful', {variant: 'success'})
+            await navigator.clipboard.writeText(`${window.location.protocol}//${window.location.host}/collect/${key}`);
+            enqueueSnackbar('Copied Successful', {variant: 'success'})
         } catch (err) {
         enqueueSnackbar('Copied Fail', {variant: 'error'})
         }
@@ -39,18 +40,8 @@ const Finished: React.FC = () => {
                         className="w-full py-3 rounded-md border-2 border-white009 bg-primary008 text-white001 px-4"
                         readOnly={true}
                         value={`${window.location.protocol}//${window.location.host}/collect/${key}`}/>
-                    <button 
-                        onClick={handleCopy}
-                        className="w-full h-12 font-SourceSanPro text-buttonmb border border-white002 bg-white001 text-primary011 py-2 px-4 rounded flex items-center justify-center"
-                    >
-                        Copy Link
-                    </button>
-                    <Link 
-                        target="_blank" href={`https://twitter.com/intent/tweet?text=${tweetText}`}
-                        className="w-full h-12 font-SourceSanPro text-buttonmb border border-white002 text-white001 py-2 px-4 rounded flex items-center justify-center"
-                    >
-                        Share on Twitter
-                    </Link>
+                    <Button type='solid' label='Copy link' onClick={handleCopy} />
+                    <Button type='outline' label='Share on Twitter' className="flex justify-center items-center" target="_blank" href={`https://twitter.com/intent/tweet?text=${tweetText}`} />
                 </>)
                 : (<>
                     <Image 
@@ -65,18 +56,8 @@ const Finished: React.FC = () => {
                     <div className="text-white001 text-center font-SourceSanPro">
                         Depending on network traffic, it might take a little time to complete. You can always check the status in your <Link href={'/history'} className='text-linkColor'>Gift History</Link>, or visit the <Link className=" text-linkColor" target="_blank" href={`https://explorer.nervos.org/transaction/${txHash}`}>CKB Explorer</Link>. Thank you for spreading joy with Philosopher&apos;s Stone! 🌟
                     </div>
-                    <Link 
-                        href={'/'} 
-                        className='w-full flex items-center justify-center h-12 text-buttonmb font-SourceSanPro border border-white002 bg-white001 text-primary011 py-2 px-4 rounded mt-6'
-                    >
-                        Back to Home
-                    </Link>
-                    <Link 
-                        href={'/history'}
-                        className="w-full flex items-center justify-center h-12 text-buttonmb font-SourceSanPro border border-white002 py-2 px-4 rounded text-white001" 
-                    >
-                        View Gift History
-                    </Link>
+                    <Button type='solid' label='Back to home' href={'/'} />
+                    <Button type='outline' label='View Gift history' href={'/history'} />
                 </>)
             }
         </div>

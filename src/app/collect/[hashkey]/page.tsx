@@ -13,8 +13,8 @@ import { router } from '@/server/trpc';
 import { getLumosScript } from '@/utils/updateLumosConfig';
 import WalletModal from '@/app/_components/WalletModal/WalletModal';
 import Image from 'next/image';
-import Link from 'next/link';
 import { sporeConfig } from '@/utils/config';
+import Button from '@/app/_components/Button/Button';
 
 const Hashkey: React.FC = () => {
     const pathName = usePathname();
@@ -51,7 +51,7 @@ const Hashkey: React.FC = () => {
     }
 
     const deleteHashkey = async(key: string) => {
-        let rlt = await fetchGiftAPI({
+        let rlt = await fetchHashkeyAPI({
             action: 'deleteHash',
             key
         });
@@ -64,25 +64,14 @@ const Hashkey: React.FC = () => {
         }
         setReceiveProcessing(true);
         const receiverAccounts = walletAddress!!;
-        const sporeCell = await getSporeById(`${sporeId}`, sporeConfig);
-        const senderAddress = await fetchWalletAPI({
-            action: 'getAddress'
-        })
-        const { txSkeleton, outputIndex } = await transferSpore({
-            outPoint: sporeCell.outPoint!,
-            fromInfos: [senderAddress.address!!],
-            toLock: helpers.parseAddress(receiverAccounts, {
-                config: sporeConfig.lumos,
-            }),
-            config: sporeConfig,
-        });
         const txHash = await fetchWalletAPI({
             action: 'signAndSendTransaction',
-            txSkeleton
+            sporeId,
+            receiverAccounts
         });
         setReceiveProcessing(false);
         deleteHashkey(pathAddress);
-        router.push(`/receipt/${txHash}?date=${sporeInfo?.date}&type=receive`)
+        router.push(`/receipt/${txHash.txHash}?date=${sporeInfo?.date}&type=receive`)
     }
 
     useEffect(() => {
@@ -121,24 +110,24 @@ const Hashkey: React.FC = () => {
                             { sporeInfo ? new Date(sporeInfo?.date!!).toLocaleDateString() : '*****'}
                         </div>
                         <div className='w-full flex justify-center mt-4'>
-                            <Image src={`/api/media/${sporeInfo?.sporeId}`} width={220} height={170} className="px-4" alt="Gift" /> 
+                            <img src={`/api/media/${sporeInfo?.sporeId}`} className="px-4 w-[220px] h-[170px]" alt="Gift" /> 
                         </div>
                         <div className='w-full flex justify-center mt-4 items-center'>
                             {giftMessage && <p className="text-body1mb">{giftMessage}</p>}
                         </div>
                         
                     </div>
-                    <button 
-                        disabled={receiveProcessing}
+                    <Button
+                        type='solid'
+                        label={receiveProcessing ? 'Claiming...' : 'Claim Now'}
+                        className='mt-8 flex justify-center items-center'
                         onClick={() => {
                             if(sporeInfo) {
                                 receiveGift(sporeInfo.sporeId);
                             }
                         }}
-                        className="w-full h-12 mt-8 font-SourceSanPro border border-white002 bg-white001 text-primary011 text-buttonmb py-2 px-4 rounded"
-                    >
-                        {receiveProcessing ? 'Claiming...' :'Claim Now'}
-                    </button>
+                        disabled={receiveProcessing}
+                    />
                 </>)
             }
             {
@@ -162,9 +151,7 @@ const Hashkey: React.FC = () => {
                                 This gift was claimed by someone else. But don&apos;t worry, there are plenty more surprises. Keep an eye out for the next magical Gift crafted with Philosopher&apos;s Stone! 🌟
                             </p>
                         </div>
-                        <Link href={'/'} className='w-full flex items-center justify-center h-12 text-buttonmb font-SourceSanPro border border-white002 bg-white001 text-primary011 py-2 px-4 rounded mt-8'>
-                            Come Back Later
-                        </Link>
+                        <Button className='mt-8 flex justify-center items-center' type='solid' label='Come back later' href={'/'}/>
                     </div>
                 )
             }
