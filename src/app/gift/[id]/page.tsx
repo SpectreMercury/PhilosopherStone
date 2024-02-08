@@ -172,7 +172,7 @@ const Gift: React.FC = () => {
         {occupied} CKB 
       </div>
       {giftMessage && <p className="pb-4 font-SourceSanPro text-white001 text-body1mb">“{giftMessage}”</p>}
-      <Button type='solid' label='Send as Gift' className='mb-4' href={`/send?hasGift=${pathAddress}`} />
+      <Button type='solid' label='Send as Gift' className='flex justify-center mb-4 items-center' href={`/send?hasGift=${pathAddress}`} />
       <Button type='outline' label='Melt into CKB' onClick={handleMeltModal} />
     </div>
   );
