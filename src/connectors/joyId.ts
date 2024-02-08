@@ -1,7 +1,7 @@
 import { Script } from '@ckb-lumos/base';
 import { BI, Transaction, commons, config, helpers } from '@ckb-lumos/lumos';
 // @ts-ignore
-import { connect, initConfig, signChallenge } from '@joyid/ckb';
+import { connect, initConfig, signChallenge, signTransaction } from '@joyid/ckb';
 // @ts-ignore
 import CKBConnector from './base';
 import * as omnilock from './lock/omnilock';
@@ -91,7 +91,7 @@ export default class JoyIdConnector extends CKBConnector {
           return outputs.set(index, output);
         });
       }
-    });
+      }); 
 
     const transaction = await omnilock.signTransaction(
       txSkeleton,

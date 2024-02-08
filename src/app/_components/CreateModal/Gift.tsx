@@ -108,12 +108,13 @@ const CreateGift: React.FC<CreateGiftProps> = ({ onClose }) => {
   const addSpore = useCallback(
     async (...args: Parameters<typeof createSpore>) => {
       let { txSkeleton, outputIndex } = await createSpore(...args);
-      const signedTx = await signTransaction(txSkeleton);
-      const txHash = await sendTransaction(signedTx);
-      await PutIntoProcessList(walletAddress!!, txHash!!);
-      const outputs = txSkeleton.get('outputs');
-      const spore = outputs.get(outputIndex);
-      return spore;
+      console.log(txSkeleton);
+      // const signedTx = await signTransaction(txSkeleton);
+      // const txHash = await sendTransaction(signedTx);
+      // await PutIntoProcessList(walletAddress!!, txHash!!);
+      // const outputs = txSkeleton.get('outputs');
+      // const spore = outputs.get(outputIndex);
+      // return spore;
     },
     [signTransaction],
   );
