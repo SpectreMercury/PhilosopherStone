@@ -41,7 +41,7 @@ const Finished: React.FC = () => {
                         readOnly={true}
                         value={`${window.location.protocol}//${window.location.host}/collect/${key}`}/>
                     <Button type='solid' label='Copy link' onClick={handleCopy} />
-                    <Button type='outline' label='Share on Twitter' target="_blank" href={`https://twitter.com/intent/tweet?text=${tweetText}`} />
+                    <Button type='outline' label='Share on Twitter' className="flex justify-center items-center" target="_blank" href={`https://twitter.com/intent/tweet?text=${tweetText}`} />
                 </>)
                 : (<>
                     <Image 

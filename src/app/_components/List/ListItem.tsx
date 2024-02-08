@@ -37,7 +37,7 @@ const ListItem: React.FC<ItemProps> = ({ gift, isSelected, onSelect, viewMode, i
       <div className="w-[115px] ml-4 h-[80px] flex-grow flex flex-col items-start justify-center">
         <p className="font-SourceSanPro text-body1bdmb text-white001">{gift.id.slice(0,6)}...{gift.id.slice(gift.id.length - 6,gift.id.length)}</p>
         {
-          isSpore && <p className="font-SourceSanPro text-labelmb text-white003">{BI.from(gift.cell?.cellOutput.capacity).toNumber() / 10 ** 8} CKB</p>
+          isSpore && <p className="font-SourceSanPro text-labelmb text-white003">{Math.ceil(BI.from(gift.cell?.cellOutput.capacity).toNumber() / 10 ** 8)} CKB</p>
         }
       </div>
       {isSelected && (

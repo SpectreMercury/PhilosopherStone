@@ -18,7 +18,7 @@ import { getLumosScript } from '@/utils/updateLumosConfig';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { fetchGiftAPI } from '@/utils/fetchAPI';
-import { formatDate } from '@/utils/common';
+import { formatDate, formatTypeDate } from '@/utils/common';
 import { sporeConfig } from '@/utils/config';
 import Button from '@/app/_components/Button/Button';
 
@@ -126,10 +126,6 @@ const Receipt: React.FC = () => {
   }
 
   useEffect(() => {
-    // getGiftStatus()
-  }, [])
-
-  useEffect(() => {
     getTransaction()  
   }, [])
 
@@ -137,7 +133,7 @@ const Receipt: React.FC = () => {
     let type = searchParams.get('type');
     let date = searchParams.get('date');
     setHistoryType(type || 'melt');
-    date ? setHistoryDate(formatDate(date)): '';
+    date ? setHistoryDate(formatTypeDate(date)): '';
   }, [searchParams])
 
 
@@ -209,7 +205,7 @@ const Receipt: React.FC = () => {
       {
         transactionStatus === 'committed' && 
         <div className='w-full relative flex items-center justify-between bg-success-bg rounded-md text-success-function px-4 border border-success-function font-SourceSanPro text-labelmb py-2'>
-          <p>{`Success: This Gift was ${historyType === 'melt' ? 'melt' : historyType === 'create' ? 'created' : 'sent' } successfully.`}</p>
+          <p>{`Success: This Gift was ${historyType === 'melt' ? 'melt' : historyType === 'create' ? 'created' : historyType === 'receive' ? 'received': 'sent' } successfully.`}</p>
         </div>
       }
       <div className="py-4 relative">
