@@ -120,7 +120,7 @@ const Hashkey: React.FC = () => {
                     <Button
                         type='solid'
                         label={receiveProcessing ? 'Claiming...' : 'Claim Now'}
-                        className='mt-8'
+                        className='mt-8 flex justify-center items-center'
                         onClick={() => {
                             if(sporeInfo) {
                                 receiveGift(sporeInfo.sporeId);
@@ -151,7 +151,7 @@ const Hashkey: React.FC = () => {
                                 This gift was claimed by someone else. But don&apos;t worry, there are plenty more surprises. Keep an eye out for the next magical Gift crafted with Philosopher&apos;s Stone! 🌟
                             </p>
                         </div>
-                        <Button className='mt-8' type='solid' label='Come back later' href={'/'}/>
+                        <Button className='mt-8 flex justify-center items-center' type='solid' label='Come back later' href={'/'}/>
                     </div>
                 )
             }

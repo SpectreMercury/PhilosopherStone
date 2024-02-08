@@ -2,14 +2,12 @@
 
 import React, { useCallback, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { transferSpore as _transferSpore, predefinedSporeConfigs } from '@spore-sdk/core';
-import { QuerySpore } from '@/hooks/useQuery/type';
+import { transferSpore as _transferSpore } from '@spore-sdk/core';
 import { useSporeQuery } from '@/hooks/useQuery/useQuerybySpore';
 import { BI, OutPoint, config, helpers } from '@ckb-lumos/lumos';
 import { fetchBlindBoxAPI, fetchGiftAPI, fetchHashkeyAPI, fetchHistoryAPI, fetchWalletAPI } from '@/utils/fetchAPI';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
-import { boxData } from '@/types/BlindBox';
 import Image from 'next/image'
 import useLoadingOverlay from '@/hooks/useLoadOverlay';
 import LoadingOverlay from '../_components/LoadingOverlay/LoadingOverlay';
@@ -18,10 +16,8 @@ import { sendTransaction } from '@/utils/transaction';
 import { useMutation } from '@tanstack/react-query';
 import { enqueueSnackbar } from 'notistack';
 import { useSporesByAddressQuery } from '@/hooks/useQuery/useSporesByAddress';
-import { getLumosScript } from '@/utils/updateLumosConfig';
 import { GiftProps } from '@/types/Gifts';
-import { values } from 'lodash';
-import { HashkeyObj, SporeItem } from '@/types/Hashkey';
+import { SporeItem } from '@/types/Hashkey';
 import { GenerateHashKey } from '@/utils/common';
 import { sporeConfig } from '@/utils/config';
 import Button from '@/app/_components/Button/Button';
@@ -36,6 +32,7 @@ const SendGift: React.FC = () => {
   const [hasGift, setHasGift] = useState<string>();
   const [occupied, setOccupied] = useState<string>('');
   const [activeTab, setActiveTab] = useState<'Wallet Address' | 'URL'>('URL');
+  const [hashKey, setHashKey] = useState<string>('');
   const walletAddress = useSelector((state: RootState) => state.wallet.wallet?.address);
   const { refresh: refreshSporesByAddress } = useSporesByAddressQuery(walletAddress, false);
   const { data: spore, isLoading: isSporeLoading } = useSporeQuery(
@@ -67,12 +64,23 @@ const SendGift: React.FC = () => {
     setHasGift(randomSelect.id)
   }
 
+  const generateKey = (id: string) => {
+    let _hashkey = new Date().getTime().toString() + id;
+    setHashKey(GenerateHashKey(_hashkey));
+  }
+
   const formatNumberWithCommas = (num: number) => {
     const numStr = num.toString();
     const reversedNumStr = numStr.split('').reverse().join('');
     const commaInserted = reversedNumStr.replace(/(\d{3})(?=\d)/g, '$1,');
     setOccupied(commaInserted.split('').reverse().join(''))
   }
+
+  useEffect(() => {
+    if(spore && spore.id && activeTab === 'URL' && hashKey === '') {
+      generateKey(spore.id);
+    }
+  }, [activeTab, spore])
 
   useEffect(() => {
     if(walletAddress) {
@@ -141,7 +149,7 @@ const SendGift: React.FC = () => {
       if (!walletAddress || (!values.to && activeTab === 'Wallet Address') || !spore) {
         return;
       }
-      const hashKeyText = new Date().getTime().toString() + spore.id;
+      let hashKeyText = new Date().getTime().toString() + spore.id;
       //update wallet address by activeTab
       let toAddress = values.to
       if(activeTab === 'URL') {
@@ -159,7 +167,7 @@ const SendGift: React.FC = () => {
         config: sporeConfig,
         useCapacityMarginAsFee: true,
       });
-      await saveHashKey(GenerateHashKey(hashKeyText), {sporeId: spore.id, senderWalletAddress: walletAddress!!, txHash: rlt.txHash })
+      await saveHashKey(hashKey, {sporeId: spore.id, senderWalletAddress: walletAddress!!, txHash: rlt.txHash })
       await PutIntoProcessList(walletAddress!!, rlt.txHash, toAddress, spore.id);
       await callSaveAction(toAddress, spore.id, {
         'giftMessage': message
@@ -168,7 +176,7 @@ const SendGift: React.FC = () => {
       setProgressStatus('done')
       enqueueSnackbar('Gift Send Successful', { variant: 'success' });
       refreshSporesByAddress()
-      router.push(`/finished?tx=${rlt.txHash}&type=URL&key=${GenerateHashKey(hashKeyText)}`);
+      router.push(`/finished?tx=${rlt.txHash}&type=URL&key=${hashKey}`);
     },
     [transferSporeMutation],
   );
@@ -245,6 +253,15 @@ const SendGift: React.FC = () => {
         {
           activeTab === 'URL' && (
             <>
+              {/* <div className='flex flex-col px-4'>
+                <p className='text-white001 font-SourceSanPro text-body1bdmb mt-4'>Wallet key</p>
+                <input 
+                  id="walletAddress"
+                  value={hashKey}
+                  onChange={(e) => setHashKey(e.target.value)}
+                  className='w-full h-12 border border-white009 rounded-lg bg-primary008 mt-2 px-4 text-white001' />
+              </div> */}
+              
               <p className='px-4 mt-4 text-white001 font-SourceSanPro text-labelmb'>For URL delivery, click &#39;Pack Gift&#39; below to get a shareable link.</p>
             </>
           )
@@ -264,13 +281,15 @@ const SendGift: React.FC = () => {
             </>
           )
         }
-        <Button 
-          type='solid' 
-          label='Pack Gift' 
-          onClick={() => {handleSubmit({to: toWalletAddress || GenerateHashKey(hasGift!!)})}}
-          disabled={!toWalletAddress && activeTab !== 'URL'}
-          className='px-4 my-8'
-        />
+        <div className='px-4'>
+          <Button 
+            type='solid' 
+            label='Pack Gift' 
+            onClick={() => {handleSubmit({to: toWalletAddress || GenerateHashKey(hasGift!!)})}}
+            disabled={!toWalletAddress && activeTab !== 'URL'}
+            className='px-4 my-8'
+          />
+        </div>
       </div>
     </div>
   );
