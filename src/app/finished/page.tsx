@@ -56,8 +56,8 @@ const Finished: React.FC = () => {
                     <div className="text-white001 text-center font-SourceSanPro">
                         Depending on network traffic, it might take a little time to complete. You can always check the status in your <Link href={'/history'} className='text-linkColor'>Gift History</Link>, or visit the <Link className=" text-linkColor" target="_blank" href={`https://explorer.nervos.org/transaction/${txHash}`}>CKB Explorer</Link>. Thank you for spreading joy with Philosopher&apos;s Stone! 🌟
                     </div>
-                    <Button type='solid' label='Back to home' href={'/'} />
-                    <Button type='outline' label='View Gift history' href={'/history'} />
+                    <Button type='solid' className="flex justify-center items-center" label='Back to home' href={'/'} />
+                    <Button type='outline' className="flex justify-center items-center" label='View Gift history' href={'/history'} />
                 </>)
             }
         </div>
