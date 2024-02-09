@@ -32,7 +32,8 @@ export interface HistoryParams {
 export interface HashkeyParams {
   action: string;
   key: string;
-  record?: SporeItem
+  record?: SporeItem;
+  receiverAccount?: string;
 }
 
 export interface WalletParams {

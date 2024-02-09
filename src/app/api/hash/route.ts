@@ -3,7 +3,8 @@ import { NextApiResponse } from "next";
 import { NextRequest, NextResponse } from "next/server";
 import { HistoryRecord } from '@/types/History';
 import { setInProcessGift, setUnavailableGifts } from "../gift/route";
-import { HashkeyObj } from "@/types/Hashkey";
+import { HashkeyGift, HashkeyObj } from "@/types/Hashkey";
+import { signAndSendTransactionApi } from "../wallet/route";
 
 function handleError(error: string, errno: number = 400) {
     return NextResponse.json({ error, errno }, { status: errno });
@@ -30,6 +31,22 @@ const getHashKeyGift = async(k: string) => {
     return NextResponse.json({ data: rlt, errno: 200 }, { status: 200 });
 }
 
+const checkAndGetHashKey = async (k: string, receiverAccount: string, uuid: string): Promise<NextResponse> => {
+    const rlt: HashkeyGift | null = await kv.get(`${k}-hashKey`);
+    const exists = rlt !== null;
+    if (!exists) {
+        return NextResponse.json({ data: exists, errno: 404 }, { status: 200 });
+    }
+    const userExist: Boolean | null = await kv.get(`${uuid}`)
+    if (userExist) {
+       // return NextResponse.json({ data: userExist, errno: 403 }, { status: 200 });
+    }
+    uuid && kv.set(uuid, true);
+    deleteHash(k); 
+    let txHash = await signAndSendTransactionApi(rlt.sporeId, receiverAccount)
+    return NextResponse.json({ data: {...rlt, tradeTx: txHash}, errno: 200 }, { status: 200 });
+}
+
 const saveHashkey = async (k: string, record: HashkeyObj) => {
     let date = new Date();
     await kv.set(`${k}-hashKey`, {...record, date});
@@ -53,6 +70,8 @@ export async function POST(req: NextRequest, res: NextApiResponse) {
             return await withErrorHandling(getHashKeyHistory, body.key, body.start || 0, body.end || 10);
         case 'deleteHash':
             return await withErrorHandling(deleteHash, body.key);
+        case 'checkAndGetHashKey':
+            return await withErrorHandling(checkAndGetHashKey, body.key, body.receiverAccount, req.cookies.get('__gpi')?.value.split('UID=')[1] || '');
         default:
             return handleError('Invalid action', 400);
     }
