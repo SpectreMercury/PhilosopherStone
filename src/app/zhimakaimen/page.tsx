@@ -63,7 +63,7 @@ const Zhimakaimen: React.FC = () => {
                         <Button
                             type='solid'
                             label={receiveProcessing ? 'Claiming...' : 'Claim Now'}
-                            className='w-[343px] mx-auto mt-8 flex justify-center items-center'
+                            className='!w-[343px] mx-auto mt-8 flex justify-center items-center'
                             onClick={() => {
                                 claimGift()
                             }}
