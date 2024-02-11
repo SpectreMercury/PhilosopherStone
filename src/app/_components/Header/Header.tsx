@@ -178,6 +178,7 @@ const Header:React.FC = () => {
               <MenuList text={"Home"} isActive={isRouteActive('/')} onClick={() => NaviTo('/')} />
               {walletAddress && <MenuList text={"History"} isActive={isRouteActive('/history')} onClick={() => NaviTo('/history')} />}
               <MenuList text={"FAQ"} isActive={isRouteActive('/FAQ')} onClick={() => NaviTo('/FAQ')} />
+              <MenuList text={'Claim Gift'} isActive={isRouteActive('/zhimakaimen')} onClick={() => NaviTo('/zhimakaimen')} />
             </div>
             <div className='px-4 border-t border-white009 sticky bottom-0'>
               {
@@ -230,7 +231,7 @@ const Header:React.FC = () => {
 export default Header;
 
 interface MenuListProps {
-  text: string;
+  text: 'Home' | 'History'| 'FAQ' | 'Claim Gift';
   onClick: MouseEventHandler<HTMLDivElement>;
   isActive: boolean;
 }
@@ -238,14 +239,22 @@ interface MenuListProps {
 const MenuList: React.FC<MenuListProps> = ({ text, onClick, isActive }) => { 
   return (
     <div 
-      className={`h-11 cursor-pointer flex gap-4 ${isActive? 'text-white001 font-bold': 'text-white005'} text-body1mb items-center`} 
+      className={`h-11 cursor-pointer flex gap-2 ${isActive? 'text-white001 font-bold': 'text-white005'} text-body1mb items-center`} 
       onClick={onClick}
     >
       {text}
-      {isActive && 
+      {isActive && text !== 'Claim Gift' &&
         <Image 
           alt='active tab'
           src='/svg/icon-star.svg'
+          width={24}
+          height={24}
+        />
+      }
+      {text === 'Claim Gift' && 
+        <Image
+          alt='Event to claim New Year Gift'
+          src='/svg/icon-dragon.svg'
           width={24}
           height={24}
         />

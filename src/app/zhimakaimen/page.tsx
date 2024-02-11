@@ -9,6 +9,7 @@ import { fetchHashkeyAPI } from '@/utils/fetchAPI';
 import { HashkeyGift, HashkeyObj } from '@/types/Hashkey';
 import { formatString } from '@/utils/common';
 import Link from 'next/link';
+import WalletModal from '@/app/_components/WalletModal/WalletModal';
 
 const Zhimakaimen: React.FC = () => {
     const [receiveProcessing, setReceiveProcessing] = useState<boolean>(false);
@@ -19,9 +20,9 @@ const Zhimakaimen: React.FC = () => {
     const [giftMessage, setGiftMessage] = useState<string>('');
     const [sporeInfo, setSporeInfo] = useState<HashkeyGift>();
     const tweetText = "I just unlocked an exclusive New Year gift with #PhilosopherStone at the event co-hosted by #BuidlerDAO! 🎉 Join the game and claim yours. Don't miss out! 🚀"
+    const [showHeaderModal, setHeaderShowModal] = useState(false);
 
     const claimGift = async () => {
-        if(!hashKey || !walletAddress) return 
         const txHash = await fetchHashkeyAPI({
             action: 'checkAndGetHashKey',
             key: hashKey,
@@ -35,6 +36,9 @@ const Zhimakaimen: React.FC = () => {
             setPageStatus('fail'); 
             return
         }
+        if (!walletAddress) {
+            setHeaderShowModal(true);
+        }
         setSporeInfo(txHash.data);
         setPageStatus('successful');
     }
@@ -42,10 +46,11 @@ const Zhimakaimen: React.FC = () => {
 
 
     return (
-        <div className='px-4'>
+        <div className='px-4 universe-bg flex-1 flex flex-col rounded-3xl'>
             {
                 pageStatus === 'process' && (
                     <>
+                        {showHeaderModal && <WalletModal onClose={() => setHeaderShowModal(false)}/>}
                         <div className='w-full flex justify-center mt-8'>
                             <Image src={'/svg/dragon-packet.svg'} width={343} height={170} alt={'dragon-pocket'} />
                         </div>
@@ -55,10 +60,13 @@ const Zhimakaimen: React.FC = () => {
                         </div>
                         <div className='w-full flex items-center flex-col justify-center mt-8'>
                             <input 
-                                onChange={(e) => {setHashKey(e.target.value)}}
+                                onChange={(e) => {
+                                    setHashKey(e.target.value);
+                                    setErrMsg(''); 
+                                }}
                                 className='w-[343px] h-12 border border-white009 rounded-lg bg-primary008 mt-2 px-4 text-white001'
                             />
-                            { errMsg && <p className=' text-error-function font-SourceSanPro text-labelmb mt-4'>{errMsg}</p> }
+                            { errMsg && <p className='font-SourceSanPro text-light-error-function text-labelmb mt-4'>{errMsg}</p> }
                         </div>
                         <Button
                             type='solid'
@@ -67,7 +75,7 @@ const Zhimakaimen: React.FC = () => {
                             onClick={() => {
                                 claimGift()
                             }}
-                            disabled={receiveProcessing}
+                            disabled={receiveProcessing || !!errMsg || !hashKey}
                         />
                     </>
                 )
@@ -118,10 +126,10 @@ const Zhimakaimen: React.FC = () => {
                             </div>
                         </div>
                         <p className='text-center text-white001 font-Montserrat text-hd3mb mt-6'>Congratulation!</p>
-                        <p className='text-center text-white003 mt-4'>The Gift is yours to enjoy. Please note, it might take some time to appear in your Gifts.</p>
+                        <p className='text-center text-white003 mt-4 font-SourceSanPro text-labelmb'>The Gift is yours to enjoy. Please note, it might take some time to appear in your Gifts.</p>
                         <Button type='solid' className="max-w-[343px] mx-auto flex justify-center items-center mt-8" label='Share on Twitter' href={`https://twitter.com/intent/tweet?text=${tweetText}`} />
                         <div className='w-full text-center mt-4'>
-                            <Link href={'/'} className='text-linkColor text-center text-body1mb'>Back to My Gifts</Link>
+                            <Link href={'/'} className='font-SourceSanPro text-linkColor text-center text-body1mb'>Back to My Gifts</Link>
                         </div>
                     </>
                 )
