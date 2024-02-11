@@ -143,6 +143,7 @@ const DesktopHeader:React.FC = () => {
           <TabList text='Home' isActive={isRouteActive('/')} onClick={() => NaviTo('/')} />
           {walletAddress && <TabList text='History' isActive={isRouteActive('/history')} onClick={() => NaviTo('/history')} />}
           <TabList text='FAQ' isActive={isRouteActive('/FAQ')} onClick={() => NaviTo('/FAQ')} />
+          <TabList text='Claim Gift' isActive={isRouteActive('/zhimakaimen')} onClick={() => NaviTo('/zhimakaimen')} />
           <div 
             className='cursor-pointer relative px-4 py-2 bg-primary010 flex items-center text-white001 rounded'
             onClick={toggleDropdown}
@@ -207,7 +208,7 @@ const DesktopHeader:React.FC = () => {
 export default DesktopHeader;
 
 interface TabListProps {
-  text: string;
+  text: 'Home' | 'History'| 'FAQ' | 'Claim Gift';
   onClick: MouseEventHandler<HTMLDivElement>;
   isActive: boolean;
 }
@@ -215,10 +216,18 @@ interface TabListProps {
 const TabList: React.FC<TabListProps> = ({ text, onClick, isActive }) => { 
   return (
     <div 
-      className={`py-1 ${isActive? 'text-white001 text-body1bdmb cursor-default': 'text-white005 text-body1mb cursor-pointer hover:underline'}`} 
+      className={`flex items-center gap-2 py-1 ${isActive? 'text-white001 text-body1bdmb cursor-default': 'text-white005 text-body1mb cursor-pointer hover:underline'}`} 
       onClick={onClick}
     >
       {text}
+      {text === 'Claim Gift' && 
+        <Image 
+          src="/svg/icon-dragon.svg"
+          alt='Event to claim New Year Gift'
+          width={24}
+          height={24}
+        />
+      }
   </div>
   )
 }

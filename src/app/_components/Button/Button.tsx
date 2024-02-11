@@ -11,7 +11,7 @@ interface ButtonProps {
 	href?: string | undefined;
 	target?: React.HTMLAttributeAnchorTarget | undefined;
 }
-const GENERAL_STYLE = 'w-full h-12 text-buttonmb font-SourceSanPro rounded text-center';
+const GENERAL_STYLE = 'flex justify-center items-center w-full h-12 text-buttonmb font-SourceSanPro rounded';
 const SOLID_STYLE= 'text-primary011 bg-btn-default hover:bg-btn-hover preesed:bg-btn-pressed border-none';
 const OUTLINE_STYLE= 'text-btn-default border border-btn-default hover:bg-hover pressed:bg-pressed';
 const DISABLED_STYLE = 'opacity-50 cursor-not-allowed'
