@@ -17,6 +17,7 @@ async function withErrorHandling<T extends any[]>(
     try {
         return await fn(...args);
     } catch (error) {
+        console.log(error);
         return handleError(error as string);
     }
 }
@@ -39,12 +40,18 @@ const checkAndGetHashKey = async (k: string, receiverAccount: string, uuid: stri
     }
     const userExist: Boolean | null = await kv.get(`${uuid}`)
     if (userExist) {
-       // return NextResponse.json({ data: userExist, errno: 403 }, { status: 200 });
+       return NextResponse.json({ data: userExist, errno: 403 }, { status: 200 });
     }
-    uuid && kv.set(uuid, true);
+    uuid && kv.set(uuid, true, {ex: 86400});
     deleteHash(k); 
-    let txHash = await signAndSendTransactionApi(rlt.sporeId, receiverAccount)
-    return NextResponse.json({ data: {...rlt, tradeTx: txHash}, errno: 200 }, { status: 200 });
+    try {
+        let txHash = await signAndSendTransactionApi(rlt.sporeId, receiverAccount);
+        return NextResponse.json({ data: {...rlt, tradeTx: txHash}, errno: 200 }, { status: 200 });
+    } catch (error) {
+        await kv.set(`${k}-hashKey`, rlt); 
+        console.error("Failed to sign and send transaction:", error);
+        return handleError('Transaction signing and sending failed', 500); 
+    }    
 }
 
 const saveHashkey = async (k: string, record: HashkeyObj) => {
