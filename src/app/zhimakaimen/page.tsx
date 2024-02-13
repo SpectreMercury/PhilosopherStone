@@ -11,6 +11,16 @@ import { formatString } from '@/utils/common';
 import Link from 'next/link';
 import WalletModal from '@/app/_components/WalletModal/WalletModal';
 
+const _existFailText = {
+    head: 'Already claimed',
+    text: 'Looks like you’ve already claimed a Gift. Let’s give everyone else a chance to shine! ❤️'
+}
+
+const _apiFailText = {
+    head: '🎈 Uh-oh! The service got some problem',
+    text: 'With a high volume of users, we are currently processing these gifts, but will complete it swiftly. Please attempt again shortly.'
+}
+
 const Zhimakaimen: React.FC = () => {
     const [receiveProcessing, setReceiveProcessing] = useState<boolean>(false);
     const walletAddress = useSelector((state: RootState) => state.wallet.wallet?.address);
@@ -21,32 +31,49 @@ const Zhimakaimen: React.FC = () => {
     const [sporeInfo, setSporeInfo] = useState<HashkeyGift>();
     const tweetText = "I just unlocked an exclusive New Year gift with #PhilosopherStone at the event co-hosted by #BuidlerDAO! 🎉 Join the game and claim yours. Don't miss out! 🚀"
     const [showHeaderModal, setHeaderShowModal] = useState(false);
+    const [failBody, setFailBody] = useState({
+        head: 'Already claimed',
+        text: 'Looks like you’ve already claimed a Gift. Let’s give everyone else a chance to shine! ❤️'
+    })
 
     const claimGift = async () => {
-        const txHash = await fetchHashkeyAPI({
-            action: 'checkAndGetHashKey',
-            key: hashKey,
-            receiverAccount: walletAddress
-        });
-        if (txHash.errno === 404) {
-            setErrMsg('Key is Wrong, Try another')
-            return 
-        }
-        if (txHash.errno === 403) {
-            setPageStatus('fail'); 
+        if(!walletAddress) {
+            setHeaderShowModal(true);
             return
         }
-        if (!walletAddress) {
-            setHeaderShowModal(true);
-        }
-        setSporeInfo(txHash.data);
-        setPageStatus('successful');
+        try {
+            const txHash = await fetchHashkeyAPI({
+                action: 'checkAndGetHashKey',
+                key: hashKey.replace(/\s/g, ''),
+                receiverAccount: walletAddress
+            });
+            if (txHash.errno === 404) {
+                setErrMsg('Key is Wrong, Try another')
+                return 
+            }
+            if (txHash.errno === 403) {
+                setPageStatus('fail'); 
+                setFailBody(_existFailText);
+                return
+            }
+            if (!walletAddress) {
+                setHeaderShowModal(true);
+            }
+            setSporeInfo(txHash.data);
+            setPageStatus('successful');
+            } catch(error) {
+                setPageStatus('fail');
+                setFailBody(_apiFailText);
+            }
+
     }
 
 
 
     return (
         <div className='px-4 universe-bg flex-1 flex flex-col rounded-3xl'>
+            {showHeaderModal && <WalletModal onClose={() => setHeaderShowModal(false)}/>}
+
             {
                 pageStatus === 'process' && (
                     <>
@@ -85,10 +112,8 @@ const Zhimakaimen: React.FC = () => {
                     <>
                         <div className='w-full flex justify-center items-center flex-col mt-8'>
                             <Image alt={'already-claim'} src={'/svg/already-claim.svg'} width={160} height={170}/>
-                            <p className='text-white001 font-Montserrat text-hd3mb mt-8'>Already claimed</p>
-                            <p className='text-white003 text-labelmb font-SourceSanPro max-w-[343px] text-center mt-8'>
-                                Looks like you’ve already claimed a Gift. Let’s give everyone else a chance to shine! ❤️
-                            </p>
+                            <p className='text-white001 font-Montserrat text-hd3mb mt-8'>{failBody.head}</p>
+                            <p className='text-white003 text-labelmb font-SourceSanPro max-w-[343px] text-center mt-8'>{failBody.text}</p>
                             <Button type='solid' className="max-w-[343px] mx-auto flex justify-center items-center mt-8" label='Back to My Gifts' href={'/'} />
                         </div>
                     </>
