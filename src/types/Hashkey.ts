@@ -6,6 +6,13 @@ export interface HashkeyObj {
     }
 }
 
+export interface HashkeyGift {
+    date: string;
+    senderWalletAddress: string;
+    sporeId: string;
+    txHash: string;
+}
+
 export interface SporeItem {
     sporeId: string;
     senderWalletAddress: string;

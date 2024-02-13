@@ -219,7 +219,7 @@ const Receipt: React.FC = () => {
           />
         </>)
           :
-        (<>{sporeId ? 
+        (<>{sporeId && transactionStatus !== 'pending' ? 
           <img src={`/api/media/${sporeId}`} className="px-4 w-[300px] h-[200px]" alt="Gift" /> 
             :
           <Image alt={'unkown-sporeId'} src={`/svg/blindbox-animation-1.svg`} className="rounded" width={164} height={120}/>
