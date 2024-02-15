@@ -46,24 +46,26 @@ const Header:React.FC = () => {
     const inProcessingGifts = await fetchGiftAPI({
       action: 'getUnavailableGifts',
       key: k,
-    })
+    });
     let unavailableSporeIdList:string[] = [];
     if(!inProcessingGifts.data) return;
-    Object.keys(inProcessingGifts.data).map(async (txHash: string) => {
-      const transaction = await rpc.getTransaction(txHash);
-      const transactionStatus = transaction.txStatus.status;
-      if (transactionStatus === 'committed') {
-        await fetchGiftAPI({
-          action: 'removeUnavailableGifts',
-          key: k,
-          id: txHash
-        });
-      } else {
-        if(inProcessingGifts.data.txHash !== 'create') {
-          unavailableSporeIdList.push(inProcessingGifts.data.txHash);
+    await Promise.all(
+      Object.keys(inProcessingGifts.data).map(async (txHash: string) => {
+        const transaction = await rpc.getTransaction(txHash);
+        const transactionStatus = transaction.txStatus.status;
+        if (transactionStatus === 'committed') {
+          await fetchGiftAPI({
+            action: 'removeUnavailableGifts',
+            key: k,
+            id: txHash
+          });
+        } else {
+          if(inProcessingGifts.data[txHash] !== 'create') {
+            unavailableSporeIdList = [...unavailableSporeIdList, inProcessingGifts.data[txHash]];
+          }
         }
-      }
-    })
+      })
+    )
     dispatch(setUnavailablelist(unavailableSporeIdList));
   }
 

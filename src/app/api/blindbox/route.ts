@@ -85,14 +85,14 @@ const remove = async (k: string, boxName: string, giftIds: string[]) => {
   const boxIndex = currBlindBoxes.findIndex(box => box.id === boxName);
 
   if (boxIndex === -1) {
-    return handleError('No Blind Box found with the given name.');
+    return NextResponse.json({ data:'', errno: 200 }, { status: 200 });
   }
 
   inBlindBoxGifts = inBlindBoxGifts.filter(id => !giftIds.includes(id));
 
   currBlindBoxes[boxIndex].boxData = currBlindBoxes[boxIndex].boxData.filter(gift => !giftIds.includes(gift.id));
-  await kv.set(k, JSON.stringify(currBlindBoxes));
-  await kv.set(`${k}-include`, JSON.stringify(inBlindBoxGifts));
+  await kv.set(k, currBlindBoxes);
+  await kv.set(`${k}-include`, inBlindBoxGifts);
   return NextResponse.json({ data: currBlindBoxes[boxIndex].boxData, errno: 200 }, { status: 200 });
 };
 

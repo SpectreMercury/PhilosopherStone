@@ -21,6 +21,7 @@ import { fetchBlindBoxAPI, fetchGiftAPI, fetchHistoryAPI } from '@/utils/fetchAP
 import { formatNumberWithCommas } from '@/utils/common';
 import { sporeConfig } from '@/utils/config';
 import Button from '@/app/_components/Button/Button';
+import { CellOutput } from '../../../types/Gifts';
 
 
 const Gift: React.FC = () => {
@@ -71,7 +72,7 @@ const Gift: React.FC = () => {
       record: {
         actions: 'melt',
         status: 'pending',
-        sporeId: 'pathAddress',
+        sporeId: pathAddress,
         from: walletAddress!!,
         id: id
       }
@@ -107,8 +108,7 @@ const Gift: React.FC = () => {
 
   async function callUpdateGiftReadStatusAction(key: string, value: string) {
     const response = await fetchBlindBoxAPI({ action: 'remove', key, ids: [value] });
-    const data = await response.json();
-    return data;
+    return response;
   }
   
 
@@ -122,7 +122,7 @@ const Gift: React.FC = () => {
   }, [])
 
   useEffect(() => {
-    if(!isSporeLoading) {
+    if(!isSporeLoading && spore && spore.cell && spore?.cell?.cellOutput && spore.cell.cellOutput.capacity) {
       let occupied = formatNumberWithCommas(BI.from(spore?.cell?.cellOutput.capacity).toNumber() / 10 ** 8)
       setOccupied(occupied);
     }
