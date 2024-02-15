@@ -59,7 +59,7 @@ const Zhimakaimen: React.FC = () => {
             if (!walletAddress) {
                 setHeaderShowModal(true);
             }
-            setSporeInfo(txHash.data);
+            setSporeInfo(txHash.data); 
             setPageStatus('successful');
             } catch(error) {
                 setPageStatus('fail');
