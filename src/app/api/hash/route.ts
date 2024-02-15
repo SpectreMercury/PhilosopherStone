@@ -74,7 +74,7 @@ export async function POST(req: NextRequest, res: NextApiResponse) {
         case 'getHashKeyGift':
             return await withErrorHandling(getHashKeyGift, body.key);
         case 'getHashKeyHistory':
-            return await withErrorHandling(getHashKeyHistory, body.key, body.start || 0, body.end || 10);
+            return await withErrorHandling(getHashKeyHistory, body.key, body.start || 0, body.end || 20);
         case 'deleteHash':
             return await withErrorHandling(deleteHash, body.key);
         case 'checkAndGetHashKey':

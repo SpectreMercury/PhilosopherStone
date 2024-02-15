@@ -166,7 +166,7 @@ const Gift: React.FC = () => {
         </div>
       </div>
       <div className="mb-6">
-        <img src={`/api/media/${pathAddress}`} className='w-[300px] h-[200px]' alt="Gift" />
+        <img src={`/api/media/${pathAddress}`} className='' alt="Gift" />
       </div>
       <div className='text-white001 font-Montserrat text-hd2mb mb-6'>
         {occupied} CKB 
