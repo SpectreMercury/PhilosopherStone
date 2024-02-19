@@ -17,8 +17,9 @@ const Withdraw: React.FC = () => {
 
     const widthDrawFunc = async () => {
         if (!toAddress || !address || !amount) return
+        const amountInShannon = BI.from(amount).mul(BI.from(10).pow(8));
         transfer({
-            amount: amount,
+            amount: amountInShannon.toString(),
             from: address,
             to: toAddress
         }).then(res => {

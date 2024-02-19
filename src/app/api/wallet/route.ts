@@ -67,7 +67,6 @@ export async function signAndSendTransactionApi(sporeId: string, receiverAccount
 
 export async function POST(req: NextRequest, res: NextApiResponse) {
     const body = await req.json();
-    console.log(body);
     switch (body.action) {
         case 'getAddress':
             return await withErrorHandling(getAddress);
