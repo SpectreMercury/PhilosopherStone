@@ -2,6 +2,7 @@ import { BI, Cell, helpers, Indexer, RPC, config, commons } from "@ckb-lumos/lum
 import { blockchain, bytify, hexify } from "@ckb-lumos/lumos/codec";
 import { Script } from '../gql/graphql';
 import { sporeConfig } from "./config";
+import { reject } from "lodash";
 
 const CKB_RPC_URL = sporeConfig.ckbNodeUrl;
 const rpc = new RPC(CKB_RPC_URL);
@@ -36,12 +37,17 @@ export interface EthereumProvider {
     request: EthereumRpc;
   }
 // @ts-ignore
-export const ethereum = window.ethereum as EthereumProvider;
+export const ethereum = typeof window !== 'undefined' ? (window.ethereum as EthereumProvider) : undefined;
 
 export async function transfer(options: Options): Promise<string> {
+
   let tx = helpers.TransactionSkeleton({});
   const fromScript = helpers.parseAddress(options.from);
   const toScript = helpers.parseAddress(options.to);
+
+  if(!ethereum) {
+    reject('')
+  }
 
   // additional 0.001 ckb for tx fee
   // the tx fee could calculated by tx size
@@ -107,9 +113,9 @@ export async function transfer(options: Options): Promise<string> {
 
   tx = commons.omnilock.prepareSigningEntries(tx, { config: sporeConfig.lumos });
 
-  let signedMessage = await ethereum.request({
+  let signedMessage = await ethereum!!.request({
     method: "personal_sign",
-    params: [ethereum.selectedAddress, tx.signingEntries.get(0)!!.message],
+    params: [ethereum!!.selectedAddress, tx.signingEntries.get(0)!!.message],
   });
 
   let v = Number.parseInt(signedMessage.slice(-2), 16);
