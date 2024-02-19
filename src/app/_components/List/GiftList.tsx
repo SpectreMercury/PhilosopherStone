@@ -34,17 +34,19 @@ const GiftList: React.FC<GiftListProps> = ({ onNewGiftClick, list, type, blindbo
   };
 
   const getInProcessingList = async (k: string) => {
-    // const inProcessingGifts = await fetchGiftAPI({
-    //   action: 'getUnavailableGifts',
-    //   key: k,
-    // })
-    // if (!inProcessingGifts.data) return 
-    // const filtered = Object.values(inProcessingGifts.data).filter(item => item !== 'create');
-    // setGifts(list.filter(item => !filtered.includes(item.id)));
+    const inProcessingGifts = await fetchGiftAPI({
+      action: 'getUnavailableGifts',
+      key: k,
+    });
+    console.log(inProcessingGifts);
+    if (!inProcessingGifts.data) return 
+    const filtered = Object.values(inProcessingGifts.data).filter(item => item !== 'create');
+    setGifts(list.filter(item => !filtered.includes(item.id)));
   }
 
   useEffect(() => {
     if(walletAddress) {
+      getInProcessingList(walletAddress);
       setGifts(list.filter(item => !unavailableList?.includes(item.id)));
     }
   }, [list, walletAddress, unavailableList])

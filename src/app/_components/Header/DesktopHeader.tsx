@@ -39,21 +39,23 @@ const DesktopHeader:React.FC = () => {
     })
     let unavailableSporeIdList:string[] = [];
     if(!inProcessingGifts.data) return;
-    Object.keys(inProcessingGifts.data).map(async (txHash: string) => {
-      const transaction = await rpc.getTransaction(txHash);
-      const transactionStatus = transaction.txStatus.status;
-      if (transactionStatus === 'committed') {
-        await fetchGiftAPI({
-          action: 'removeUnavailableGifts',
-          key: k,
-          id: txHash
-        });
-      } else {
-        if(inProcessingGifts.data.txHash !== 'create') {
-          unavailableSporeIdList.push(inProcessingGifts.data.txHash);
+    await Promise.all(
+      Object.keys(inProcessingGifts.data).map(async (txHash: string) => {
+        const transaction = await rpc.getTransaction(txHash);
+        const transactionStatus = transaction.txStatus.status;
+        if (transactionStatus === 'committed') {
+          await fetchGiftAPI({
+            action: 'removeUnavailableGifts',
+            key: k,
+            id: txHash
+          });
+        } else {
+          if(inProcessingGifts.data[txHash] !== 'create') {
+            unavailableSporeIdList = [...unavailableSporeIdList, inProcessingGifts.data[txHash]];
+          }
         }
-      }
-    })
+      })
+    )
     dispatch(setUnavailablelist(unavailableSporeIdList));
   }
 
@@ -115,14 +117,14 @@ const DesktopHeader:React.FC = () => {
   }, [pathname]);
 
   useEffect(() => {
-    let intervalTask
-    if(walletAddress) {
+    let intervalTask: string | number | NodeJS.Timeout | undefined;
+    if (walletAddress) {
       intervalTask = setInterval(() => {
         checkAndRemoveProcessingGifts(walletAddress)
-      }, 6000)
+      }, 6000);
     }
-    return clearInterval(intervalTask);
-  }, [walletAddress])
+    return () => clearInterval(intervalTask);
+  }, [walletAddress]);
 
   return (
     <>
