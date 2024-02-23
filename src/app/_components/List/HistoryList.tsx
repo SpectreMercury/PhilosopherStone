@@ -1,5 +1,6 @@
 import { ReceivedGift } from '@/types/Gifts';
 import { HistoryRecord } from '@/types/History';
+import { WithdrawObj } from '@/types/Withdraw';
 import { formatString } from '@/utils/common';
 import Link from 'next/link';
 import React, { useState } from 'react';

@@ -121,7 +121,7 @@ const DesktopHeader:React.FC = () => {
     if (walletAddress) {
       intervalTask = setInterval(() => {
         checkAndRemoveProcessingGifts(walletAddress)
-      }, 6000);
+      }, 60000);
     }
     return () => clearInterval(intervalTask);
   }, [walletAddress]);

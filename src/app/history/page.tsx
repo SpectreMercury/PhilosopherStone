@@ -2,7 +2,7 @@
 import { useConnect } from '@/hooks/useConnect';
 import { RootState } from '@/store/store';
 import { HistoryRecord } from '@/types/History';
-import { fetchGiftAPI, fetchHashkeyAPI, fetchHistoryAPI } from '@/utils/fetchAPI';
+import { fetchGiftAPI, fetchHashkeyAPI, fetchHistoryAPI, fetchWithdrawAPI } from '@/utils/fetchAPI';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -11,14 +11,17 @@ import { ReceivedGift } from '@/types/Gifts';
 import { HashkeyObj } from '@/types/Hashkey';
 import HashkeyList from '@/app/_components/List/HashkeyList';
 import Button from '@/app/_components/Button/Button';
+import WithdrawList from '@/app/_components/List/WithdrawList';
+import { WithdrawObj } from '@/types/Withdraw';
 
 const History: React.FC = () => {
     const walletAddress = useSelector((state: RootState) => state.wallet.wallet?.address);
-    const [activeTab, setActiveTab] = useState<'Action'| 'Received'|'Key'>('Action');
+    const [activeTab, setActiveTab] = useState<'Action' | 'Received' | 'Key' | 'Withdraw'>('Action');
     const [receivedGiftList, setReceivedGiftList] = useState<ReceivedGift[]>([]);
     const [historyData, setHistoryData] = useState<HistoryRecord[]>([]);
     const [currentList, setCurrentList] = useState<HistoryRecord[] | ReceivedGift[] | HashkeyObj[]>();
     const [hashkeyList, setHashkeyList] = useState<HashkeyObj[]>([]) 
+    const [withdrawList, setWithdrawList] = useState<WithdrawObj[]>([]);
     const getHistoryList = async (address: string) => {
         let data = await fetchHistoryAPI({
                 action: 'getHistory',
@@ -33,6 +36,14 @@ const History: React.FC = () => {
             key: address
         });
         setReceivedGiftList(data.data);
+    }
+
+    const getWithdrawList = async(address: string) => {
+        let data = await fetchWithdrawAPI({
+            action: 'widthHistory',
+            key: address
+        })
+        setWithdrawList(data.data);
     }
 
     const getHashkeyList = async(address: string) => {
@@ -59,6 +70,7 @@ const History: React.FC = () => {
             getHistoryList(walletAddress);
             getReceivedList(walletAddress);
             getHashkeyList(walletAddress);
+            getWithdrawList(walletAddress);
         }
     }, [walletAddress])
     return (
@@ -89,6 +101,14 @@ const History: React.FC = () => {
                 >
                     Sent URL
                 </button>
+                <button
+                className={`flex-1 py-1 m-1 font-SourceSanPro ${activeTab === 'Withdraw' ? 'bg-primary010 text-white001 text-labelbdmb ' : 'text-labelmb text-white005'} rounded-md `}
+                onClick={() => {
+                    setActiveTab('Withdraw')
+                }}
+                >
+                    Withdraw
+                </button>
             </div>
             {
                 currentList?.length ? 
@@ -96,6 +116,7 @@ const History: React.FC = () => {
                     {activeTab === 'Action' && <HistoryList ListType={activeTab} HistoryList={historyData} />}
                     {activeTab === 'Received' && <HistoryList ListType={activeTab} ReceivedList={receivedGiftList} />}
                     {activeTab === 'Key' && <HashkeyList HashkeyList={hashkeyList} />}
+                    {activeTab === 'Withdraw' && <WithdrawList WithdrawList={withdrawList} />}
                 </>)
                     :
                 (

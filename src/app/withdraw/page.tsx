@@ -9,6 +9,8 @@ import { useSelector } from "react-redux";
 import Button from "@/app/_components/Button/Button";
 import { transfer } from "@/utils/withdraw";
 import GuestHome from "@/app/_components/GuestHome/GuestHome";
+import { fetchWithdrawAPI } from "@/utils/fetchAPI";
+import { enqueueSnackbar } from "notistack";
 
 const Withdraw: React.FC = () => {
     const [toAddress, setToAddress] = useState<string>('');
@@ -19,14 +21,24 @@ const Withdraw: React.FC = () => {
 
     const widthDrawFunc = async () => {
         if (!toAddress || !address || !amount) return
-        const amountInShannon = BI.from(amount).mul(BI.from(10).pow(8));
-        transfer({
+        const amountInShannon = BI.from(parseInt(amount) - 1).mul(BI.from(10).pow(8));
+        let rlt = await transfer({
             amount: amountInShannon.toString(),
             from: address,
             to: toAddress
-        }).then(res => {
-            console.log(res);
         })
+        if(rlt.errno != 200) {
+            enqueueSnackbar('withdraw error', {variant: 'error'});
+        } else {
+            let withdrawResult = await fetchWithdrawAPI({
+                action: 'withdraw',
+                key: address,
+                toAddress,
+                value: amount,
+                txHash: rlt.txHash
+            })
+            enqueueSnackbar('Withdraw successful', {variant: 'success'});
+        }
     }
 
     const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {

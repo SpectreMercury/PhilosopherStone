@@ -14,6 +14,11 @@ interface Options {
   amount: string;
 }
 
+interface Result {
+    errno: number;
+    txHash?: string 
+}
+
 // prettier-ignore
 interface EthereumRpc {
     (payload: { method: 'personal_sign'; params: [string /*from*/, string /*message*/] }): Promise<string>;
@@ -39,7 +44,7 @@ export interface EthereumProvider {
 // @ts-ignore
 export const ethereum = typeof window !== 'undefined' ? (window.ethereum as EthereumProvider) : undefined;
 
-export async function transfer(options: Options): Promise<string> {
+export async function transfer(options: Options): Promise<Result> {
 
   let tx = helpers.TransactionSkeleton({});
   const fromScript = helpers.parseAddress(options.from);
@@ -133,9 +138,13 @@ export async function transfer(options: Options): Promise<string> {
   tx = tx.update("witnesses", (witnesses) => witnesses.set(0, signedWitness));
 
   const signedTx = helpers.createTransactionFromSkeleton(tx);
-  const txHash = await rpc.sendTransaction(signedTx, "passthrough");
-
-  return txHash;
+  try {
+    const txHash = await rpc.sendTransaction(signedTx, "passthrough");
+    return {errno: 200, txHash};
+  } catch(error) {
+    return {errno: 400};
+  }
+  
 }
 
 export async function capacityOf(address: string): Promise<BI> {
