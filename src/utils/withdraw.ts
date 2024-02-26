@@ -54,10 +54,7 @@ export async function transfer(options: Options): Promise<Result> {
     reject('')
   }
 
-  // additional 0.001 ckb for tx fee
-  // the tx fee could calculated by tx size
-  // this is just a simple example
-  const neededCapacity = BI.from(options.amount).add(100000);
+  const neededCapacity = BI.from(options.amount).add(BI.from('61').mul(BI.from(10).pow(8)));
   let collectedSum = BI.from(0);
   const collectedCells: Cell[] = [];
   const collector = indexer.collector({ lock: fromScript, type: "empty" });
@@ -142,7 +139,7 @@ export async function transfer(options: Options): Promise<Result> {
     const txHash = await rpc.sendTransaction(signedTx, "passthrough");
     return {errno: 200, txHash};
   } catch(error) {
-    return {errno: 400};
+    return {errno: 400}
   }
   
 }

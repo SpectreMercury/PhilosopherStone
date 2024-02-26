@@ -3,14 +3,24 @@
 import useWalletBalance from "@/hooks/useBalance";
 import { useConnect } from "@/hooks/useConnect";
 import { RootState } from "@/store/store";
-import { BI } from "@ckb-lumos/bi";
-import React, { useState } from "react";
+import { BI, BIish } from "@ckb-lumos/bi";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import Button from "@/app/_components/Button/Button";
-import { transfer } from "@/utils/withdraw";
+import { EthereumProvider, transfer } from "@/utils/withdraw";
 import GuestHome from "@/app/_components/GuestHome/GuestHome";
 import { fetchWithdrawAPI } from "@/utils/fetchAPI";
 import { enqueueSnackbar } from "notistack";
+import { RPC, commons, helpers, Indexer, Transaction} from "@ckb-lumos/lumos";
+import { sporeConfig } from "@/utils/config";
+import { blockchain } from "@ckb-lumos/base";
+import getTransaction from '../../utils/getTransactionStatus';
+import { sealTransaction } from "@ckb-lumos/lumos/helpers";
+import { bytify, hexify } from "@ckb-lumos/lumos/codec";
+
+const CKB_RPC_URL = sporeConfig.ckbNodeUrl;
+const rpc = new RPC(CKB_RPC_URL);
+const indexer = new Indexer(CKB_RPC_URL);
 
 const Withdraw: React.FC = () => {
     const [toAddress, setToAddress] = useState<string>('');
@@ -19,9 +29,53 @@ const Withdraw: React.FC = () => {
     const balance = useWalletBalance(address!!);
     const [amountError, setAmountError] = useState<string>('');
 
+    const calculateFee = (size: number, feeRate: BIish) => {
+        const ratio = BI.from(1000);
+        const base = BI.from(size).mul(feeRate);
+        const fee = base.div(ratio);
+        if (fee.mul(ratio).lt(base)) {
+            return fee.add(1);
+        }
+        return BI.from(fee);
+    }
+
+    //@ts-ignore
+    const ethereum = typeof window !== 'undefined' ? (window.ethereum as EthereumProvider) : undefined;
+
+    const getTransactionSize = (tx: Transaction): number => {
+        const serializedTx = blockchain.Transaction.pack(tx);
+        return 4 + serializedTx.buffer.byteLength;
+    }
+    
+    const calculateFeeByTransaction = (tx: Transaction, feeRate: BIish) => {
+        const size = getTransactionSize(tx);
+        return calculateFee(size, feeRate);
+    }
+
+    const calculateFeeByTransactionSkeleton = (txSkeleton: helpers.TransactionSkeletonType, feeRate: BIish) => {
+        const tx = helpers.createTransactionFromSkeleton(txSkeleton);
+        return calculateFeeByTransaction(tx, feeRate);
+    }
+
+    const getTransactionfee = async () => {
+        let txSkeleton = helpers.TransactionSkeleton({ cellProvider: indexer });
+        txSkeleton = await commons.common.transfer(
+            txSkeleton,
+            [address!!],
+            toAddress,
+            BI.from(amount).mul(BI.from(10).pow(8)).toString(),
+        );
+    }
+
+    const getMinFeeRate = async (rpc: RPC | string): Promise<BI> => {
+        rpc = typeof rpc === 'string' ? new RPC(rpc) : rpc;
+        const info = await rpc.txPoolInfo();
+        return BI.from(info.minFeeRate);
+    }
+
     const widthDrawFunc = async () => {
         if (!toAddress || !address || !amount) return
-        const amountInShannon = BI.from(parseInt(amount) - 1).mul(BI.from(10).pow(8));
+        const amountInShannon = BI.from(JSON.stringify(parseInt(amount) - 61)).mul(BI.from(10).pow(8));
         let rlt = await transfer({
             amount: amountInShannon.toString(),
             from: address,
@@ -39,6 +93,42 @@ const Withdraw: React.FC = () => {
             })
             enqueueSnackbar('Withdraw successful', {variant: 'success'});
         }
+        // let txSkeleton = helpers.TransactionSkeleton({ cellProvider: indexer });
+        // let tx = await commons.common.transfer(
+        //     txSkeleton,
+        //     [address],
+        //     toAddress,
+        //     amountInShannon.toString()
+        // );
+        // let feeRate = await getMinFeeRate(CKB_RPC_URL);
+        // // let fee = calculateFeeByTransactionSkeleton(tx, feeRate);
+        // tx = await commons.common.payFeeByFeeRate(
+        //     txSkeleton,
+        //     [address],
+        //     feeRate
+        // )
+        // tx = await commons.common.prepareSigningEntries(
+        //     tx
+        // )
+        // let signedMessage = await ethereum!!.request({
+        //     method: "personal_sign",
+        //     params: [ethereum!!.selectedAddress, tx.signingEntries.get(0)!!.message],
+        // });
+        // let v = Number.parseInt(signedMessage.slice(-2), 16);
+        // if (v >= 27) v -= 27;
+        // signedMessage = "0x" + signedMessage.slice(2, -2) + v.toString(16).padStart(2, "0");
+        // const signedWitness = hexify(
+        //     blockchain.WitnessArgs.pack({
+        //         lock: commons.omnilock.OmnilockWitnessLock.pack({
+        //             signature: bytify(signedMessage).buffer,
+        //         }),
+        //     })
+        // );
+
+        // tx = tx.update("witnesses", (witnesses) => witnesses.set(0, signedWitness));
+        // const signedTx = helpers.createTransactionFromSkeleton(tx);
+        // let txHash = await rpc.sendTransaction(signedTx, "passthrough");
+        console.log(txHash);
     }
 
     const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -50,6 +140,16 @@ const Withdraw: React.FC = () => {
             setAmountError('')
         }
     }
+
+    const changeFeeRate = async() => {
+        let rlt = await getMinFeeRate(CKB_RPC_URL);
+        console.log(rlt);
+
+    }
+
+    useEffect(() => {
+        changeFeeRate();
+    }, [])
 
     return (
         <>
