@@ -75,59 +75,59 @@ const Withdraw: React.FC = () => {
 
     const widthDrawFunc = async () => {
         if (!toAddress || !address || !amount) return
-        const amountInShannon = BI.from(JSON.stringify(parseInt(amount) - 61)).mul(BI.from(10).pow(8));
-        let rlt = await transfer({
-            amount: amountInShannon.toString(),
-            from: address,
-            to: toAddress
-        })
-        if(rlt.errno != 200) {
-            enqueueSnackbar('withdraw error', {variant: 'error'});
-        } else {
-            let withdrawResult = await fetchWithdrawAPI({
-                action: 'withdraw',
-                key: address,
-                toAddress,
-                value: amount,
-                txHash: rlt.txHash
-            })
-            enqueueSnackbar('Withdraw successful', {variant: 'success'});
-        }
-        // let txSkeleton = helpers.TransactionSkeleton({ cellProvider: indexer });
-        // let tx = await commons.common.transfer(
-        //     txSkeleton,
-        //     [address],
-        //     toAddress,
-        //     amountInShannon.toString()
-        // );
-        // let feeRate = await getMinFeeRate(CKB_RPC_URL);
-        // // let fee = calculateFeeByTransactionSkeleton(tx, feeRate);
-        // tx = await commons.common.payFeeByFeeRate(
-        //     txSkeleton,
-        //     [address],
-        //     feeRate
-        // )
-        // tx = await commons.common.prepareSigningEntries(
-        //     tx
-        // )
-        // let signedMessage = await ethereum!!.request({
-        //     method: "personal_sign",
-        //     params: [ethereum!!.selectedAddress, tx.signingEntries.get(0)!!.message],
-        // });
-        // let v = Number.parseInt(signedMessage.slice(-2), 16);
-        // if (v >= 27) v -= 27;
-        // signedMessage = "0x" + signedMessage.slice(2, -2) + v.toString(16).padStart(2, "0");
-        // const signedWitness = hexify(
-        //     blockchain.WitnessArgs.pack({
-        //         lock: commons.omnilock.OmnilockWitnessLock.pack({
-        //             signature: bytify(signedMessage).buffer,
-        //         }),
+        const amountInShannon = BI.from(JSON.stringify(parseInt(amount))).mul(BI.from(10).pow(8));
+        // let rlt = await transfer({
+        //     amount: amountInShannon.toString(),
+        //     from: address,
+        //     to: toAddress
+        // })
+        // if(rlt.errno != 200) {
+        //     enqueueSnackbar('withdraw error', {variant: 'error'});
+        // } else {
+        //     let withdrawResult = await fetchWithdrawAPI({
+        //         action: 'withdraw',
+        //         key: address,
+        //         toAddress,
+        //         value: amount,
+        //         txHash: rlt.txHash
         //     })
-        // );
+        //     enqueueSnackbar('Withdraw successful', {variant: 'success'});
+        // }
+        let txSkeleton = helpers.TransactionSkeleton({ cellProvider: indexer });
+        let tx = await commons.common.transfer(
+            txSkeleton,
+            [address],
+            toAddress,
+            amountInShannon.toString()
+        );
+        let feeRate = await getMinFeeRate(CKB_RPC_URL);
+        // let fee = calculateFeeByTransactionSkeleton(tx, feeRate);
+        tx = await commons.common.payFeeByFeeRate(
+            txSkeleton,
+            [address],
+            feeRate
+        )
+        tx = await commons.common.prepareSigningEntries(
+            tx
+        )
+        let signedMessage = await ethereum!!.request({
+            method: "personal_sign",
+            params: [ethereum!!.selectedAddress, tx.signingEntries.get(0)!!.message],
+        });
+        let v = Number.parseInt(signedMessage.slice(-2), 16);
+        if (v >= 27) v -= 27;
+        signedMessage = "0x" + signedMessage.slice(2, -2) + v.toString(16).padStart(2, "0");
+        const signedWitness = hexify(
+            blockchain.WitnessArgs.pack({
+                lock: commons.omnilock.OmnilockWitnessLock.pack({
+                    signature: bytify(signedMessage).buffer,
+                }),
+            })
+        );
 
-        // tx = tx.update("witnesses", (witnesses) => witnesses.set(0, signedWitness));
-        // const signedTx = helpers.createTransactionFromSkeleton(tx);
-        // let txHash = await rpc.sendTransaction(signedTx, "passthrough");
+        tx = tx.update("witnesses", (witnesses) => witnesses.set(0, signedWitness));
+        const signedTx = helpers.createTransactionFromSkeleton(tx);
+        let txHash = await rpc.sendTransaction(signedTx, "passthrough");
         console.log(txHash);
     }
 
