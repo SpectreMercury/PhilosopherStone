@@ -44,7 +44,7 @@ export interface EthereumProvider {
 // @ts-ignore
 export const ethereum = typeof window !== 'undefined' ? (window.ethereum as EthereumProvider) : undefined;
 
-export async function transfer(options: Options): Promise<Result> {
+export async function transfer(options: Options) {
 
   let tx = helpers.TransactionSkeleton({});
   const fromScript = helpers.parseAddress(options.from);
@@ -64,9 +64,9 @@ export async function transfer(options: Options): Promise<Result> {
     if (BI.from(collectedSum).gte(neededCapacity)) break;
   }
 
-  if (collectedSum.lt(neededCapacity)) {
-    throw new Error(`Not enough CKB, expected: ${neededCapacity}, actual: ${collectedSum} `);
-  }
+  // if (collectedSum.lt(neededCapacity)) {
+  //   throw new Error(`Not enough CKB, expected: ${neededCapacity}, actual: ${collectedSum} `);
+  // }
 
   const transferOutput: Cell = {
     cellOutput: {
@@ -106,6 +106,8 @@ export async function transfer(options: Options): Promise<Result> {
     )
   );
 
+  console.log(JSON.stringify(tx));
+
   const witness = hexify(blockchain.WitnessArgs.pack({ lock: SECP_SIGNATURE_PLACEHOLDER }));
 
   // fill txSkeleton's witness with placeholder
@@ -134,13 +136,13 @@ export async function transfer(options: Options): Promise<Result> {
 
   tx = tx.update("witnesses", (witnesses) => witnesses.set(0, signedWitness));
 
-  const signedTx = helpers.createTransactionFromSkeleton(tx);
-  try {
-    const txHash = await rpc.sendTransaction(signedTx, "passthrough");
-    return {errno: 200, txHash};
-  } catch(error) {
-    return {errno: 400}
-  }
+  // const signedTx = helpers.createTransactionFromSkeleton(tx);
+  // try {
+  //   const txHash = await rpc.sendTransaction(signedTx, "passthrough");
+  //   return {errno: 200, txHash};
+  // } catch(error) {
+  //   return {errno: 400}
+  // }
   
 }
 

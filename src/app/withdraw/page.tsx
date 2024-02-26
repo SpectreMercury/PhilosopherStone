@@ -13,10 +13,11 @@ import { fetchWithdrawAPI } from "@/utils/fetchAPI";
 import { enqueueSnackbar } from "notistack";
 import { RPC, commons, helpers, Indexer, Transaction} from "@ckb-lumos/lumos";
 import { sporeConfig } from "@/utils/config";
-import { blockchain } from "@ckb-lumos/base";
+import { Cell, blockchain } from "@ckb-lumos/base";
 import getTransaction from '../../utils/getTransactionStatus';
 import { sealTransaction } from "@ckb-lumos/lumos/helpers";
 import { bytify, hexify } from "@ckb-lumos/lumos/codec";
+import { injectCapacityAndPayFee, payFeeByOutput } from "@spore-sdk/core";
 
 const CKB_RPC_URL = sporeConfig.ckbNodeUrl;
 const rpc = new RPC(CKB_RPC_URL);
@@ -42,30 +43,13 @@ const Withdraw: React.FC = () => {
     //@ts-ignore
     const ethereum = typeof window !== 'undefined' ? (window.ethereum as EthereumProvider) : undefined;
 
-    const getTransactionSize = (tx: Transaction): number => {
-        const serializedTx = blockchain.Transaction.pack(tx);
-        return 4 + serializedTx.buffer.byteLength;
-    }
-    
-    const calculateFeeByTransaction = (tx: Transaction, feeRate: BIish) => {
-        const size = getTransactionSize(tx);
-        return calculateFee(size, feeRate);
-    }
-
-    const calculateFeeByTransactionSkeleton = (txSkeleton: helpers.TransactionSkeletonType, feeRate: BIish) => {
-        const tx = helpers.createTransactionFromSkeleton(txSkeleton);
-        return calculateFeeByTransaction(tx, feeRate);
-    }
-
-    const getTransactionfee = async () => {
-        let txSkeleton = helpers.TransactionSkeleton({ cellProvider: indexer });
-        txSkeleton = await commons.common.transfer(
-            txSkeleton,
-            [address!!],
-            toAddress,
-            BI.from(amount).mul(BI.from(10).pow(8)).toString(),
-        );
-    }
+    const SECP_SIGNATURE_PLACEHOLDER = hexify(
+        new Uint8Array(
+            commons.omnilock.OmnilockWitnessLock.pack({
+            signature: new Uint8Array(65).buffer,
+            }).byteLength
+        )
+    );
 
     const getMinFeeRate = async (rpc: RPC | string): Promise<BI> => {
         rpc = typeof rpc === 'string' ? new RPC(rpc) : rpc;
@@ -75,44 +59,64 @@ const Withdraw: React.FC = () => {
 
     const widthDrawFunc = async () => {
         if (!toAddress || !address || !amount) return
-        const amountInShannon = BI.from(JSON.stringify(parseInt(amount))).mul(BI.from(10).pow(8));
-        // let rlt = await transfer({
-        //     amount: amountInShannon.toString(),
-        //     from: address,
-        //     to: toAddress
-        // })
-        // if(rlt.errno != 200) {
-        //     enqueueSnackbar('withdraw error', {variant: 'error'});
-        // } else {
-        //     let withdrawResult = await fetchWithdrawAPI({
-        //         action: 'withdraw',
-        //         key: address,
-        //         toAddress,
-        //         value: amount,
-        //         txHash: rlt.txHash
-        //     })
-        //     enqueueSnackbar('Withdraw successful', {variant: 'success'});
-        // }
+        const amountInShannon = BI.from(amount).mul(BI.from(10).pow(8));
         let txSkeleton = helpers.TransactionSkeleton({ cellProvider: indexer });
-        let tx = await commons.common.transfer(
-            txSkeleton,
-            [address],
-            toAddress,
-            amountInShannon.toString()
+        const collectedCells: Cell[] = [];
+        let collector = indexer.collector({lock: helpers.parseAddress(address), type: 'empty'});
+        let collectedSum = BI.from(0);
+        for await (const cell of collector.collect()) {
+            collectedSum = collectedSum.add(cell.cellOutput.capacity);
+            collectedCells.push(cell);
+            if (BI.from(collectedSum).gte(amountInShannon)) break;
+        }
+        const transferOutput: Cell = {
+            cellOutput: {
+                capacity: BI.from(amountInShannon).toHexString(),
+                lock: helpers.parseAddress(toAddress),
+            },
+            data: "0x",
+        };
+        
+        txSkeleton = txSkeleton.update('inputs', (inputs) => inputs.push(...collectedCells));
+        txSkeleton = txSkeleton.update('outputs', (outputs) => outputs.push(transferOutput));
+        txSkeleton = txSkeleton.update("cellDeps", (cellDeps) =>
+            cellDeps.push(
+            {
+                outPoint: {
+                txHash: sporeConfig.lumos.SCRIPTS.OMNILOCK?.TX_HASH!!, 
+                index: sporeConfig.lumos.SCRIPTS.OMNILOCK?.INDEX!!,
+                },
+                depType: sporeConfig.lumos.SCRIPTS.OMNILOCK?.DEP_TYPE!!,
+            },
+            {
+                outPoint: {
+                txHash: sporeConfig.lumos.SCRIPTS.SECP256K1_BLAKE160!!.TX_HASH,
+                index: sporeConfig.lumos.SCRIPTS.SECP256K1_BLAKE160!!.INDEX,
+                },
+                depType: sporeConfig.lumos.SCRIPTS.SECP256K1_BLAKE160!!.DEP_TYPE,
+            }
+            )
         );
-        let feeRate = await getMinFeeRate(CKB_RPC_URL);
-        // let fee = calculateFeeByTransactionSkeleton(tx, feeRate);
-        tx = await commons.common.payFeeByFeeRate(
+
+        const witness = hexify(blockchain.WitnessArgs.pack({ lock: SECP_SIGNATURE_PLACEHOLDER }));
+        for (let i = 0; i < txSkeleton.inputs.toArray().length; i++) {
+            txSkeleton = txSkeleton.update("witnesses", (witnesses) => witnesses.push(witness));
+        }
+
+        let payResult = await payFeeByOutput({
             txSkeleton,
-            [address],
-            feeRate
+            outputIndex: 0,
+            config: sporeConfig,
+        })
+
+        txSkeleton = await commons.omnilock.prepareSigningEntries(
+            payResult,
+            {config: sporeConfig.lumos}
         )
-        tx = await commons.common.prepareSigningEntries(
-            tx
-        )
+
         let signedMessage = await ethereum!!.request({
             method: "personal_sign",
-            params: [ethereum!!.selectedAddress, tx.signingEntries.get(0)!!.message],
+            params: [ethereum!!.selectedAddress, txSkeleton.signingEntries.get(0)!!.message],
         });
         let v = Number.parseInt(signedMessage.slice(-2), 16);
         if (v >= 27) v -= 27;
@@ -125,10 +129,22 @@ const Withdraw: React.FC = () => {
             })
         );
 
-        tx = tx.update("witnesses", (witnesses) => witnesses.set(0, signedWitness));
-        const signedTx = helpers.createTransactionFromSkeleton(tx);
-        let txHash = await rpc.sendTransaction(signedTx, "passthrough");
-        console.log(txHash);
+        txSkeleton = txSkeleton.update("witnesses", (witnesses) => witnesses.set(0, signedWitness));
+
+        const signedTx = helpers.createTransactionFromSkeleton(txSkeleton);
+        try {
+            let txHash = await rpc.sendTransaction(signedTx, "passthrough");
+            let withdrawResult = await fetchWithdrawAPI({
+                action: 'withdraw',
+                key: address,
+                toAddress,
+                value: amount,
+                txHash
+            })
+            enqueueSnackbar('Withdraw successful', {variant: 'success'});
+        } catch {
+            enqueueSnackbar('withdraw error', {variant: 'error'});
+        }
     }
 
     const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -143,8 +159,6 @@ const Withdraw: React.FC = () => {
 
     const changeFeeRate = async() => {
         let rlt = await getMinFeeRate(CKB_RPC_URL);
-        console.log(rlt);
-
     }
 
     useEffect(() => {
