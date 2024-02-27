@@ -6,7 +6,6 @@ const sporeConfig: SporeConfig = process.env.NODE_ENV === 'development' ?  prede
 // const sporeConfig: SporeConfig = process.env.NODE_ENV === 'development' ?  predefinedSporeConfigs.Mainnet : predefinedSporeConfigs.Mainnet;
 initializeConfig(sporeConfig.lumos);
 setSporeConfig(sporeConfig);
-
 export {
   sporeConfig,
 };

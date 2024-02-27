@@ -17,7 +17,6 @@ async function withErrorHandling<T extends any[]>(
     try {
         return await fn(...args);
     } catch (error) {
-        console.log(error);
         return handleError(error as string);
     }
 }

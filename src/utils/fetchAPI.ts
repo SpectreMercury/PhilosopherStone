@@ -43,6 +43,14 @@ export interface WalletParams {
   receiverAccounts?: string;
 }
 
+export interface WidthdrawParams {
+  action: string;
+  key: string;
+  toAddress?: string;
+  value?: string;
+  txHash?: string;
+}
+
 export const fetchBlindBoxAPI = async (
   params: BlindBoxAPIParams
 ): Promise<any> => {
@@ -119,6 +127,23 @@ export const fetchHistoryAPI = async (
   }
 };
 
+export const fetchWithdrawAPI = async (
+  params: WidthdrawParams
+): Promise<any> => {
+  try {
+    const response = await fetch('/api/withdraw', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(params),
+    });
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    enqueueSnackbar('Error Fetch WithdrawAPI', {variant: 'error'})
+  }
+}
 
 export const fetchWalletAPI = async (
   params: WalletParams

@@ -38,7 +38,6 @@ const GiftList: React.FC<GiftListProps> = ({ onNewGiftClick, list, type, blindbo
       action: 'getUnavailableGifts',
       key: k,
     });
-    console.log(inProcessingGifts);
     if (!inProcessingGifts.data) return 
     const filtered = Object.values(inProcessingGifts.data).filter(item => item !== 'create');
     setGifts(list.filter(item => !filtered.includes(item.id)));

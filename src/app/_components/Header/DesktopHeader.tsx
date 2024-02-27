@@ -82,9 +82,9 @@ const DesktopHeader:React.FC = () => {
   const handleCopy = async (textToCopy: string) => {
     try {
       await navigator.clipboard.writeText(textToCopy);
-      enqueueSnackbar('Copied Successful', {variant: 'success'})
+      enqueueSnackbar('Address copied Successful', {variant: 'success'})
     } catch (err) {
-      enqueueSnackbar('Copied Fail', {variant: 'error'})
+      enqueueSnackbar('Address copied Fail', {variant: 'error'})
     }
   };
 
@@ -121,7 +121,7 @@ const DesktopHeader:React.FC = () => {
     if (walletAddress) {
       intervalTask = setInterval(() => {
         checkAndRemoveProcessingGifts(walletAddress)
-      }, 6000);
+      }, 60000);
     }
     return () => clearInterval(intervalTask);
   }, [walletAddress]);
@@ -166,7 +166,7 @@ const DesktopHeader:React.FC = () => {
                     height={24}
                   />
                 }
-                <p className='ml-4'>{balance} CKB</p>
+                <p className='ml-4'>{balance.toLocaleString()} CKB</p>
               </>
             : 
               <div 
@@ -179,25 +179,65 @@ const DesktopHeader:React.FC = () => {
             {isDropdownVisible && walletAddress && (
               <div 
                 ref={dropdownRef} 
-                className='absolute top-full right-0 rounded bg-primary008 min-w-[280px] py-2 z-50 text-shadow'
+                className='absolute top-full right-0 rounded bg-primary010 min-w-[320px] z-50 border-white009 cursor-default'
                 style={{boxShadow: '0px -2px 6px 0px rgba(0, 0, 0, 0.16)'}}
               >
-                <div className='px-4 flex justify-between items-center py-3 border-b border-white009'>
-                  <div className='cursor-default font-SourceSanPro text-body1mb'>
-                      {walletAddress.slice(0, 10)}...{walletAddress.slice(walletAddress.length - 10, walletAddress.length)}
+                <div className='flex flex-col items-center pt-6'>
+                    <div className='text-white001 font-SourceSanPro text-body1bdmb'>My wallet</div>
+                    <div className='flex gap-2 mt-2'>
+                      {walletType === 'JoyID' ? 
+                        <Image 
+                          alt='wallet-icon'
+                          src='/svg/joyid-icon.svg'
+                          width={18}
+                          height={18}
+                        />:
+                        <Image 
+                          alt='wallet-icon'
+                          src='/svg/metamask-icon.svg'
+                          width={18}
+                          height={18}
+                        />
+                      }
+                      <div className='text-white001 font-SourceSanPro text-labelmb'>{walletAddress.slice(0, 10)}...{walletAddress.slice(walletAddress.length - 10, walletAddress.length)}</div>
+                    </div>
+                    <div className='text-white001 font-Montserrat text-hd3mb mt-4'>{balance.toLocaleString()} CKB</div>
                   </div>
-                  <div className='flex justify-center items-center w-6 h-6 hover:bg-selected' onClick={() => {handleCopy(walletAddress)}}>
-                    <Image
-                        src='/svg/icon-copy.svg'
-                        width={18}
-                        height={18}
-                        alt='Copy address'
-                    />
+                  <div className='flex justify-center items-center gap-12 mt-8 pb-8'>
+                    <div className='flex flex-col gap-2 items-center'>
+                      <button className='w-8 h-8 bg-primary008 rounded-full flex justify-center items-center' onClick={() => {handleCopy(walletAddress)}}>
+                        <Image
+                          src='/svg/icon-copy.svg'
+                          width={18}
+                          height={18}
+                          alt='Copy address'
+                        />
+                      </button>
+                      <p className='text-white001 font-SourceSanPro text-labelmb'>Copy</p>
+                    </div>
+                    <div className='flex flex-col gap-2 items-center'>
+                      <button className='w-8 h-8 bg-primary008 rounded-full flex justify-center items-center' onClick={() => NaviTo('/withdraw')}>
+                        <Image
+                          src='/svg/icon-withdraw.svg'
+                          width={18}
+                          height={18}
+                          alt='Withdraw'
+                        />
+                      </button>
+                      <p className='text-white001 font-SourceSanPro text-labelmb'>Withdraw</p>
+                    </div>
+                    <div className='flex flex-col gap-2 items-center'>
+                      <button className='w-8 h-8 bg-primary008 rounded-full flex justify-center items-center' onClick={handleDisconnect}>
+                        <Image
+                          src='/svg/icon-logout.svg'
+                          width={18}
+                          height={18}
+                          alt='Log out'
+                        />
+                      </button>
+                      <p className='text-white001 font-SourceSanPro text-labelmb'>Log out</p>
+                    </div>
                   </div>
-                </div>
-                <button className='px-4 py-3 w-full hover:bg-selected text-left' onClick={handleDisconnect}>
-                    Log out
-                </button>
               </div>
             )}
           </div>

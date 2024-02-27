@@ -16,6 +16,7 @@ import { Transaction } from '@ckb-lumos/lumos';
 import unavailableSlice, { setUnavailablelist } from '../../../store/unavailableListSlice';
 import { sporeConfig } from '@/utils/config';
 import Button from '@/app/_components/Button/Button';
+import Link from 'next/link';
 
 
 const Header:React.FC = () => {
@@ -91,9 +92,9 @@ const Header:React.FC = () => {
   const handleCopy = async (textToCopy: string) => {
     try {
       await navigator.clipboard.writeText(textToCopy);
-      enqueueSnackbar('Copied Successful', {variant: 'success'})
+      enqueueSnackbar('Address copied Successful', {variant: 'success'})
     } catch (err) {
-      enqueueSnackbar('Copied Fail', {variant: 'error'})
+      enqueueSnackbar('Address copied Fail', {variant: 'error'})
     }
   };
 
@@ -170,7 +171,7 @@ const Header:React.FC = () => {
       {
         isMenuOpen && (
           <div 
-            className='absoulte bg-primary011 w-full top-16 flex flex-col justify-between'
+            className='absolute bg-primary011 w-full top-16 flex flex-col justify-between'
             style={{ 
               minHeight: 'calc(100vh - 64px)', 
               paddingBottom: 'env(safe-area-inset-bottom, 20px)'
@@ -182,41 +183,65 @@ const Header:React.FC = () => {
               <MenuList text={"FAQ"} isActive={isRouteActive('/FAQ')} onClick={() => NaviTo('/FAQ')} />
               <MenuList text={'Claim Gift'} isActive={isRouteActive('/zhimakaimen')} onClick={() => NaviTo('/zhimakaimen')} />
             </div>
-            <div className='px-4 border-t border-white009 sticky bottom-0'>
+            <div className='p-4 border-t border-white009 sticky bottom-0'>
               {
                 walletAddress ? (<>
-                  <div className='flex justify-between py-4'>
-                    <div className='text-white001 font-SourceSanPro text-subheadermb'>My Wallet</div>
-                    <div className='text-white001 font-SourceSanPro text-subheadermb'>{balance} CKB</div>
-                  </div>
-                  <div className='flex justify-between'>
-                    <div className='flex gap-2'>
+                  <div className='flex flex-col items-center'>
+                    <div className='text-white001 font-SourceSanPro text-body1bdmb'>My wallet</div>
+                    <div className='flex gap-2 mt-2'>
                       {walletType === 'JoyID' ? 
                         <Image 
                           alt='wallet-icon'
                           src='/svg/joyid-icon.svg'
-                          width={24}
-                          height={24}
+                          width={18}
+                          height={18}
                         />:
                         <Image 
                           alt='wallet-icon'
                           src='/svg/metamask-icon.svg'
-                          width={24}
-                          height={24}
+                          width={18}
+                          height={18}
                         />
                       }
                       <div className='text-white001 font-SourceSanPro text-labelmb'>{walletAddress.slice(0, 10)}...{walletAddress.slice(walletAddress.length - 10, walletAddress.length)}</div>
                     </div>
-                    <button onClick={() => {handleCopy(walletAddress)}}>
-                      <Image
-                        src='/svg/icon-copy.svg'
-                        width={18}
-                        height={18}
-                        alt='Copy address'
-                      />
-                    </button>
+                    <div className='text-white001 font-Montserrat text-hd3mb mt-4'>{balance.toLocaleString()} CKB</div>
                   </div>
-                  <Button className='my-8' type='outline' label='Log out' onClick={handleDisconnect} />
+                  <div className='flex justify-center items-center gap-12 mt-8 pb-8'>
+                    <div className='flex flex-col gap-2 items-center'>
+                      <button className='w-8 h-8 bg-primary010 rounded-full flex justify-center items-center' onClick={() => {handleCopy(walletAddress)}}>
+                        <Image
+                          src='/svg/icon-copy.svg'
+                          width={18}
+                          height={18}
+                          alt='Copy address'
+                        />
+                      </button>
+                      <p className='text-white001 font-SourceSanPro text-labelmb'>Copy</p>
+                    </div>
+                    <div className='flex flex-col gap-2 items-center'>
+                      <button className='w-8 h-8 bg-primary010 rounded-full flex justify-center items-center' onClick={() => NaviTo('/withdraw')}>
+                        <Image
+                          src='/svg/icon-withdraw.svg'
+                          width={18}
+                          height={18}
+                          alt='Withdraw'
+                        />
+                      </button>
+                      <p className='text-white001 font-SourceSanPro text-labelmb'>Withdraw</p>
+                    </div>
+                    <div className='flex flex-col gap-2 items-center'>
+                      <button className='w-8 h-8 bg-primary010 rounded-full flex justify-center items-center' onClick={handleDisconnect}>
+                        <Image
+                          src='/svg/icon-logout.svg'
+                          width={18}
+                          height={18}
+                          alt='Log out'
+                        />
+                      </button>
+                      <p className='text-white001 font-SourceSanPro text-labelmb'>Log out</p>
+                    </div>
+                  </div>
                 </>
                 ) : (
                   <Button className='my-8' type='outline' label='Log in' onClick={() => setHeaderShowModal(true)} />
