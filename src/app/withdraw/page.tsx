@@ -29,17 +29,6 @@ const Withdraw: React.FC = () => {
     const { lock, address } = useConnect();
     const balance = useWalletBalance(address!!);
     const [amountError, setAmountError] = useState<string>('');
-
-    const calculateFee = (size: number, feeRate: BIish) => {
-        const ratio = BI.from(1000);
-        const base = BI.from(size).mul(feeRate);
-        const fee = base.div(ratio);
-        if (fee.mul(ratio).lt(base)) {
-            return fee.add(1);
-        }
-        return BI.from(fee);
-    }
-
     //@ts-ignore
     const ethereum = typeof window !== 'undefined' ? (window.ethereum as EthereumProvider) : undefined;
 
@@ -59,7 +48,7 @@ const Withdraw: React.FC = () => {
 
     const widthDrawFunc = async () => {
         if (!toAddress || !address || !amount) return
-        const amountInShannon = BI.from(amount).mul(BI.from(10).pow(8));
+        const amountInShannon = BI.from(JSON.stringify(amount)).mul(BI.from(10).pow(8));
         let txSkeleton = helpers.TransactionSkeleton({ cellProvider: indexer });
         const collectedCells: Cell[] = [];
         let collector = indexer.collector({lock: helpers.parseAddress(address), type: 'empty'});
@@ -188,7 +177,7 @@ const Withdraw: React.FC = () => {
                 </div>
                 <input 
                     id="capacity"
-                    type='number'
+                    type='float'
                     value={amount}
                     onChange={handleAmountChange}
                     className='w-full h-12 border border-white009 rounded-lg bg-primary008 mt-2 px-4 text-white001' />
