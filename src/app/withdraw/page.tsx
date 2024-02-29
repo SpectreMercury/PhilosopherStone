@@ -48,26 +48,39 @@ const Withdraw: React.FC = () => {
 
     const widthDrawFunc = async () => {
         if (!toAddress || !address || !amount) return
-        const amountInShannon = BI.from(amount).mul(BI.from(10).pow(8));
+        const amountInShannon = BI.from(parseFloat(amount) * 10 ** 8)
         let txSkeleton = helpers.TransactionSkeleton({ cellProvider: indexer });
         const collectedCells: Cell[] = [];
         let collector = indexer.collector({lock: helpers.parseAddress(address), type: 'empty'});
         let collectedSum = BI.from(0);
+
         for await (const cell of collector.collect()) {
             collectedSum = collectedSum.add(cell.cellOutput.capacity);
             collectedCells.push(cell);
             if (BI.from(collectedSum).gte(amountInShannon)) break;
         }
-        const transferOutput: Cell = {
+
+        const outputCell: Cell[] = [{
             cellOutput: {
                 capacity: BI.from(amountInShannon).toHexString(),
                 lock: helpers.parseAddress(toAddress),
             },
             data: "0x",
-        };
+        }];
+
+        if (balance > parseFloat(amount)) {
+            outputCell.push({
+                cellOutput: {
+                    capacity: collectedSum.sub(amountInShannon).toHexString(),
+                    lock: helpers.parseAddress(address!!),
+                },
+                data: '0x'
+            })
+        }
+        
         
         txSkeleton = txSkeleton.update('inputs', (inputs) => inputs.push(...collectedCells));
-        txSkeleton = txSkeleton.update('outputs', (outputs) => outputs.push(transferOutput));
+        txSkeleton = txSkeleton.update('outputs', (outputs) => outputs.push(...outputCell));
         txSkeleton = txSkeleton.update("cellDeps", (cellDeps) =>
             cellDeps.push(
             {
@@ -173,7 +186,7 @@ const Withdraw: React.FC = () => {
             <div className='flex flex-col'>
                 <div className='flex justify-between items-center mt-6'>
                     <p className='text-white001 font-SourceSanPro text-labelmb'>Amount</p>
-                    <p className='cursor-pointer text-linkColor font-SourceSanPro text-labelmb' onClick={() => setAmount(balance.toString())}>{`Max: ${balance} CKB`}</p>
+                    <p className='cursor-pointer text-linkColor font-SourceSanPro text-labelmb' onClick={() => setAmount(balance.toString())}>{`Max: ${ balance } CKB`}</p>
                 </div>
                 <input 
                     id="capacity"

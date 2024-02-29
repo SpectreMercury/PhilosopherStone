@@ -7,7 +7,7 @@ const useWalletBalance = (walletAddress: string) => {
     { enabled: !!walletAddress }
   );
 
-  const balance = Math.floor(new BigNumber(capacity).toNumber() / 10 ** 8);
+  const balance = new BigNumber(capacity).toNumber() / 10 ** 8;
 
   return balance;
 };
