@@ -48,6 +48,10 @@ const Withdraw: React.FC = () => {
 
     const widthDrawFunc = async () => {
         if (!toAddress || !address || !amount) return
+        if (parseFloat(amount) === Infinity || parseFloat(amount) === -Infinity)  {
+            enqueueSnackbar('Amount is invaild', {variant: 'error'})
+            return false
+        }
         const amountInShannon = BI.from(parseFloat(amount) * 10 ** 8)
         let txSkeleton = helpers.TransactionSkeleton({ cellProvider: indexer });
         const collectedCells: Cell[] = [];
@@ -68,7 +72,7 @@ const Withdraw: React.FC = () => {
             data: "0x",
         }];
 
-        if (balance > parseFloat(amount)) {
+        if (collectedSum.sub(amountInShannon).toNumber()) {
             outputCell.push({
                 cellOutput: {
                     capacity: collectedSum.sub(amountInShannon).toHexString(),
