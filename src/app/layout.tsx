@@ -4,8 +4,6 @@ import TrpcProvider from "@/app/_trpc/Provider";
 import Header from "./_components/Header/Header";
 import { Provider } from "react-redux";
 import store from "@/store/store";
-import { initConfig } from "@joyid/ckb";
-import { JoyIDConfig } from "@/config/joyid/joyid";
 import { ConnectProvider } from '@/hooks/useConnect';
 import JoyIdConnector from '@/connectors/joyId';
 import MetaMaskConnector from "@/connectors/metamask";
@@ -15,9 +13,8 @@ import { GiftReceiveModalProvider } from "./context/GiftReceiveModalContext";
 import DesktopHeader from "./_components/Header/DesktopHeader";
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import { predefinedSporeConfigs, setSporeConfig } from "@spore-sdk/core";
-import { predefined } from "@ckb-lumos/config-manager";
 import Script from "next/script";
+import '@/utils/joyid';
 
 const StyledMaterialDesignContent = styled(MaterialDesignContent)(() => ({
   '&.notistack-MuiContent-success': {

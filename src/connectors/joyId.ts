@@ -1,14 +1,13 @@
 import { Script } from '@ckb-lumos/base';
 import { BI, Transaction, commons, config, helpers } from '@ckb-lumos/lumos';
 // @ts-ignore
-import { initConfig, connect, signMessage } from '@joyid/evm';
+import { initConfig, connect, signMessage } from '@joyid/ckb';
 // @ts-ignore
 import CKBConnector from './base';
 import * as omnilock from './lock/omnilock';
 import { isSameScript } from '@/utils/script';
 import { bytes } from '@ckb-lumos/codec';
 import store from '@/store/store';
-import { sporeConfig } from '@/utils/config';
 
 export default class JoyIdConnector extends CKBConnector {
   public type: string = 'JoyID';
@@ -39,22 +38,13 @@ export default class JoyIdConnector extends CKBConnector {
     return state.wallet.wallet;
   };
 
-  private setAddress(ethAddress: `0x${string}` | undefined) {
-    if (!ethAddress) {
-      return;
-    }
-    config.initializeConfig(sporeConfig.lumos);
-    const lock = commons.omnilock.createOmnilockScript({
-      auth: { flag: 'ETHEREUM', content: ethAddress ?? '0x' },
-    });
-    const address = helpers.encodeToAddress(lock, {
-      config: sporeConfig.lumos,
-    });
+  private setAddress(address: string | undefined) {
+    if (!address) return
     this.setData({
       address,
       walletType: 'JoyID',
-      ethAddress,
-    });
+      ethAddress: '0x'
+    })
   }
 
   public async connect(): Promise<void> {
@@ -62,8 +52,8 @@ export default class JoyIdConnector extends CKBConnector {
     if (walletData?.walletType === this.type.toLowerCase() && walletData?.address) {
       return;
     }
-    const ethAddress = await connect();
-    this.setAddress(ethAddress);
+    const JoyIdData = await connect();
+    this.setAddress(JoyIdData.address);
     this.isConnected = true;
   }
 
