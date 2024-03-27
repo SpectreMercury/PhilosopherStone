@@ -45,7 +45,7 @@ class JoyIDCellCollector {
   }
 }
 
-function createJoyIDScriptInfo(): commons.LockScriptInfo {
+export function createJoyIDScriptInfo(): commons.LockScriptInfo {
   return {
     codeHash: getJoyIDLockScript().codeHash,
     hashType: "type",
@@ -133,4 +133,3 @@ function asserts(condition: unknown, message = "Assert failed"): asserts conditi
     throw new Error(message);
   }
 }
-registerCustomLockScriptInfos([createJoyIDScriptInfo()]);

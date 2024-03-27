@@ -21,6 +21,8 @@ import { SporeItem } from '@/types/Hashkey';
 import { GenerateHashKey } from '@/utils/common';
 import { sporeConfig } from '@/utils/config';
 import Button from '@/app/_components/Button/Button';
+import { createTransactionFromSkeleton } from '@ckb-lumos/lumos/helpers';
+import { signRawTransaction } from '@joyid/ckb';
 
 const SendGift: React.FC = () => {
   const router = useRouter();
@@ -80,7 +82,7 @@ const SendGift: React.FC = () => {
     if(spore && spore.id && activeTab === 'URL' && hashKey === '') {
       generateKey(spore.id);
     }
-  }, [activeTab, spore])
+  }, [activeTab, hashKey, spore])
 
   useEffect(() => {
     if(walletAddress) {
@@ -93,20 +95,21 @@ const SendGift: React.FC = () => {
       const hasGiftValue = searchParams.get('hasGift');
       setHasGift(hasGiftValue ?? '');
     }
-  }, [searchParams])
+  }, [searchParams, type])
 
   const transferSpore = useCallback(
     async (...args: Parameters<typeof _transferSpore>) => {
       const { txSkeleton, outputIndex } = await _transferSpore(...args);
+      let tx = createTransactionFromSkeleton(txSkeleton);
       //@ts-ignore
-      const signedTx = await signTransaction(txSkeleton);
+      const signedTx = await signRawTransaction(tx, walletAddress);
       const txHash = await sendTransaction(signedTx);
       return {
         txHash,
         index: BI.from(outputIndex).toHexString(),
       } as OutPoint;
     },
-    [signTransaction],
+    [walletAddress],
   );
 
   const transferSporeMutation = useMutation({

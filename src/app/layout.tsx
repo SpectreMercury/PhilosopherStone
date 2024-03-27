@@ -1,4 +1,5 @@
 "use client"
+import { commons, config, helpers } from "@ckb-lumos/lumos";
 import "./globals.css";
 import TrpcProvider from "@/app/_trpc/Provider";
 import Header from "./_components/Header/Header";
@@ -16,10 +17,10 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import { bytifyRawString, createSpore, predefinedSporeConfigs, setSporeConfig} from "@spore-sdk/core";
 import Script from "next/script";
-import { commons, config, helpers } from "@ckb-lumos/lumos";
 import { sporeConfig } from "@/utils/config";
 import { registerCustomLockScriptInfos } from "@ckb-lumos/lumos/common-scripts/common";
-import {createJoyIDScriptInfo, getDefaultConfig} from "@ckb-lumos/joyid"
+// import {createJoyIDScriptInfo, getDefaultConfig} from "@ckb-lumos/joyid"
+import { createJoyIDScriptInfo } from "@/utils/joyid";
 
 const StyledMaterialDesignContent = styled(MaterialDesignContent)(() => ({
   '&.notistack-MuiContent-success': {
@@ -44,39 +45,19 @@ function RootLayout({
   children: React.ReactNode;
 }) {
   const [width, setWidth] = useState<number>(0);
-  // Accounts for mobile browser's address bar
-  let testLumos = async () => {
-    let connection = {
-      "address":"ckt1qrfrwcdnvssswdwpn3s9v8fp87emat306ctjwsm3nmlkjg8qyza2cqgqqy6hjcvd44k7s39rqt3pvhfnyerd7dgas50yqy0q",
-      "ethAddress":"0x0D7c29d0F8a472c56de52C060b402D4DF32b2ce8",
-      "keyType":"main_key",
-      "alg":-7,
-      "nostrPubkey":"4dc494cf203336c4ff6ad452003062e00fa564274c1e254ef261fee86efe1ed6",
-      "pubkey":"1c27922d0642eae6acc57ff97bc4b00109f700f5d819436b7ee47ac8a122d03ab4589173e67e8c0bdf156c890b2095739d5d020fa19bafe00319cf98c487c248"
-    }
+
+  let initLumos = async () => {
     setSporeConfig(sporeConfig);
-    config.initializeConfig(config.predefined.AGGRON4);
-    
-    registerCustomLockScriptInfos([createJoyIDScriptInfo(connection, getDefaultConfig(false))]);
-    // config.initializeConfig(sporeConfig.lumos);
-    
-    console.log('--->', commons.common.__tests__.getLockScriptInfos());
-    let spore = await createSpore({
-      data: {
-        contentType: 'text/plain',
-        content: bytifyRawString('content'),
-      },
-      fromInfos: ['ckt1qrfrwcdnvssswdwpn3s9v8fp87emat306ctjwsm3nmlkjg8qyza2cqgqqy6hjcvd44k7s39rqt3pvhfnyerd7dgas50yqy0q'],
-      toLock: helpers.parseAddress("ckt1qrfrwcdnvssswdwpn3s9v8fp87emat306ctjwsm3nmlkjg8qyza2cqgqqy6hjcvd44k7s39rqt3pvhfnyerd7dgas50yqy0q"),
-      config: predefinedSporeConfigs.Testnet
-    });
-    // console.log(spore);
+    registerCustomLockScriptInfos([createJoyIDScriptInfo()]);
+    // registerCustomLockScriptInfos([createJoyIDScriptInfo(connection, getDefaultConfig(false))]);
+    config.initializeConfig(sporeConfig.lumos);
   }
 
   useEffect(() => {
-    testLumos();
+    initLumos();
   }, [])
 
+  // Accounts for mobile browser's address bar
   useEffect(() => {
     const handleResize = () => {
       document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
@@ -87,9 +68,7 @@ function RootLayout({
     handleResize();
   
     return () => window.removeEventListener('resize', handleResize);
-  }, []);
-  // setSporeConfig(predefinedSporeConfigs.Mainnet);
-  // initConfig(JoyIDConfig)  
+  }, []); 
   return (
     <html lang="en" className="min-h-full min-w-full">
       <head>
@@ -134,7 +113,7 @@ function RootLayout({
           alt='decor lines'
           className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
         />
-        {/* <TrpcProvider>
+        <TrpcProvider>
           <ConnectProvider value={_config}>
             <GiftReceiveModalProvider>
               <SnackbarProvider
@@ -159,7 +138,7 @@ function RootLayout({
             </GiftReceiveModalProvider>
             
           </ConnectProvider>
-        </TrpcProvider> */}
+        </TrpcProvider>
       </body>
     </html>
   );

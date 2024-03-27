@@ -22,6 +22,8 @@ import { formatNumberWithCommas } from '@/utils/common';
 import { sporeConfig } from '@/utils/config';
 import Button from '@/app/_components/Button/Button';
 import { CellOutput } from '../../../types/Gifts';
+import { createTransactionFromSkeleton } from '@ckb-lumos/lumos/helpers';
+import { signRawTransaction } from '@joyid/ckb';
 
 
 const Gift: React.FC = () => {
@@ -57,7 +59,9 @@ const Gift: React.FC = () => {
   const meltSpore = useCallback(
     async (...args: Parameters<typeof _meltSpore>) => {
       const { txSkeleton } = await _meltSpore(...args);
-      const signedTx = await signTransaction(txSkeleton);
+      let tx = createTransactionFromSkeleton(txSkeleton);
+      //@ts-ignore
+      const signedTx = await signRawTransaction(tx, address);
       const txHash = await sendTransaction(signedTx);
       await PutIntoProcessList(walletAddress!!, txHash)
       return txHash;

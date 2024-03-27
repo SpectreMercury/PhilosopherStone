@@ -12,13 +12,8 @@
   },
   "dependencies": {
     "@apollo/server": "^4.9.5",
-    "@ckb-lumos/base": "0.22.0-next.3",
-    "@ckb-lumos/bi": "0.22.0-next.3",
-    "@ckb-lumos/codec": "0.22.0-next.3",
-    "@ckb-lumos/config-manager": "^0.22.0-next.3",
     "@ckb-lumos/joyid": "0.0.0-experimental-joyid-0855d00-20240319125140",
-    "@ckb-lumos/lumos": "^0.0.0-experimental-joyid-0855d00-20240319125140",
-    "@ckb-lumos/rpc": "0.22.0-next.3",
+    "@ckb-lumos/lumos": "^0.22.0-next.5",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@graphql-codegen/cli": "^5.0.0",
@@ -32,6 +27,7 @@
     "@mantine/next": "^6.0.21",
     "@mui/icons-material": "^5.15.0",
     "@mui/material": "^5.15.0",
+    "@nervina-labs/joyid-sdk": "^0.3.0",
     "@parcel/watcher": "^2.3.0",
     "@reduxjs/toolkit": "^2.0.1",
     "@spore-sdk/core": "^0.2.0-beta.2",
@@ -77,9 +73,5 @@
   "devDependencies": {
     "@types/better-sqlite3": "^7.6.4",
     "node-gyp": "^9.4.0"
-  },
-  "resolutions": {
-    "@ckb-lumos/lumos": "npm:@ckb-lumos/lumos@0.0.0-experimental-joyid-0855d00-20240319125140 ",
-    "@ckb-lumos/joyid": "npm:@ckb-lumos/joyid@0.0.0-experimental-joyid-0855d00-20240319125140 "
   }
 }

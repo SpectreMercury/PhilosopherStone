@@ -16,17 +16,18 @@ import { sendTransaction } from '@/utils/transaction';
 import { getMIMETypeByName } from '@/utils/mime';
 import { trpc } from '@/app/_trpc/client';
 import { useMutation } from '@tanstack/react-query';
-import { BI, Hexadecimal, config } from '@ckb-lumos/lumos';
+import { BI, Hexadecimal, config, helpers } from '@ckb-lumos/lumos';
 import useLoadingOverlay from '@/hooks/useLoadOverlay';
 import LoadingOverlay from '../LoadingOverlay/LoadingOverlay';
 import { useSporesByAddressQuery } from '@/hooks/useQuery/useSporesByAddress';
-import SporeService from '@/spore';
 import useLumosScript from '@/hooks/useUpdateLumosConfig';
 import { getLumosScript } from '@/utils/updateLumosConfig';
 import { predefined } from '@ckb-lumos/lumos/config';
 import { fetchHistoryAPI } from '@/utils/fetchAPI';
 import { sporeConfig } from '@/utils/config';
 import Button from '@/app/_components/Button/Button';
+import { createTransactionFromSkeleton } from '@ckb-lumos/lumos/helpers';
+import { signRawTransaction } from '@joyid/ckb';
 
 interface CreateGiftProps {
   onClose?: () => void; //
@@ -108,7 +109,9 @@ const CreateGift: React.FC<CreateGiftProps> = ({ onClose }) => {
   const addSpore = useCallback(
     async (...args: Parameters<typeof createSpore>) => {
       let { txSkeleton, outputIndex } = await createSpore(...args);
-      const signedTx = await signTransaction(txSkeleton);
+      let tx = createTransactionFromSkeleton(txSkeleton);
+      //@ts-ignore
+      const signedTx = await signRawTransaction(tx, address);
       const txHash = await sendTransaction(signedTx);
       await PutIntoProcessList(walletAddress!!, txHash!!);
       const outputs = txSkeleton.get('outputs');
@@ -142,7 +145,7 @@ const CreateGift: React.FC<CreateGiftProps> = ({ onClose }) => {
           clusterId,
         },
         fromInfos: [address],
-        toLock: lock,
+        toLock: helpers.parseAddress(address),
         config: sporeConfig,
         // @ts-ignore
         capacityMargin: useCapacityMargin ? BI.from(100_000_000) : BI.from(0),
