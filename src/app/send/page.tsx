@@ -26,7 +26,6 @@ import { signRawTransaction } from '@joyid/ckb';
 
 const SendGift: React.FC = () => {
   const router = useRouter();
-  const { signTransaction } = useConnect();
   const { isVisible, showOverlay, hideOverlay, progressStatus, setProgressStatus } = useLoadingOverlay();  
   const texts = ["Unmatched Flexibility and Interopera­bility", "Supreme Security and Decentrali­zation", "Inventive Tokenomics"]; 
   const [message, setMessage] = useState<string>('');

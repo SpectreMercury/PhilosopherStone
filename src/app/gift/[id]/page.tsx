@@ -37,7 +37,7 @@ const Gift: React.FC = () => {
   const [occupied, setOccupied] = useState<string>('')
   const [isMeltModal, setIsMeltModal] = useState<boolean>(false)
   const [giftMessage, setGiftMessage] = useState<string>("") 
-  const { address, signTransaction } = useConnect()
+  const { address } = useConnect()
   const walletAddress = useSelector((state: RootState) => state.wallet.wallet?.address);
 
   const { isVisible, showOverlay, hideOverlay, progressStatus, setProgressStatus } = useLoadingOverlay(); 
@@ -66,7 +66,7 @@ const Gift: React.FC = () => {
       await PutIntoProcessList(walletAddress!!, txHash)
       return txHash;
     },
-    [signTransaction],
+    [],
   );
 
   async function PutIntoProcessList(key: string, id: string) {

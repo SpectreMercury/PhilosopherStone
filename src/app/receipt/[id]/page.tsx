@@ -36,7 +36,7 @@ const Receipt: React.FC = () => {
   const [showPopup, setShowPopup] = useState<boolean>(false);
   const [isMeltModal, setIsMeltModal] = useState<boolean>(false)
   const [giftMessage, setGiftMessage] = useState<string>("") 
-  const { address, signTransaction } = useConnect()
+  const { address } = useConnect()
   const walletAddress = useSelector((state: RootState) => state.wallet.wallet?.address);
   const [sporeId, setSporeId] = useState<string>('');
   const [historyType, setHistoryType] = useState<string>('melt');
@@ -76,7 +76,7 @@ const Receipt: React.FC = () => {
       const txHash = await sendTransaction(signedTx);
       return txHash;
     },
-    [signTransaction],
+    [],
   );
 
   const meltSporeMutation = useMutation({

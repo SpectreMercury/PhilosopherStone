@@ -5,10 +5,7 @@ import { initConfig, connect, signMessage } from '@joyid/ckb';
 // @ts-ignore
 import CKBConnector from './base';
 import * as omnilock from './lock/omnilock';
-import { isSameScript } from '@/utils/script';
-import { bytes } from '@ckb-lumos/codec';
 import store from '@/store/store';
-import { sporeConfig } from '@/utils/config';
 
 export default class JoyIdConnector extends CKBConnector {
   public type: string = 'JoyID';

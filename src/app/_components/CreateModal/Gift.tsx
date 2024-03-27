@@ -49,7 +49,7 @@ const CreateGift: React.FC<CreateGiftProps> = ({ onClose }) => {
     file,
     false,
   );
-  const { address, lock, signTransaction } = useConnect()
+  const { address, lock } = useConnect()
   const [capacityList, setCapacityList] = useState<number[]>([]);
   const [totalCapacity, setTotalCapacity] = useState<number>(0) 
   const { isVisible, showOverlay, hideOverlay, progressStatus, setProgressStatus } = useLoadingOverlay(); 
@@ -118,7 +118,7 @@ const CreateGift: React.FC<CreateGiftProps> = ({ onClose }) => {
       const spore = outputs.get(outputIndex);
       return spore;
     },
-    [signTransaction],
+    [],
   );
 
   const addSporeMutation = useMutation({
