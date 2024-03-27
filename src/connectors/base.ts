@@ -57,16 +57,11 @@ export default abstract class CKBConnector {
   protected getLockFromAddress(): Script {
     const walletData = this.getCurrentWalletAddress();
     const { address } = walletData!!;
-    return helpers.parseAddress(address, {
-      config: sporeConfig.lumos,
-    });
+    return helpers.parseAddress(address);
   }
 
   abstract connect(): Promise<void>;
   abstract getAnyoneCanPayLock(): Script;
   abstract isOwned(targetLock: Script): boolean;
   abstract disconnect(): Promise<void> | void;
-  abstract signTransaction(
-    txSkeleton: helpers.TransactionSkeletonType,
-  ): Promise<Transaction>;
 }

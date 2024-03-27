@@ -109,18 +109,7 @@ export const useConnect = () => {
     return lock;
   }, [connector, connectorType]);
 
-  const signTransaction = useCallback(
-    async (
-      txSkeleton: helpers.TransactionSkeletonType,
-    ): Promise<Transaction> => {
-      if (!connector) {
-        throw new Error(`Connector ${connectorType} not found`);
-      }
-      const transaction = await connector.signTransaction(txSkeleton);
-      return transaction;
-    },
-    [connector, connectorType],
-  );
+
 
   return {
     address,
@@ -129,6 +118,5 @@ export const useConnect = () => {
     isOwned,
     disconnect,
     getAnyoneCanPayLock,
-    signTransaction,
   };
 };

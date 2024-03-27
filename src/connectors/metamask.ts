@@ -46,7 +46,6 @@ export default class MetaMaskConnector extends CKBConnector {
     if (!ethAddress) {
       return;
     }
-    config.initializeConfig(sporeConfig.lumos);
     const lock = commons.omnilock.createOmnilockScript({
       auth: { flag: 'ETHEREUM', content: ethAddress ?? '0x' },
     });
