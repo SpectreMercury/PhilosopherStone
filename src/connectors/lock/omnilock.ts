@@ -37,7 +37,6 @@ export async function signTransaction(
   fromLock: Script,
   signMessage: (message: string) => Promise<string>,
 ): Promise<Transaction> {
-  config.initializeConfig(sporeConfig.lumos);
   const inputs = txSkeleton.get('inputs')!;
   const outputs = txSkeleton.get('outputs')!;
 

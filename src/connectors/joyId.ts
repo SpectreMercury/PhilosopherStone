@@ -1,7 +1,7 @@
 import { Script } from '@ckb-lumos/base';
 import { BI, Transaction, commons, config, helpers } from '@ckb-lumos/lumos';
 // @ts-ignore
-import { initConfig, connect, signMessage } from '@joyid/evm';
+import { initConfig, connect, signMessage } from '@joyid/ckb';
 // @ts-ignore
 import CKBConnector from './base';
 import * as omnilock from './lock/omnilock';
@@ -39,21 +39,15 @@ export default class JoyIdConnector extends CKBConnector {
     return state.wallet.wallet;
   };
 
-  private setAddress(ethAddress: `0x${string}` | undefined) {
-    if (!ethAddress) {
+  private setAddress(address: string | undefined) {
+    if (!address) {
       return;
     }
-    config.initializeConfig(sporeConfig.lumos);
-    const lock = commons.omnilock.createOmnilockScript({
-      auth: { flag: 'ETHEREUM', content: ethAddress ?? '0x' },
-    });
-    const address = helpers.encodeToAddress(lock, {
-      config: sporeConfig.lumos,
-    });
+
     this.setData({
       address,
       walletType: 'JoyID',
-      ethAddress,
+      ethAddress: '0x',
     });
   }
 
@@ -62,52 +56,12 @@ export default class JoyIdConnector extends CKBConnector {
     if (walletData?.walletType === this.type.toLowerCase() && walletData?.address) {
       return;
     }
-    const ethAddress = await connect();
-    this.setAddress(ethAddress);
+    const joyidWalletInfo = await connect();
+    this.setAddress(joyidWalletInfo.address);
     this.isConnected = true;
   }
 
   public async disconnect(): Promise<void> {
     this.isConnected = false;
-  }
-
-  public async signTransaction(
-    txSkeleton: helpers.TransactionSkeletonType,
-  ): Promise<Transaction> {
-    const { ethAddress } = this.getCurrentWalletAddress()!;
-
-    const outputs = txSkeleton.get('outputs')!;
-    outputs.forEach((output, index) => {
-      const { lock, type } = output.cellOutput;
-
-      if (!type && isSameScript(lock, this.lock)) {
-        txSkeleton = txSkeleton.update('outputs', (outputs) => {
-          output.cellOutput.capacity = BI.from(output.cellOutput.capacity)
-            .sub(1000)
-            .toHexString();
-          return outputs.set(index, output);
-        });
-      }
-    });
-
-    const transaction = await omnilock.signTransaction(
-      txSkeleton,
-      this.lock!,
-      async (message) => {
-        return new Promise((resolve, reject) => {
-          const button = document.createElement('button');
-          button.onclick = async () => {
-            try {
-              const signature = await signMessage(bytes.bytify(message), ethAddress);
-              resolve(signature);
-            } catch (e) {
-              reject(e);
-            }
-          };
-          button.click();
-        })
-      },
-    );
-    return transaction;
   }
 }

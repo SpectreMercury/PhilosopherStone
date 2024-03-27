@@ -11,7 +11,6 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { QuerySpore } from '@/hooks/useQuery/type';
 import { useSearchParams } from 'next/navigation';
-import { getLumosScript } from '@/utils/updateLumosConfig';
 import Tip from '@/app/_components/Tip/Tip';
 import Button from '@/app/_components/Button/Button';
 
