@@ -255,14 +255,14 @@ const SendGift: React.FC = () => {
         {
           activeTab === 'URL' && (
             <>
-              {/* <div className='flex flex-col px-4'>
+              <div className='flex flex-col px-4'>
                 <p className='text-white001 font-SourceSanPro text-body1bdmb mt-4'>Wallet key</p>
                 <input 
                   id="walletAddress"
                   value={hashKey}
                   onChange={(e) => setHashKey(e.target.value)}
                   className='w-full h-12 border border-white009 rounded-lg bg-primary008 mt-2 px-4 text-white001' />
-              </div> */}
+              </div> 
               
               <p className='px-4 mt-4 text-white001 font-SourceSanPro text-labelmb'>For URL delivery, click &#39;Pack Gift&#39; below to get a shareable link.</p>
             </>
