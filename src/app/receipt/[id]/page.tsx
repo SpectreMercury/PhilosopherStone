@@ -21,6 +21,8 @@ import { fetchGiftAPI } from '@/utils/fetchAPI';
 import { formatDate, formatTypeDate } from '@/utils/common';
 import { sporeConfig } from '@/utils/config';
 import Button from '@/app/_components/Button/Button';
+import { createTransactionFromSkeleton } from '@ckb-lumos/lumos/helpers';
+import { signRawTransaction } from '@joyid/ckb';
 
 
 const Receipt: React.FC = () => {
@@ -34,7 +36,7 @@ const Receipt: React.FC = () => {
   const [showPopup, setShowPopup] = useState<boolean>(false);
   const [isMeltModal, setIsMeltModal] = useState<boolean>(false)
   const [giftMessage, setGiftMessage] = useState<string>("") 
-  const { address, signTransaction } = useConnect()
+  const { address } = useConnect()
   const walletAddress = useSelector((state: RootState) => state.wallet.wallet?.address);
   const [sporeId, setSporeId] = useState<string>('');
   const [historyType, setHistoryType] = useState<string>('melt');
@@ -68,11 +70,13 @@ const Receipt: React.FC = () => {
   const meltSpore = useCallback(
     async (...args: Parameters<typeof _meltSpore>) => {
       const { txSkeleton } = await _meltSpore(...args);
-      const signedTx = await signTransaction(txSkeleton);
+      let tx = createTransactionFromSkeleton(txSkeleton);
+      //@ts-ignore
+      const signedTx = await signRawTransaction(tx);
       const txHash = await sendTransaction(signedTx);
       return txHash;
     },
-    [signTransaction],
+    [],
   );
 
   const meltSporeMutation = useMutation({

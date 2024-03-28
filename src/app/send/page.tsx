@@ -21,10 +21,11 @@ import { SporeItem } from '@/types/Hashkey';
 import { GenerateHashKey } from '@/utils/common';
 import { sporeConfig } from '@/utils/config';
 import Button from '@/app/_components/Button/Button';
+import { createTransactionFromSkeleton } from '@ckb-lumos/lumos/helpers';
+import { signRawTransaction } from '@joyid/ckb';
 
 const SendGift: React.FC = () => {
   const router = useRouter();
-  const { signTransaction } = useConnect();
   const { isVisible, showOverlay, hideOverlay, progressStatus, setProgressStatus } = useLoadingOverlay();  
   const texts = ["Unmatched Flexibility and Interopera­bility", "Supreme Security and Decentrali­zation", "Inventive Tokenomics"]; 
   const [message, setMessage] = useState<string>('');
@@ -80,7 +81,7 @@ const SendGift: React.FC = () => {
     if(spore && spore.id && activeTab === 'URL' && hashKey === '') {
       generateKey(spore.id);
     }
-  }, [activeTab, spore])
+  }, [activeTab, hashKey, spore])
 
   useEffect(() => {
     if(walletAddress) {
@@ -93,20 +94,21 @@ const SendGift: React.FC = () => {
       const hasGiftValue = searchParams.get('hasGift');
       setHasGift(hasGiftValue ?? '');
     }
-  }, [searchParams])
+  }, [searchParams, type])
 
   const transferSpore = useCallback(
     async (...args: Parameters<typeof _transferSpore>) => {
       const { txSkeleton, outputIndex } = await _transferSpore(...args);
+      let tx = createTransactionFromSkeleton(txSkeleton);
       //@ts-ignore
-      const signedTx = await signTransaction(txSkeleton);
+      const signedTx = await signRawTransaction(tx, walletAddress);
       const txHash = await sendTransaction(signedTx);
       return {
         txHash,
         index: BI.from(outputIndex).toHexString(),
       } as OutPoint;
     },
-    [signTransaction],
+    [walletAddress],
   );
 
   const transferSporeMutation = useMutation({
@@ -253,14 +255,14 @@ const SendGift: React.FC = () => {
         {
           activeTab === 'URL' && (
             <>
-              {/* <div className='flex flex-col px-4'>
+              <div className='flex flex-col px-4'>
                 <p className='text-white001 font-SourceSanPro text-body1bdmb mt-4'>Wallet key</p>
                 <input 
                   id="walletAddress"
                   value={hashKey}
                   onChange={(e) => setHashKey(e.target.value)}
                   className='w-full h-12 border border-white009 rounded-lg bg-primary008 mt-2 px-4 text-white001' />
-              </div> */}
+              </div> 
               
               <p className='px-4 mt-4 text-white001 font-SourceSanPro text-labelmb'>For URL delivery, click &#39;Pack Gift&#39; below to get a shareable link.</p>
             </>

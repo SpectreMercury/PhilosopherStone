@@ -1,11 +1,11 @@
 "use client"
+import { commons, config, helpers } from "@ckb-lumos/lumos";
 import "./globals.css";
 import TrpcProvider from "@/app/_trpc/Provider";
 import Header from "./_components/Header/Header";
 import { Provider } from "react-redux";
 import store from "@/store/store";
 import { initConfig } from "@joyid/ckb";
-import { JoyIDConfig } from "@/config/joyid/joyid";
 import { ConnectProvider } from '@/hooks/useConnect';
 import JoyIdConnector from '@/connectors/joyId';
 import MetaMaskConnector from "@/connectors/metamask";
@@ -15,9 +15,12 @@ import { GiftReceiveModalProvider } from "./context/GiftReceiveModalContext";
 import DesktopHeader from "./_components/Header/DesktopHeader";
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import { predefinedSporeConfigs, setSporeConfig } from "@spore-sdk/core";
-import { predefined } from "@ckb-lumos/config-manager";
+import { bytifyRawString, createSpore, predefinedSporeConfigs, setSporeConfig} from "@spore-sdk/core";
 import Script from "next/script";
+import { sporeConfig } from "@/utils/config";
+import { registerCustomLockScriptInfos } from "@ckb-lumos/lumos/common-scripts/common";
+// import {createJoyIDScriptInfo, getDefaultConfig} from "@ckb-lumos/joyid"
+import { createJoyIDScriptInfo } from "@/utils/joyid";
 
 const StyledMaterialDesignContent = styled(MaterialDesignContent)(() => ({
   '&.notistack-MuiContent-success': {
@@ -29,7 +32,7 @@ const StyledMaterialDesignContent = styled(MaterialDesignContent)(() => ({
   },
 }));
 
-const config = {
+const _config = {
   autoConnect: true,
   connectors: [new JoyIdConnector(), new MetaMaskConnector()],
 };
@@ -42,6 +45,18 @@ function RootLayout({
   children: React.ReactNode;
 }) {
   const [width, setWidth] = useState<number>(0);
+
+  let initLumos = async () => {
+    setSporeConfig(sporeConfig);
+    registerCustomLockScriptInfos([createJoyIDScriptInfo()]);
+    // registerCustomLockScriptInfos([createJoyIDScriptInfo(connection, getDefaultConfig(false))]);
+    config.initializeConfig(sporeConfig.lumos);
+  }
+
+  useEffect(() => {
+    initLumos();
+  }, [])
+
   // Accounts for mobile browser's address bar
   useEffect(() => {
     const handleResize = () => {
@@ -53,9 +68,7 @@ function RootLayout({
     handleResize();
   
     return () => window.removeEventListener('resize', handleResize);
-  }, []);
-  // setSporeConfig(predefinedSporeConfigs.Mainnet);
-  // initConfig(JoyIDConfig)  
+  }, []); 
   return (
     <html lang="en" className="min-h-full min-w-full">
       <head>
@@ -101,7 +114,7 @@ function RootLayout({
           className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
         />
         <TrpcProvider>
-          <ConnectProvider value={config}>
+          <ConnectProvider value={_config}>
             <GiftReceiveModalProvider>
               <SnackbarProvider
                 autoHideDuration={5000} 
@@ -132,3 +145,4 @@ function RootLayout({
 }
 
 export default RootLayout
+

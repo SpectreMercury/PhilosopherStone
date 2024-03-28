@@ -33,7 +33,11 @@ export function useRefreshableQuery<
       if (headers) {
         ctx.meta.headers = headers;
       }
-      return Promise.resolve(queryFn?.(ctx));
+      if (typeof queryFn === 'function') {
+        return Promise.resolve(queryFn(ctx));
+      } else {
+        return Promise.reject(new Error('queryFn is not a function'));
+      }
     },
     [queryFn],
   );
