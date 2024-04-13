@@ -30,8 +30,8 @@ const HashkeyList: React.FC<HistoryListProps> = ({ HashkeyList }) => {
                 </div>
                 {
                     HashkeyList?.map((item, index) => {
-                        const key = Object.keys(item)[0]; // 获取对象的键
-                        const data = item[key]; // 获取对象的值（嵌套对象）
+                        const key = Object.keys(item)[0]; 
+                        const data = item[key];
                         return (
                             <div key={index} className="w-full flex items-center border-b text-white001 border-white009 py-2">
                                 <div className="flex-1 text-body1mb px-1 px-2 overflow-hidden font-SourceSanPro text-ellipsis whitespace-nowrap">{data.txHash && formatString(data.txHash)}</div>

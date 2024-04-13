@@ -3,7 +3,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
-import { predefinedSporeConfigs, meltSpore as _meltSpore } from '@spore-sdk/core';
+import { predefinedSporeConfigs, meltSpore as _meltSpore, getSporeById } from '@spore-sdk/core';
 import Link from 'next/link';
 import { enqueueSnackbar } from 'notistack';
 import { useSporeQuery } from '@/hooks/useQuery/useQuerybySpore';
@@ -24,6 +24,7 @@ import Button from '@/app/_components/Button/Button';
 import { CellOutput } from '../../../types/Gifts';
 import { createTransactionFromSkeleton } from '@ckb-lumos/lumos/helpers';
 import { signRawTransaction } from '@joyid/ckb';
+import { assembleMeltSporeAction } from '@spore-sdk/core/lib/cobuild/action/spore/meltSpore'
 
 
 const Gift: React.FC = () => {
@@ -97,17 +98,19 @@ const Gift: React.FC = () => {
     }
     handleMeltModal()
     showOverlay(); 
-    await meltSporeMutation.mutateAsync({
-      outPoint: spore!.cell!.outPoint!,
-      config: sporeConfig,
-    });
-    callUpdateGiftReadStatusAction(walletAddress!!, pathAddress)
-    setProgressStatus('done')
-    setTimeout(() => {
-      hideOverlay();
-    }, 1000)
-    enqueueSnackbar('Melt Successful', {variant: 'success'})
-    router.push('/')
+    let sporeCell = await getSporeById(pathAddress);
+    let rlt = await assembleMeltSporeAction(sporeCell);
+    // await meltSporeMutation.mutateAsync({
+    //   outPoint: spore!.cell!.outPoint!,
+    //   config: sporeConfig,
+    // });
+    // callUpdateGiftReadStatusAction(walletAddress!!, pathAddress)
+    // setProgressStatus('done')
+    // setTimeout(() => {
+    //   hideOverlay();
+    // }, 1000)
+    // enqueueSnackbar('Melt Successful', {variant: 'success'})
+    // router.push('/')
   }
 
   async function callUpdateGiftReadStatusAction(key: string, value: string) {
