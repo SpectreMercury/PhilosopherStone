@@ -16,7 +16,6 @@ import {
   Script,
   Transaction,
   commons,
-  config,
   helpers,
 } from '@ckb-lumos/lumos';
 import * as omnilock from './lock/omnilock';
@@ -48,7 +47,9 @@ export default class MetaMaskConnector extends CKBConnector {
     }
     const lock = commons.omnilock.createOmnilockScript({
       auth: { flag: 'ETHEREUM', content: ethAddress ?? '0x' },
-    });
+      
+    },{config: sporeConfig.lumos});
+    console.log(sporeConfig.lumos);
     const address = helpers.encodeToAddress(lock, {
       config: sporeConfig.lumos,
     });

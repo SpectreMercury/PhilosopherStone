@@ -18,6 +18,8 @@ import getTransaction from '../../utils/getTransactionStatus';
 import { sealTransaction } from "@ckb-lumos/lumos/helpers";
 import { bytify, hexify } from "@ckb-lumos/lumos/codec";
 import { injectCapacityAndPayFee, payFeeByOutput } from "@spore-sdk/core";
+import { prepareSigningEntries } from "@ckb-lumos/lumos/common-scripts/common";
+import { getConfig } from "@ckb-lumos/lumos/config";
 
 const CKB_RPC_URL = sporeConfig.ckbNodeUrl;
 const rpc = new RPC(CKB_RPC_URL);
@@ -55,7 +57,7 @@ const Withdraw: React.FC = () => {
         const amountInShannon = BI.from(parseFloat(amount) * 10 ** 8)
         let txSkeleton = helpers.TransactionSkeleton({ cellProvider: indexer });
         const collectedCells: Cell[] = [];
-        let collector = indexer.collector({lock: helpers.parseAddress(address), type: 'empty'});
+        let collector = indexer.collector({lock: helpers.parseAddress(address, {config: sporeConfig.lumos}), type: 'empty'});
         let collectedSum = BI.from(0);
 
         for await (const cell of collector.collect()) {
@@ -64,10 +66,12 @@ const Withdraw: React.FC = () => {
             if (BI.from(collectedSum).gte(amountInShannon)) break;
         }
 
+        console.log(collectedCells);
+
         const outputCell: Cell[] = [{
             cellOutput: {
                 capacity: BI.from(amountInShannon).toHexString(),
-                lock: helpers.parseAddress(toAddress),
+                lock: helpers.parseAddress(toAddress, {config: sporeConfig.lumos}),
             },
             data: "0x",
         }];
@@ -76,7 +80,7 @@ const Withdraw: React.FC = () => {
             outputCell.push({
                 cellOutput: {
                     capacity: collectedSum.sub(amountInShannon).toHexString(),
-                    lock: helpers.parseAddress(address!!),
+                    lock: helpers.parseAddress(address!!, {config: sporeConfig.lumos}),
                 },
                 data: '0x'
             })
@@ -103,7 +107,7 @@ const Withdraw: React.FC = () => {
             }
             )
         );
-
+        
         const witness = hexify(blockchain.WitnessArgs.pack({ lock: SECP_SIGNATURE_PLACEHOLDER }));
         for (let i = 0; i < txSkeleton.inputs.toArray().length; i++) {
             txSkeleton = txSkeleton.update("witnesses", (witnesses) => witnesses.push(witness));
@@ -114,16 +118,23 @@ const Withdraw: React.FC = () => {
             outputIndex: 0,
             config: sporeConfig,
         })
-
+        console.log('lumos config:', getConfig());
+        console.log('before sign', JSON.stringify(txSkeleton));
+        
         txSkeleton = await commons.omnilock.prepareSigningEntries(
             payResult,
             {config: sporeConfig.lumos}
         )
 
+        console.log('after sign', JSON.stringify(txSkeleton));
+
+
         let signedMessage = await ethereum!!.request({
             method: "personal_sign",
             params: [ethereum!!.selectedAddress, txSkeleton.signingEntries.get(0)!!.message],
         });
+
+        
         let v = Number.parseInt(signedMessage.slice(-2), 16);
         if (v >= 27) v -= 27;
         signedMessage = "0x" + signedMessage.slice(2, -2) + v.toString(16).padStart(2, "0");

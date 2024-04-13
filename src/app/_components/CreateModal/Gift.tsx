@@ -108,7 +108,11 @@ const CreateGift: React.FC<CreateGiftProps> = ({ onClose }) => {
 
   const addSpore = useCallback(
     async (...args: Parameters<typeof createSpore>) => {
-      let { txSkeleton, outputIndex } = await createSpore(...args);
+      let { txSkeleton, outputIndex, reference, mutantReference } = await createSpore(...args);
+      console.log('txSkeleton: ', JSON.stringify(txSkeleton));
+      console.log('outputindex: ', JSON.stringify(outputIndex));
+      console.log('reference: ', JSON.stringify(reference));
+      console.log('mutantReference: ', JSON.stringify(mutantReference));
       let tx = createTransactionFromSkeleton(txSkeleton);
       //@ts-ignore
       const signedTx = await signRawTransaction(tx, address);
